@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(158, 158, 158);
+}
+
+.container {
+    max-width: 60%;
+    box-sizing: border-box;
+    background-color: white;
+    margin-top: 8%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 40px;
+    box-shadow: -5px 10px 18px rgb(34, 34, 31);
+}
+
+.arabic-form {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
+}
+
+.button {
+    cursor: pointer;
+}

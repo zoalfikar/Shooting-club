@@ -1,0 +1,17 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+// Variables
+@import 'variables';
+$fa-font-path: "../webfonts";
+$material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/';
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+// importing core styling file
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+// our project needs Solid + Brands
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+//mdi-font
+@import '~@mdi/font/scss/materialdesignicons.scss';
+//material-design-icons
+@import '~material-design-icons-iconfont/src/material-design-icons.scss';
