@@ -14,9 +14,11 @@ class CreateTablesTable extends Migration
     public function up()
     {
         Schema::create('tables', function (Blueprint $table) {
-            $table->id();
-            $table->boolean('active')->default(true);
-            $table->integer('maxCapacity');
+            $table->string('hall-table')->virtualAs('concat(concat(tableNumber,"--"),hallNumber)')->unique()->primary();
+            $table->unsignedInteger('tableNumber');
+            $table->unsignedInteger('hallNumber')->default(1);
+            $table->tinyInteger('active')->default(1);
+            $table->unsignedInteger('maxCapacity')->default(10);
             $table->timestamps();
         });
     }

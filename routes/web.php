@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\Resturant;
 use App\Http\Middleware\UnAuth;
 
 /*
@@ -14,16 +15,24 @@ use App\Http\Middleware\UnAuth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', function () {
+
+});
 Route::get('/dev', function () {
     return view('boards');
 
 });
+
+
 Route::middleware('authenticate')->group(function () {
     Route::get('/logout', [AuthController::class,'logout']);
     Route::get('/', function () {
         return view('appLayouts.app');
 
     });
+    Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
+    Route::post('/add-new-table', [Resturant::class,'addNewTable']);
+
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

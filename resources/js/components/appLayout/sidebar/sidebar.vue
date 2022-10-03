@@ -12,11 +12,11 @@
         </div>
         <div class="menu">
         <div class="menu-item-itemChild">
-            <div class="menu-item" @click="showItemChildren($event.target)">
+            <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
                     <i class="fa fa-home fa-2x" aria-hidden="true"></i>
                 </div>
-                <span class="item-text"> <span>الرئيسية</span></span>
+                <span class="item-text"> <span id="test">الرئيسية</span></span>
             </div>
             <div class="item-children">
                 <div class="item-child">
@@ -80,6 +80,22 @@
                 </div>
             </div>
         </div>
+        <div class="menu-item-itemChild">
+            <div class="menu-item"  @click="showItemChildren($event.target)">
+                <div class="item-icon">
+                    <i class="fa fa-restaurant fa-2x" aria-hidden="true"></i>
+                </div>
+                <span class="item-text"> <span>الطاولات</span></span>
+            </div>
+            <div class="item-children ">
+                <div class="item-child">
+                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">عرض</a></span>
+                </div>
+                <div class="item-child">
+                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev1'">طاولة جديدة</a></span>
+                </div>
+            </div>
+        </div>
         </div>
     </aside>
 </template>
@@ -87,10 +103,8 @@
 <script>
 import { ref } from 'vue';
 
-
 if (!sessionStorage.expanded) {
     sessionStorage.setItem('expanded',false)
-    console.log("done");
 }
 const is_expanded = ref((sessionStorage.expanded ==='true'));
 const showItemChildren = (e)=>{
@@ -116,9 +130,6 @@ const showItemChildren = (e)=>{
 }
 
 const toggleMenu = () => {
-    console.log((sessionStorage.expanded === 'true'));
-    console.log(sessionStorage.expanded);
-    console.log(is_expanded.value);
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
 }
@@ -185,6 +196,7 @@ export default {
     .menu{
         margin-top: 40px;
     }
+
     .menu-item{
         position: relative;
         top:0;
@@ -192,22 +204,20 @@ export default {
         padding: 13px;
         display: flex;
         border: 2px solid white;
-        transition: top 0.2s ease-in-out;
+        transition: top 0.2s ease-in;
     }
     .menu-item:hover{
         cursor: pointer;
         color: chartreuse;
         top:-5px;
         font-size: 0.7rem;
-
     }
 
    .item-text  {
         overflow: hidden;
         font-size: 2rem;
         margin-right: 30px;
-        transition:font-size 0.1s ease-in-out ,margin-right 0.1s ease-in-out ;
-        transition-timing-function:initial ;
+        transition:font-size 0.2s ease-in ,margin-right 0.2s ease-in ;
    }
    .menu-item:hover .item-text {
         font-size: 1.5rem;
@@ -219,7 +229,7 @@ export default {
         justify-content: center;
         padding-right: 0px;
         padding-top: 8px;
-        transition: padding-right 0.1s ease-in-out;
+        transition: padding-right 0.2s ease-in;
    }
    .is_expanded .menu-item:hover .item-icon {
         padding-right: 23px;
@@ -270,9 +280,5 @@ export default {
    a:link {
         text-decoration: none;
    }
-
-
-
-
 </style>
 

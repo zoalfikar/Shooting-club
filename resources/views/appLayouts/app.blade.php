@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <!--bootstap 5 -->
-    <link href="{{asset('assets/boostrap5/css/bootstrap5.css')}}" rel="stylesheet" >
+    <link href="{{asset('assets\bootstrap5\css\bootstrap5.css')}}" rel="stylesheet" >
     <!--vue.js style-->
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <!-- style -->
@@ -25,15 +25,19 @@
                 <div class="app-container">
                     @yield('content')
                 </div>
-            </div>
         </div>
-    @yield('scripts')
+    </div>
+
     <!--bootstrap 5 -->
-    <script src="{{ asset('assets/boostrap5/css/bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets\bootstrap5\js\bootstrap5.js') }}"></script>
+    <!--jquery 5 -->
+    <script src="{{ asset('assets\JQuery\jquery.js') }}"></script>
     <!--vue.js-->
     <script src="{{ mix('/js/app.js') }}"></script>
     <!--scripts-->
     <script src="{{ asset('assets/custom/appLayout/scripts.js') }}"></script>
+    <!--extended scripts-->
+    @yield('scripts')
 </body>
 
 
