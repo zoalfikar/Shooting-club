@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Resturant;
 use App\Http\Middleware\UnAuth;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,19 @@ use App\Http\Middleware\UnAuth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::get('/{any?}',
+//     function () {
+//         return view('appLayouts.app');
+//     }
+// )->where('any', '.*');
 Route::get('/test', function () {
 
 });
-Route::get('/dev', function () {
+Route::get('/dev', function (Request $req) {
+    if ($req->ajax()) {
+        $sections = view('boards')->renderSections();
+        return response(["extendedScripts"=>$sections["scripts"] , "content"=>$sections["content"]]);
+    }
     return view('boards');
 
 });

@@ -89,10 +89,10 @@
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">عرض</a></span>
+                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev'">عرض</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev1'">طاولة جديدة</a></span>
+                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
                 </div>
             </div>
         </div>
@@ -129,6 +129,7 @@ const showItemChildren = (e)=>{
     is_expanded.value = true;
 }
 
+
 const toggleMenu = () => {
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
@@ -142,8 +143,92 @@ export default {
   },
    methods:{
     'toggleMenu':toggleMenu,
-    'showItemChildren':showItemChildren
+    'showItemChildren':showItemChildren,
+   },
+   mounted : function () {
+        function initJQuery() {
 
+        }
+        $(document).ready( function() {
+            initJQuery()
+        });
+        var vueMounted = true ;
+        var extendedScripts = null ;
+        var extendedStyles = null ;
+        var divEl = document.createElement('div');;
+        divEl.innerHTML = "<h1>wait a second!</h1>" ;
+        function resetNavVar() {
+            extendedScripts = null ;
+            extendedStyles = null ;
+            divEl.innerHTML = "<h1>wait a second!</h1>" ;
+        }
+        $("aside .menu a").click(function (e)  {
+            e.preventDefault();
+            history.pushState("","",$(this).attr("href"));
+            $('.app-container').css("visibility", "hidden");
+            vueMounted = false ;
+            resetNavVar();
+            $.ajax({
+                type: "get",
+                url: $(this).attr("href"),
+                success:function (response)
+                {
+                    if (response.title != null) {
+                        document.title = response.title
+                    }
+                    extendedStyles = response.extendedStyles != null ? response.extendedStyles : null;
+                    extendedScripts = response.extendedScripts != null ? response.extendedScripts : null ;
+                    divEl.innerHTML = response.content != null ? response.content : null;
+                    $('.app-container').html(response.content != null ? response.content : null);
+                }
+            }).then(()=>{
+                vueMount();
+            });
+        });
+
+        function appContainerLoadFinished() {
+            return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        let condition = true;
+                        var startTime = Date.now();
+                        try {
+                            while (condition) {
+                                if (Date.now() - startTime > 14000 ) {
+                                    condition = false ;
+                                    throw new Error("something went rong!");
+                                }
+                                if ( $('.app-container').html() == divEl.innerHTML ) {
+                                    condition = false ;
+                                    resolve("vue mounted allowed");
+                                }
+                                console.log("not now!");
+                            }
+
+                        } catch (error) {
+                            console.log(error);
+                            alert("حدث خطأ ما , استمرت العملية وقت اطول من المتوقع ")
+                        }
+                    }, 100);
+                });
+        }
+
+        async function vueMount()
+        {
+            var result = await appContainerLoadFinished();
+            console.log(result);
+            if (!vueMounted) {
+                const app2 = new Vue({
+                vuetify,
+                });
+                app2.$mount('.app-container');
+                vueMounted = true ;
+                initJQuery();
+                $('.extendedStyles').html(extendedStyles);
+                $('.extendedScripts').html(extendedScripts);
+                $('.app-container').css("visibility", "visible");
+                console.log("vue Mounted");
+            }
+        }
    }
 }
 </script>

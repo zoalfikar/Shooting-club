@@ -76,7 +76,6 @@
             </div>
         </div>
     </form>
-
 @endsection
 
 
@@ -89,13 +88,14 @@
                         type: "get",
                         url: "show-new-table-form",
                         data: {
-                            'hallNumber':hallNumber
+                            'hallNumber': hallNumber,
+                            'hallNumberChanged': true
                         },
                         success: function (response) {
                             $("#table-number").val(response.TableNumber);
                         }
                     });
                 });
-        });
+            });
     </script>
 @endsection

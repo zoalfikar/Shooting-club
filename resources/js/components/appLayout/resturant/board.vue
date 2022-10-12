@@ -50,11 +50,17 @@
   </template>
 
 <script>
+
 export default {
-    data: () => ({
-      reveal: false,
-    }),
-}
+    data () {
+        return {
+            reveal: false,
+        }
+    },
+    methods : {
+
+    }
+};
 </script>
 
 <style scoped>
