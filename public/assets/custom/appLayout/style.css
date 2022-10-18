@@ -1,5 +1,5 @@
 :root {
-    --dark: black;
+    --dark: rgb(0 0 0 / 80%);
     --sidebar-width: 300px;
 }
 
@@ -16,7 +16,8 @@ html {
 }
 
 body {
-    background-color: rgb(224, 197, 197);
+    background-image: linear-gradient(to left bottom, #D3D3D3, #DCDCDC);
+    font-family: 'Amiri';
 }
 
 .app-grid {
@@ -27,9 +28,13 @@ body {
 }
 
 .app-grid .sidebar {
-    width: max-content;
+    /* width: max-content; */
+    transition: 0.2s ease-in-out;
 }
 
 .app-grid .app-container {
     margin: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }

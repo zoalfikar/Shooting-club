@@ -16,7 +16,7 @@
                 <div class="item-icon">
                     <i class="fa fa-home fa-2x" aria-hidden="true"></i>
                 </div>
-                <span class="item-text"> <span id="test">الرئيسية</span></span>
+                <span class="item-text"> <span>الرئيسية</span></span>
             </div>
             <div class="item-children">
                 <div class="item-child">
@@ -59,15 +59,12 @@
                 <div class="item-child">
                     <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 8</a></span>
                 </div>
-                <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 9</a></span>
-                </div>
             </div>
         </div>
         <div class="menu-item-itemChild">
             <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الطلبات</span></span>
             </div>
@@ -83,7 +80,7 @@
         <div class="menu-item-itemChild">
             <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-restaurant fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-chair fa-2x" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الطاولات</span></span>
             </div>
@@ -102,7 +99,7 @@
 
 <script>
 import { ref } from 'vue';
-
+const sidebarStatus = new CustomEvent('sidebarStatusChanged');
 if (!sessionStorage.expanded) {
     sessionStorage.setItem('expanded',false)
 }
@@ -127,18 +124,24 @@ const showItemChildren = (e)=>{
     }
 
     is_expanded.value = true;
+    sessionStorage.expanded ='true' ;
+    document.dispatchEvent(sidebarStatus);
+
 }
 
 
 const toggleMenu = () => {
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
+    document.dispatchEvent(sidebarStatus);
+
 }
 export default {
     props:['src','url'],
     data: function () {
     return {
         is_expanded: is_expanded,
+        sidebarStatus:sidebarStatus
    }
   },
    methods:{
@@ -146,6 +149,7 @@ export default {
     'showItemChildren':showItemChildren,
    },
    mounted : function () {
+
         function initJQuery() {
 
         }
@@ -235,22 +239,49 @@ export default {
 <style  scoped>
     .is_expanded{
         width: var(--sidebar-width);
+        overflow-y: auto;
     }
 
+
    aside{
+        position: fixed;
+        top: 59px;
+        bottom: 0;
         box-shadow: -2px 0 10px rgb(43, 43, 43);
         display: inline-block;
         background-color: var(--dark);
         color: azure;
         width: calc(2rem + 32px);
-        overflow: hidden;
-        min-height:  100vh;
+        overflow-x: hidden;
+        overflow-y: unset;
+        /* min-height:  100vh; */
         transition: 0.3s ease-in-out;
-        @media (max-width:768px) {
+        /* @media (max-width:768px) {
             position: fixed;
             z-index: 99;
-        }
+        } */
    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+
+    ::-webkit-scrollbar-track {
+        background: rgb(0 0 0 / 90%);
+    }
+
+
+    ::-webkit-scrollbar-thumb {
+        size: 10px;
+        border-radius: 10px;
+        background-color: #dfdfdf;
+    }
+
+
+    ::-webkit-scrollbar-thumb:hover {
+        background:  rgb(204, 204, 204);
+    }
    .menu-toggle-wrap{
     padding: 1rem;
     width: 100%;
@@ -279,7 +310,7 @@ export default {
         transform: rotate(-180deg) ;
     }
     .menu{
-        margin-top: 40px;
+        margin-top: 15px;
     }
 
     .menu-item{

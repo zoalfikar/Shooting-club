@@ -1,64 +1,66 @@
 <template>
     <v-card
       class="mx-auto"
-      color="#2116da"
       dark
       max-width="400"
+      :color ="`${status ? `${status == 'active' ? 'rgb(119, 82, 82)' : 'rgb(66, 21, 21)' }` : 'rgb(151, 151, 151)'} `"
     >
-      <v-card-title>
-        <span class="text-h6 font-weight-light">الطاولة رقم 1</span>
-      </v-card-title>
-      <v-card-subtitle>الحالة : مشغولة / محجوزة / متوفرة</v-card-subtitle>
-      <v-card-subtitle>محجوزة باسم:الاسم الثلاثي</v-card-subtitle>
-      <v-card-subtitle>محجوزة بتاريخ : سنة / شهر / يوم</v-card-subtitle>
-      <v-card-subtitle>الحالة الفنية : مفعلة / خارج الخدمة</v-card-subtitle>
-      <v-card-actions>
-      <v-btn
-        text
-        color="teal accent-4"
-        @click="reveal = true"
-      >
-        Learn More
-      </v-btn>
-    </v-card-actions>
+        <div class="boardNumber text-h1 font-weight-light">
+            <div class="boardNumber-border">
+                <h1>{{tablenumber}}</h1>
+            </div>
+        </div>
 
-    <v-expand-transition>
-      <v-card
-        v-if="reveal"
-        class="transition-fast-in-fast-out v-card--reveal"
-        style="height: 100%;"
-      >
-        <v-card-text class="pb-0">
-          <p class="text-h4 text--primary">
-            Origin
-          </p>
-          <p>late 16th century (as a noun denoting a place where alms were distributed): from medieval Latin eleemosynarius, from late Latin eleemosyna ‘alms’, from Greek eleēmosunē ‘compassion’ </p>
-        </v-card-text>
-        <v-card-actions class="pt-0">
-          <v-btn
+        <v-card-subtitle>الحالة : مشغولة / محجوزة / متوفرة</v-card-subtitle>
+        <v-card-actions>
+        <v-btn
             text
             color="teal accent-4"
-            @click="reveal = false"
-          >
-            Close
-          </v-btn>
+            @click="reservation"
+        >
+            حجز
+        </v-btn>
+        <v-btn
+            text
+            color="teal accent-4"
+            @click="active"
+        >
+            مشغولة
+        </v-btn>
+        <v-btn
+            text
+            color="teal accent-4"
+            @click="empty"
+        >
+            فارغة
+        </v-btn>
         </v-card-actions>
-      </v-card>
-    </v-expand-transition>
-
     </v-card>
   </template>
 
 <script>
-
 export default {
+    props:{
+        'status': String ,
+        'tablenumber' : String
+        },
     data () {
         return {
-            reveal: false,
         }
     },
     methods : {
-
+        reservation: function(){
+            this.status = 'taken';
+            moveitem('3', this.tablenumber);
+        },
+        empty: function(){
+            this.status = '';
+            moveitem('1',this.tablenumber)
+        },
+        active: function(){
+            this.status = 'active';
+            moveitem('2',this.tablenumber)
+        }
     }
 };
 </script>
@@ -73,8 +75,22 @@ export default {
     .v-card:hover{
         top: 10px;
         box-shadow:0 0 10px black;
-        opacity: 0.5;
-
     }
-
+    .boardNumber{
+        padding-top: 35px;
+        width: 100%;
+        height: 180px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+    .boardNumber-border{
+        width: 120px;
+        border: 4px solid white;
+        border-radius: 100%;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        background-color: hwb(153 7% 76%);
+    }
 </style>

@@ -56625,6 +56625,44 @@ readers do not read off random characters that represent icons */
 
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
+@-webkit-keyframes fade-in-down {
+
+    from {
+
+        transform: translateY(-0.75rem);
+
+        opacity: 0
+    }
+
+    to {
+
+        transform: translateY(0rem);
+
+        opacity: 1
+    }
+}
+@keyframes fade-in-down {
+
+    from {
+
+        transform: translateY(-0.75rem);
+
+        opacity: 0
+    }
+
+    to {
+
+        transform: translateY(0rem);
+
+        opacity: 1
+    }
+}
+.animate-fade-in-down {
+
+    -webkit-animation: fade-in-down 0.2s ease-in-out both;
+
+            animation: fade-in-down 0.2s ease-in-out both
+}
 .appearance-none {
 
     -webkit-appearance: none;
@@ -56714,14 +56752,6 @@ readers do not read off random characters that represent icons */
     padding-top: 0.5rem;
 
     padding-bottom: 0.5rem
-}
-.pb-0 {
-
-    padding-bottom: 0px
-}
-.pt-0 {
-
-    padding-top: 0px
 }
 .pr-8 {
 

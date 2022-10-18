@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @keyframes s {
+            from {
+                top: -333px;
+            }
+            to {
+                top: -100px;
+            }
+        }
+        
+        #box {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            background: rgba(63, 81, 181, 0.6);
+        }
+        
+        .test {
+            animation-name: s;
+            animation-duration: 4s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button type="button" id="btn"><h1>click</h1></button>
+
+    <div id="box">1</div>
+    <script>
+        var btn = document.getElementById('btn');
+        var box = document.getElementById('box');
+
+
+
+
+        btn.addEventListener("click", layout);
+
+        function layout() {
+            box.style.marginTop = '333px';
+            box.classList.add('test')
+        }
+    </script>
+</body>
+
+</html>

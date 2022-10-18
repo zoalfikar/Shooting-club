@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 //     }
 // )->where('any', '.*');
 Route::get('/test', function () {
-
+ return view('test');
 });
 Route::get('/dev', function (Request $req) {
     if ($req->ajax()) {
