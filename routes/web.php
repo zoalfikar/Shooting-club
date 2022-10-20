@@ -27,7 +27,7 @@ Route::get('/test', function () {
 Route::get('/dev', function (Request $req) {
     if ($req->ajax()) {
         $sections = view('boards')->renderSections();
-        return response(["extendedScripts"=>$sections["scripts"] , "content"=>$sections["content"]]);
+        return response(["extendedScripts"=>$sections["scripts"] , "content"=>$sections["content"],"extendedStyles"=>$sections["styles"]]);
     }
     return view('boards');
 

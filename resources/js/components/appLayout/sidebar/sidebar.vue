@@ -215,7 +215,6 @@ export default {
                     }, 100);
                 });
         }
-
         async function vueMount()
         {
             var result = await appContainerLoadFinished();

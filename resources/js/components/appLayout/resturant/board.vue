@@ -70,7 +70,7 @@ export default {
         box-shadow:0 0 black;
         top:0;
         opacity: 1;
-        transition: top ease-in-out 0.2s , box-shadow ease-in-out 0.2s , opacity ease-in-out 0.2s ;
+        transition: top ease-in-out 0.2s , box-shadow ease-in-out 0.2s , opacity ease-in-out 0.2s , background-color ease-in-out 0.4s ;
     }
     .v-card:hover{
         top: 10px;
