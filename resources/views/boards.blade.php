@@ -24,7 +24,8 @@
         <div id="20" style="overflow: hidden;order:320" class="col-lg-3 col-md-4">  <board status="taken" tablenumber="20" style="animation-delay: 2.0s"  class="animate-fade-in-down"></board></div>
         <div id="21" style="overflow: hidden;order:321" class="col-lg-3 col-md-4">  <board status="taken" tablenumber="21" style="animation-delay: 2.1s"  class="animate-fade-in-down"></board></div>
         <div id="22" style="overflow: hidden;order:322" class="col-lg-3 col-md-4">  <board status="taken" tablenumber="22" style="animation-delay: 2.2s"  class="animate-fade-in-down"></board></div>
-</div>
+    </div>
+    <board-modal></board-modal>
 </div>
 @endsection
 @section('styles')
@@ -54,7 +55,7 @@
         var ease  = Power1.easeInOut;
         var boxes = [];
         var containerPadding = 12; //px
-
+        window.addEventListener('resize', initBoardsPositions);
         function numberOfElementsInRows() {
             if (total == 0) throw new Error("no elements"); ;
             var count = 1;
@@ -136,10 +137,23 @@
         function removeTemporaryAlternatives() {
             var temporaryAlternativesNodes = document.querySelectorAll(".temporary-alternative");
             for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
-                temporaryAlternativesNodes[i].remove();
+                if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
+                    temporaryAlternativesNodes[i].remove();
+                }
             }
         }
-
+        function initBoardsPositions() {
+            for (var i = 0; i < total; i++) {
+            var node = nodes[i];
+                boxes[i] = {
+                    transform: node._gsTransform,
+                    x: node.offsetLeft,
+                    y: node.offsetTop,
+                    order: node.style.order,
+                    node
+                };
+            }
+        }
         for (var i = 0; i < total; i++) {
 
         var node = nodes[i];

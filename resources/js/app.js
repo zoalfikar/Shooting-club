@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+// require('./bootstrap');
 import jQuery from 'jquery';
 window.$ = jQuery;
 window.Vue = require('vue').default;
@@ -24,6 +24,7 @@ window.vuetify = vuetify;
 Vue.component('navbar', require('./components/appLayout/navbar/navbar.vue').default);
 Vue.component('sidebar', require('./components/appLayout/sidebar/sidebar.vue').default);
 Vue.component('board', require('./components/appLayout/resturant/board.vue').default);
+Vue.component('board-modal', require('./components/appLayout/resturant/boardModal.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

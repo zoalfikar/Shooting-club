@@ -14,82 +14,82 @@
         <div class="menu-item-itemChild">
             <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-home" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الرئيسية</span></span>
             </div>
             <div class="item-children">
                 <div class="item-child">
-                    <span>+</span><span>&nbsp;&nbsp;&nbsp;<a href="">فرع أول</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span><span>&nbsp;&nbsp;&nbsp;<a href="">فرع أول</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
                 </div>
             </div>
         </div>
         <div class="menu-item-itemChild">
             <div class="menu-item" @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الحجوزات</span></span>
             </div>
             <div class="item-children" @click="showItemChildren($event.target)">
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع أول</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع أول</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 3</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 3</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 4</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 4</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 5</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 5</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 6</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 6</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 7</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 7</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 8</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع 8</a></span>
                 </div>
             </div>
         </div>
         <div class="menu-item-itemChild">
             <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الطلبات</span></span>
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع أول</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع أول</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
                 </div>
             </div>
         </div>
         <div class="menu-item-itemChild">
             <div class="menu-item"  @click="showItemChildren($event.target)">
                 <div class="item-icon">
-                    <i class="fa fa-chair fa-2x" aria-hidden="true"></i>
+                    <i class="fa fa-chair" aria-hidden="true"></i>
                 </div>
                 <span class="item-text"> <span>الطاولات</span></span>
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev'">عرض</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev'">عرض</a></span>
                 </div>
                 <div class="item-child">
-                    <span>+</span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
                 </div>
             </div>
         </div>
@@ -149,17 +149,16 @@ export default {
     'showItemChildren':showItemChildren,
    },
    mounted : function () {
-
-        function initJQuery() {
+        function initJQuery(){
 
         }
         $(document).ready( function() {
-            initJQuery()
+
         });
         var vueMounted = true ;
         var extendedScripts = null ;
         var extendedStyles = null ;
-        var divEl = document.createElement('div');;
+        var divEl = document.createElement('div');
         divEl.innerHTML = "<h1>wait a second!</h1>" ;
         function resetNavVar() {
             extendedScripts = null ;
@@ -313,42 +312,44 @@ export default {
     }
 
     .menu-item{
+        font-size: 2rem;
         position: relative;
-        top:0;
         margin:1px;
         padding: 13px;
         display: flex;
         border: 2px solid white;
-        transition: top 0.2s ease-in;
+        transition: transform 0.2s ease-in-out;
     }
+
+
     .menu-item:hover{
         cursor: pointer;
         color: chartreuse;
-        top:-5px;
-        font-size: 0.7rem;
+        transform: translateY(-5px);
     }
+    .menu-item:hover .item-text {
+        transform: translateX(8px);
+
+   }
+   .is_expanded .menu-item:hover .item-icon {
+        transform: translateX(-18px);
+   }
 
    .item-text  {
         overflow: hidden;
-        font-size: 2rem;
         margin-right: 30px;
-        transition:font-size 0.2s ease-in ,margin-right 0.2s ease-in ;
+        transition:transform 0.2s ease-in ;
    }
-   .menu-item:hover .item-text {
-        font-size: 1.5rem;
-        margin-right: 15px;
-   }
+
    .item-icon  {
         width: 40px;
         display: flex;
         justify-content: center;
         padding-right: 0px;
         padding-top: 8px;
-        transition: padding-right 0.2s ease-in;
+        transition: transform 0.2s ease-in;
    }
-   .is_expanded .menu-item:hover .item-icon {
-        padding-right: 23px;
-   }
+
 
    .item-children{
         max-height: 0;
@@ -368,6 +369,10 @@ export default {
    .item-child:hover{
     color:chartreuse;
    }
+
+   .item-child:hover .fa-angle-double-left{
+        transform:translateX(-6px);
+   }
    .item-child:hover a{
     color:chartreuse;
    }
@@ -376,6 +381,11 @@ export default {
    }
    .item-child:last-child{
     padding-bottom: 10px;
+   }
+   .fa-angle-double-left{
+    padding-top: 10px;
+    font-size: 11px;
+    transition: transform 0.2s ease-in-out;
    }
 
    .logo{

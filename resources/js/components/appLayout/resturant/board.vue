@@ -1,5 +1,6 @@
 <template>
     <v-card
+      :ripple="false"
       class="mx-auto"
       dark
       max-width="400"
@@ -16,21 +17,21 @@
         <v-btn
             text
             color="teal accent-4"
-            @click="reservation"
+            @click.stop="reservation"
         >
             حجز
         </v-btn>
         <v-btn
             text
             color="teal accent-4"
-            @click="active"
+            @click.stop="active"
         >
             مشغولة
         </v-btn>
         <v-btn
             text
             color="teal accent-4"
-            @click="empty"
+            @click.stop="empty"
         >
             فارغة
         </v-btn>
@@ -60,12 +61,14 @@ export default {
         active: function(){
             this.status = 'active';
             moveitem('2',this.tablenumber)
-        }
+        },
+
     }
 };
 </script>
 
 <style scoped>
+
     .v-card{
         box-shadow:0 0 black;
         top:0;

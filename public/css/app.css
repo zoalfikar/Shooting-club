@@ -56663,6 +56663,10 @@ readers do not read off random characters that represent icons */
 
             animation: fade-in-down 0.2s ease-in-out both
 }
+.resize {
+
+    resize: both
+}
 .appearance-none {
 
     -webkit-appearance: none;
