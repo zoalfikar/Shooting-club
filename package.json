@@ -26,12 +26,13 @@
         "tailwindcss": "^3.1.8",
         "vue": "^2.6.12",
         "vue-loader": "^15.9.8",
-        "vue-template-compiler": "^2.6.12"
+        "vue-template-compiler": "^2.6.12",
+        "vuex": "^4.1.0"
     },
     "dependencies": {
         "@mdi/font": "^7.0.96",
         "jquery": "^3.6.1",
-        "vue-router": "^4.1.5",
+        "vue-router": "^2.7.0",
         "vuetify": "^2.6.10"
     }
 }

@@ -134,7 +134,6 @@ const toggleMenu = () => {
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
     document.dispatchEvent(sidebarStatus);
-
 }
 export default {
     props:['src','url'],
@@ -196,7 +195,7 @@ export default {
                         var startTime = Date.now();
                         try {
                             while (condition) {
-                                if (Date.now() - startTime > 14000 ) {
+                                if (Date.now() - startTime > 7000 ) {
                                     condition = false ;
                                     throw new Error("something went rong!");
                                 }
@@ -219,10 +218,8 @@ export default {
             var result = await appContainerLoadFinished();
             console.log(result);
             if (!vueMounted) {
-                const app2 = new Vue({
-                vuetify,
-                });
-                app2.$mount('.app-container');
+                const app = new Vue(vueAppOptions);
+                app.$mount('.app-container');
                 vueMounted = true ;
                 initJQuery();
                 $('.extendedStyles').html(extendedStyles);

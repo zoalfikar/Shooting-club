@@ -1,5 +1,6 @@
 <template>
     <v-card
+      @click="toggleBoardModal"
       :ripple="false"
       class="mx-auto"
       dark
@@ -40,6 +41,7 @@
   </template>
 
 <script>
+import store from "../../../store";
 export default {
     props:{
         'status': String ,
@@ -49,10 +51,14 @@ export default {
         return {
         }
     },
+    computed: {
+            test: ()=> store.state.test,
+        },
     methods : {
         reservation: function(){
             this.status = 'taken';
             moveitem('3', this.tablenumber);
+            // store.dispatch("chang" , this.tablenumber);
         },
         empty: function(){
             this.status = '';
@@ -62,6 +68,15 @@ export default {
             this.status = 'active';
             moveitem('2',this.tablenumber)
         },
+        toggleBoardModal : function() {
+            document.querySelector(".board-modal").style.display = "block";
+            document.querySelector(".board-modal-content").classList.add("animat-show-modal");
+            document.querySelector(".board-modal-content").addEventListener('animationend', () => {
+                document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
+
+            });
+
+    }
 
     }
 };
