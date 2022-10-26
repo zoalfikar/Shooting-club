@@ -1,12 +1,14 @@
-import Vue from "vue"
-const hello = Vue.component('hello', {
-    template: '<h1>hello</h1>',
-})
-const vue = `<template><h1>hello</h1></template>`
-Vue
+import orders from "../components/appLayout/resturant/boards/orders.vue";
+import info from "../components/appLayout/resturant/boards/info.vue";
 const routes = [{
-    path: '/home',
-    component: hello,
-    name: 'home',
-}]
+        path: '/vue/orders',
+        component: orders,
+        name: 'orders',
+    },
+    {
+        path: '/vue/info',
+        component: info,
+        name: 'info',
+    }
+]
 export default routes

@@ -56601,6 +56601,10 @@ readers do not read off random characters that represent icons */
 
     display: block
 }
+.inline {
+
+    display: inline
+}
 .flex {
 
     display: flex
@@ -56812,6 +56816,10 @@ readers do not read off random characters that represent icons */
     --tw-text-opacity: 1;
 
     color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+.underline {
+
+    text-decoration-line: underline
 }
 .transition {
 

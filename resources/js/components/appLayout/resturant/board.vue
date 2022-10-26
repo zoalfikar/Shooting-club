@@ -41,6 +41,7 @@
   </template>
 
 <script>
+import router from '../../../routes';
 import store from "../../../store";
 export default {
     props:{
@@ -69,11 +70,13 @@ export default {
             moveitem('2',this.tablenumber)
         },
         toggleBoardModal : function() {
+            router.push({
+                name:"orders",
+            });
             document.querySelector(".board-modal").style.display = "block";
             document.querySelector(".board-modal-content").classList.add("animat-show-modal");
             document.querySelector(".board-modal-content").addEventListener('animationend', () => {
                 document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
-
             });
 
     }

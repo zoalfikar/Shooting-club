@@ -21,6 +21,10 @@ use Illuminate\Http\Request;
 //         return view('appLayouts.app');
 //     }
 // )->where('any', '.*');
+Route::get('/vue/{vue_capture?}', function () {
+    return view('boards');
+   })->where('vue_capture', '[\/\w\.-]*');
+
 Route::get('/test', function () {
  return view('test');
 });

@@ -6,7 +6,7 @@ Vue.use(vuex);
 
 const store = new vuex.Store({
     state: {
-        test: 'test'
+        curerntTable: '',
     },
     getter: {},
     actions: {
