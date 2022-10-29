@@ -309,13 +309,15 @@ export default {
     }
 
     .menu-item{
+        display: grid;
+        grid-template-areas: 'item-icon item-text';
+        grid-template-columns: calc(2rem + 28px) auto;
+        grid-gap:  17px ;
         font-size: 2rem;
         position: relative;
-        margin:1px;
-        padding: 13px;
-        display: flex;
         border: 2px solid white;
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out , background-color 0.2s  ease-in-out;
+        z-index: unset;
     }
 
 
@@ -323,27 +325,29 @@ export default {
         cursor: pointer;
         color: chartreuse;
         transform: translateY(-5px);
+        z-index: 9;
+        background-color: var(--dark);
+        transition:  background-color 0  ;
+
     }
     .menu-item:hover .item-text {
         transform: translateX(8px);
 
    }
    .is_expanded .menu-item:hover .item-icon {
-        transform: translateX(-18px);
+        transform: translateX(-12px);
    }
 
    .item-text  {
         overflow: hidden;
-        margin-right: 30px;
         transition:transform 0.2s ease-in ;
    }
 
    .item-icon  {
-        width: 40px;
         display: flex;
         justify-content: center;
-        padding-right: 0px;
         padding-top: 8px;
+        padding-bottom: 12px;
         transition: transform 0.2s ease-in;
    }
 

@@ -53,13 +53,12 @@ export default {
         }
     },
     computed: {
-            test: ()=> store.state.test,
+            // test: ()=> store.state.test,
         },
     methods : {
         reservation: function(){
             this.status = 'taken';
             moveitem('3', this.tablenumber);
-            // store.dispatch("chang" , this.tablenumber);
         },
         empty: function(){
             this.status = '';
@@ -70,14 +69,17 @@ export default {
             moveitem('2',this.tablenumber)
         },
         toggleBoardModal : function() {
+            store.dispatch("change" , this.tablenumber);
             router.push({
                 name:"orders",
             });
+            var clearShowModel = ()=>{
+                document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
+                document.querySelector(".board-modal-content").removeEventListener('animationend',clearShowModel);
+            }
             document.querySelector(".board-modal").style.display = "block";
             document.querySelector(".board-modal-content").classList.add("animat-show-modal");
-            document.querySelector(".board-modal-content").addEventListener('animationend', () => {
-                document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
-            });
+            document.querySelector(".board-modal-content").addEventListener('animationend', clearShowModel);
 
     }
 

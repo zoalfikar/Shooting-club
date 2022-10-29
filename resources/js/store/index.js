@@ -10,10 +10,14 @@ const store = new vuex.Store({
     },
     getter: {},
     actions: {
-
+        change({ commit }, tableNumber) {
+            commit('setnumber', tableNumber)
+        }
     },
     mutations: {
-
+        setnumber: (state, tableNumber) => {
+            state.curerntTable = tableNumber;
+        }
     },
     modules: {}
 })
