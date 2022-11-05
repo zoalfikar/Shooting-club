@@ -154,6 +154,8 @@ export default {
         $(document).ready( function() {
 
         });
+        var app1 ;
+
         var vueMounted = true ;
         var extendedScripts = null ;
         var extendedStyles = null ;
@@ -209,6 +211,7 @@ export default {
                         } catch (error) {
                             console.log(error);
                             alert("حدث خطأ ما , استمرت العملية وقت اطول من المتوقع ")
+                            location.reload();
                         }
                     }, 100);
                 });
@@ -216,10 +219,9 @@ export default {
         async function vueMount()
         {
             var result = await appContainerLoadFinished();
-            console.log(result);
             if (!vueMounted) {
-                const app = new Vue(vueAppOptions);
-                app.$mount('.app-container');
+                app1 = new Vue(vueAppOptions);
+                app1.$mount('.app-container');
                 vueMounted = true ;
                 initJQuery();
                 $('.extendedStyles').html(extendedStyles);

@@ -1,11 +1,12 @@
 <template>
+
     <div class="board-modal">
-        <div class="board-modal-content">
+        <div :style="{'background-color': currentTableStaus == 'taken' ? 'hsl(0, 57%, 11%)' :currentTableStaus == 'active' ?'hsl(0, 0%, 45%)':'hsl(0, 0%, 66%)'}" class="board-modal-content">
             <div class="modal-title">
                 <center><h1>{{currentTable}}</h1> </center>
             </div>
             <div class="modal-navigate">
-                <v-btn depressed   class="naveB" @click="getOrders();">الطلبات</v-btn>
+                <v-btn depressed   class="naveB" @click="getOrders();" :style="`display:${currentTableStaus != 'active' ? 'none' : 'block'}`">الطلبات</v-btn>
                 <v-btn depressed   class="naveB"  @click="getStatus()">الحالة</v-btn>
                 <v-btn depressed   class="naveB"  @click="getReservitions()">الحجوزات</v-btn>
                 <div class="navunderline"></div>
@@ -14,6 +15,7 @@
                 <div class="divider"></div>
                 <router-view/>
             </div>
+
             <div class="btns">
                 <v-btn large  @click="done" color="primary">
                     تم!
@@ -23,11 +25,9 @@
                 </v-btn>
             </div>
         </div>
-        <resturant-menu></resturant-menu>
     </div>
 </template>
 <script>
-import { set } from 'vue';
 import router from "../../../routes";
 import store from '../../../store';
 
@@ -37,15 +37,17 @@ export default {
   data () {
 
     return {
+
     }
   },
   computed : {
-    currentTable:  ()=> store.state.curerntTable
+    currentTable:  ()=> store.state.currentTable,
+    currentTableStaus:  ()=> store.state.currentTableStatus,
   }
   ,
   methods:{
-        done : () =>{
 
+        done : () =>{
             var clearHideModal = ()=>{
                 document.querySelector(".board-modal-content").classList.remove('animat-hide-modal')
                 document.querySelector(".board-modal").style.display = "none" ;
@@ -53,18 +55,22 @@ export default {
             }
             document.querySelector(".board-modal-content").classList.add('animat-hide-modal')
             document.querySelector(".board-modal-content").addEventListener("animationend" , clearHideModal)
-        },
-        getOrders:()=>{
             router.push({
-                name:"orders",
+                path:"/dev",
             });
         },
-        getStatus:()=>{
+        getOrders:function(){
+            router.push({
+                name:"orders",
+                params:{'tableNumber':this.currentTable}
+            });
+        },
+        getStatus:function(){
             router.push({
                 name:"info",
             });
         },
-        getReservitions:()=>{
+        getReservitions: function(){
             router.push({
                 name:"reservations",
             });
@@ -73,6 +79,7 @@ export default {
   },
   mounted : function()
     {
+
         const modalTitleText = document.querySelector(".modal-title h1")
         modalTitleText.addEventListener('animationiteration' , ()=>{
             modalTitleText.style.animationPlayState ='paused'
@@ -82,7 +89,7 @@ export default {
         })
         const modCon =  document.querySelector(".modal-navigation-content")
         var modConAlternative ;
-        var currentNavB ;
+        var currentNavB = document.createElement('button');
         var newNavB;
         const divider =document.querySelector(".divider");
         const modal = document.querySelector(".board-modal");
@@ -95,12 +102,18 @@ export default {
                 {
                     var currentModalDisplay = getComputedStyle(modal).display;
                     if (oldModalDisplay == "none" && currentModalDisplay == "block") {
-                        underline.style.left = navButtuns[0].offsetLeft;
-                        underline.style.width = getComputedStyle(navButtuns[0]).width
                         oldModalDisplay = 'block';
                         modConAlternative = modCon.cloneNode(true);
                         modConAlternative.style.position="absolute";
-                        currentNavB = navButtuns[0];
+                        for (let i = 0; i < navButtuns.length; i++) {
+                           if (navButtuns[i].style.display !== 'none') {
+                                currentNavB = navButtuns[i];
+                                break;
+                           }
+                        }
+                        underline.style.left = currentNavB.offsetLeft;
+                        underline.style.width = getComputedStyle(currentNavB).width
+                        currentNavB.click();
                     }
                     if (oldModalDisplay == "block" && currentModalDisplay == "none") {
                         underline.style.width = '0';
@@ -217,9 +230,9 @@ export default {
             })
         }
 
-        document.querySelector(".board-modal").addEventListener("click" , ()=>{
-            var modal = document.querySelector(".board-modal-content");
-            if ( !modal.contains(event.target)) {
+        document.querySelector(".board-modal").addEventListener("click" , (event)=>{
+            // if ( !modal.contains(event.target)) {
+            if ( event.target==modal) {
                 modal.classList.add("animat-alter-modal");
                 modal.addEventListener('animationend', () => {
                     modal.classList.remove("animat-alter-modal");
@@ -239,10 +252,6 @@ export default {
         from{transform: scale(0);}
         to{transform: scale(1);}
     }
-    @keyframes animat-hide-modal {
-        from{clip-path: inset(0 0 0 0);}
-        to{clip-path: inset( 0 100% 0 0);}
-    }
     .animat-alter-modal{
         animation: animat-alter-modal;
         animation-duration: 0.6s;
@@ -255,9 +264,10 @@ export default {
         animation-timing-function: ease-in-out;
     }
     .animat-hide-modal{
-        animation: animat-hide-modal;
-        animation-duration: 0.6s;
+        animation: animat-show-modal;
+        animation-duration: 0.4s;
         animation-timing-function: ease-in-out;
+        animation-direction: reverse;
     }
     .board-modal{
         display :none;
@@ -277,9 +287,6 @@ export default {
         color: aliceblue;
         margin: auto;
         width: 750px;
-
-        background-image: linear-gradient(to left bottom ,rgb(102, 102, 102) ,rgb(109, 109, 109)) ;
-        background-color: hsl(0, 0%, 45%);
         min-height: 400px;
         border-radius: 13px;
         position: relative;
@@ -370,15 +377,16 @@ export default {
     .modal-navigation-content{
         position: relative;
         height: 400px;
-        /* overflow-x: hidden; */
-        /* clip-path: inset(0 0 0 0); */
+        /* overflow-y: auto !important; */
+        overflow-x: hidden !important;
     }
     .divider{
       position: absolute;
+      top: 0;
       right:-3px;
       width: 3px;
-      height: 400px;
-      background-color: hsl(0, 0%, 85%);
+      height: 100%;
+      background-color: hsl(0, 0%, 67%);
     }
 
     .btns{

@@ -59,20 +59,22 @@ export default {
         reservation: function(){
             this.status = 'taken';
             moveitem('3', this.tablenumber);
+            store.dispatch("changeBoardState" ,  {"status":'taken' ,"tableNumber":this.tablenumber} );
         },
         empty: function(){
             this.status = '';
             moveitem('1',this.tablenumber)
+            store.dispatch("changeBoardState" ,  {"status":'' ,"tableNumber":this.tablenumber} );
         },
         active: function(){
             this.status = 'active';
             moveitem('2',this.tablenumber)
+            $(".info-modal").css("display", "block");
+            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tablenumber}  );
         },
         toggleBoardModal : function() {
-            store.dispatch("change" , this.tablenumber);
-            router.push({
-                name:"orders",
-            });
+            store.dispatch("changeCurrentTableNumber" , this.tablenumber);
+            store.dispatch("changeCurrentTableStatus" , this.status);
             var clearShowModel = ()=>{
                 document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
                 document.querySelector(".board-modal-content").removeEventListener('animationend',clearShowModel);

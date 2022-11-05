@@ -56601,6 +56601,10 @@ readers do not read off random characters that represent icons */
 
     display: block
 }
+.inline {
+
+    display: inline
+}
 .flex {
 
     display: flex
@@ -56624,6 +56628,10 @@ readers do not read off random characters that represent icons */
 .max-w-lg {
 
     max-width: 32rem
+}
+.flex-grow {
+
+    flex-grow: 1
 }
 .transform {
 
@@ -56761,6 +56769,10 @@ readers do not read off random characters that represent icons */
 
     padding-bottom: 0.5rem
 }
+.pl-2 {
+
+    padding-left: 0.5rem
+}
 .pr-8 {
 
     padding-right: 2rem
@@ -56816,6 +56828,10 @@ readers do not read off random characters that represent icons */
 .underline {
 
     text-decoration-line: underline
+}
+.filter {
+
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
 .transition {
 

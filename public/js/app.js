@@ -373,20 +373,31 @@ __webpack_require__.r(__webpack_exports__);
     reservation: function reservation() {
       this.status = 'taken';
       moveitem('3', this.tablenumber);
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
+        "status": 'taken',
+        "tableNumber": this.tablenumber
+      });
     },
     empty: function empty() {
       this.status = '';
       moveitem('1', this.tablenumber);
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
+        "status": '',
+        "tableNumber": this.tablenumber
+      });
     },
     active: function active() {
       this.status = 'active';
       moveitem('2', this.tablenumber);
+      $(".info-modal").css("display", "block");
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
+        "status": 'active',
+        "tableNumber": this.tablenumber
+      });
     },
     toggleBoardModal: function toggleBoardModal() {
-      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("change", this.tablenumber);
-      _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-        name: "orders"
-      });
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeCurrentTableNumber", this.tablenumber);
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeCurrentTableStatus", this.status);
 
       var clearShowModel = function clearShowModel() {
         document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
@@ -449,7 +460,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -458,7 +469,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {
     currentTable: function currentTable() {
-      return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.curerntTable;
+      return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.currentTable;
+    },
+    currentTableStaus: function currentTableStaus() {
+      return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.currentTableStatus;
     }
   },
   methods: {
@@ -471,10 +485,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       document.querySelector(".board-modal-content").classList.add('animat-hide-modal');
       document.querySelector(".board-modal-content").addEventListener("animationend", clearHideModal);
+      _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+        path: "/dev"
+      });
     },
     getOrders: function getOrders() {
       _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-        name: "orders"
+        name: "orders",
+        params: {
+          'tableNumber': this.currentTable
+        }
       });
     },
     getStatus: function getStatus() {
@@ -498,7 +518,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     });
     var modCon = document.querySelector(".modal-navigation-content");
     var modConAlternative;
-    var currentNavB;
+    var currentNavB = document.createElement('button');
     var newNavB;
     var divider = document.querySelector(".divider");
     var modal = document.querySelector(".board-modal");
@@ -518,12 +538,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             var currentModalDisplay = getComputedStyle(modal).display;
 
             if (oldModalDisplay == "none" && currentModalDisplay == "block") {
-              underline.style.left = navButtuns[0].offsetLeft;
-              underline.style.width = getComputedStyle(navButtuns[0]).width;
               oldModalDisplay = 'block';
               modConAlternative = modCon.cloneNode(true);
               modConAlternative.style.position = "absolute";
-              currentNavB = navButtuns[0];
+
+              for (var i = 0; i < navButtuns.length; i++) {
+                if (navButtuns[i].style.display !== 'none') {
+                  currentNavB = navButtuns[i];
+                  break;
+                }
+              }
+
+              underline.style.left = currentNavB.offsetLeft;
+              underline.style.width = getComputedStyle(currentNavB).width;
+              currentNavB.click();
             }
 
             if (oldModalDisplay == "block" && currentModalDisplay == "none") {
@@ -657,10 +685,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     }
 
-    document.querySelector(".board-modal").addEventListener("click", function () {
-      var modal = document.querySelector(".board-modal-content");
-
-      if (!modal.contains(event.target)) {
+    document.querySelector(".board-modal").addEventListener("click", function (event) {
+      // if ( !modal.contains(event.target)) {
+      if (event.target == modal) {
         modal.classList.add("animat-alter-modal");
         modal.addEventListener('animationend', function () {
           modal.classList.remove("animat-alter-modal");
@@ -668,6 +695,59 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     });
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../store */ "./resources/js/store/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  computed: {
+    boards: function boards() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.boards;
+    }
+  },
+  methods: {},
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -702,6 +782,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../routes */ "./resources/js/routes/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../store */ "./resources/js/store/index.js");
 //
 //
 //
@@ -732,7 +814,95 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      currentTable: {}
+    };
+  },
+  methods: {
+    increseQ: function increseQ(id) {
+      this.currentTable.orders.map(function (element) {
+        if (element.id == id) {
+          element.quantity++;
+        }
+      });
+    },
+    decreseQ: function decreseQ(id) {
+      this.currentTable.orders.map(function (element) {
+        if (element.id == id && element.quantity > 0) {
+          element.quantity--;
+        }
+      });
+    },
+    deleteOrder: function deleteOrder(id) {
+      var index = this.currentTable.orders.findIndex(function (o) {
+        return o.id == id;
+      });
+      this.currentTable.orders.splice(index, 1);
+    },
+    toggleMenu: function toggleMenu() {
+      document.querySelector(".menu-wraper").style.display = "block";
+    },
+    updateOrder: function updateOrder(e) {
+      var _this = this;
+
+      var save = function save() {
+        _this.saveOrder();
+      };
+
+      if (e.target.innerHTML == "تعديل طلب") {
+        e.target.innerHTML = "حفظ";
+        $('.fa-remove').css('display', "block");
+        $('.fa-plus').css('display', "block");
+        $('.fa-minus').css('display', "block");
+      } else {
+        e.target.innerHTML = "تعديل طلب";
+        $('.fa-remove').css('display', "none");
+        $('.fa-plus').css('display', "none");
+        $('.fa-minus').css('display', "none");
+        save();
+      }
+    },
+    saveOrder: function saveOrder() {
+      var itemsToDelete = [];
+      var newOrders = this.currentTable.orders;
+
+      for (var i = 0; i < this.currentTable.orders.length; i++) {
+        if (this.currentTable.orders[i].quantity === 0) {
+          itemsToDelete.push(i);
+        }
+      }
+
+      for (var _i = 0; _i < itemsToDelete.length; _i++) {
+        this.currentTable.orders.splice(_i, 1);
+      }
+
+      for (var _i2 = 0; _i2 < newOrders.length; _i2++) {
+        delete newOrders[_i2].id;
+      }
+
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("saveOrders", {
+        "tableNumber": this.currentTable.tableNumber,
+        "orders": newOrders
+      });
+    }
+  },
+  mounted: function mounted() {
+    var value = _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards.filter(function (b) {
+      return b.tableNumber == _routes__WEBPACK_IMPORTED_MODULE_0__["default"].currentRoute.params.tableNumber;
+    });
+
+    for (var i = 0; i < value[0].orders.length; i++) {
+      value[0].orders[i].id = i;
+    }
+
+    this.currentTable = value[0];
+  }
+});
 
 /***/ }),
 
@@ -755,6 +925,77 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../store */ "./resources/js/store/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  emits: ['infoDone'],
+  computed: {
+    aviliableBoards: function aviliableBoards() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.aviliabeBoards;
+    }
+  },
+  methods: {
+    showOtherTable: function showOtherTable() {
+      $('.other-boards').toggle("other-boards-hide");
+    }
+  },
+  mounted: function mounted() {
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getAviliableBoards");
+    $('.saveInfo').click(function (e) {
+      e.preventDefault();
+      $(".info-modal").css("display", "none");
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/menu.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/menu.vue?vue&type=script&lang=js& ***!
@@ -766,6 +1007,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -912,7 +1159,758 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mounted: function mounted() {
+    var RWMenu = document.querySelector(".menu-wraper");
+    var oldRWMenuDisplay = getComputedStyle(RWMenu).display;
+    var currentRWMenuDisplay;
+    var momento = [];
+
+    var REMenuMutationCallback = function REMenuMutationCallback(mutationsList) {
+      var _iterator = _createForOfIteratorHelper(mutationsList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var mutation = _step.value;
+
+          if (mutation.attributeName == "style") {
+            currentRWMenuDisplay = getComputedStyle(RWMenu).display;
+
+            if (oldRWMenuDisplay == "none" && currentRWMenuDisplay == "block") {
+              $(".resturant-menu").toggleClass("resturant-menu-show");
+              $(".resetOrder").toggleClass("show-RMOptions-buttun");
+              $(".rollbackLastOrder").toggleClass("show-RMOptions-buttun");
+              $(".cancelOrder").toggleClass("show-RMOptions-buttun");
+              $(".orderDone").toggleClass("show-order-done-buttun");
+              setTimeout(function () {
+                $(".resturant-menu").toggleClass("resturant-menu-show");
+                $(".orderDone").toggleClass("show-order-done-buttun");
+                $(".orderDone").toggleClass("button-float");
+                $(".resetOrder").toggleClass("show-RMOptions-buttun");
+                $(".rollbackLastOrder").toggleClass("show-RMOptions-buttun");
+                $(".cancelOrder").toggleClass("show-RMOptions-buttun");
+              }, 1300);
+              oldRWMenuDisplay = 'block';
+            }
+
+            if (oldRWMenuDisplay == "block" && currentRWMenuDisplay == "none") {
+              oldRWMenuDisplay = 'none';
+            }
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    };
+
+    var REMObserver = new MutationObserver(REMenuMutationCallback);
+    REMObserver.observe(RWMenu, {
+      attributes: true
+    });
+
+    function closeRMenu() {
+      $(".resturant-menu").toggleClass("resturant-menu-hide");
+      $(".orderDone").toggleClass("button-float");
+      $(".orderDone").toggleClass("hide-order-done-buttun");
+      $(".resetOrder").toggleClass("hide-RMOptions-buttun");
+      $(".rollbackLastOrder").toggleClass("hide-RMOptions-buttun");
+      $(".cancelOrder").toggleClass("hide-RMOptions-buttun");
+      setTimeout(function () {
+        $(".resturant-menu").toggleClass("resturant-menu-hide");
+        $(".orderDone").toggleClass("hide-order-done-buttun");
+        $(".resetOrder").toggleClass("hide-RMOptions-buttun");
+        $(".rollbackLastOrder").toggleClass("hide-RMOptions-buttun");
+        $(".cancelOrder").toggleClass("hide-RMOptions-buttun");
+        RWMenu.style.display = 'none';
+      }, 700);
+    }
+
+    $(".resturant-m-item").click(function (e) {
+      e.preventDefault();
+      $(this).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
+    });
+    $(".resturant-m-item-checkBox").on("click", function (e) {
+      if ($(this).prop("checked")) {
+        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'visible');
+        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val(1);
+        momento.push(e);
+      } else {
+        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'hidden');
+        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val('');
+      }
+    });
+    $(".increment-btn").click(function () {
+      var inc_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
+      var value = parseInt(inc_value, 10);
+      value = isNaN(value) ? 0 : value;
+
+      if (true) {
+        value++;
+        $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+      }
+    });
+    $(".decrement-btn").click(function () {
+      var dec_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
+      var value = parseInt(dec_value, 10);
+      value = isNaN(value) ? 0 : value;
+
+      if (value > 0) {
+        value--;
+        $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+      }
+    });
+    $(".orderDone").click(function (e) {
+      closeRMenu();
+    });
+    $(".cancelOrder").click(function (e) {
+      closeRMenu();
+    });
+    $(".resetOrder").click(function (e) {
+      $('.resturant-m-item-checkBox').prop("checked", false);
+      $('.resturant-m-item-quantity').css('visibility', 'hidden');
+      $('.resturant-m-item-quantity').val('');
+    });
+    $(".rollbackLastOrder").click(function (e) {
+      var ev = momento.pop();
+
+      if (ev) {
+        $(ev.target).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
+      }
+    });
+    $('.section-nav').click(function (e) {
+      e.preventDefault();
+      $('.display-all-section').css("margin-top", '0');
+      $('.section-nav').css("margin-top", '0');
+      $(this).css("margin-top", '-4px');
+      var clicked = $(this).children("button").children("span").text();
+      $('.col ').css("display", "none");
+      $(".col").filter(function () {
+        return $(this).children('.menu-section').children('center').children('h1').text() === clicked;
+      }).css("display", "block");
+    });
+    $('.display-all-section').click(function (e) {
+      e.preventDefault();
+      $('.section-nav').css("margin-top", '0');
+      $(this).css("margin-top", '-4px');
+      $('.col ').css("display", "block");
+    });
+  }
+});
 
 /***/ }),
 
@@ -1090,6 +2088,7 @@ var toggleMenu = function toggleMenu() {
     function initJQuery() {}
 
     $(document).ready(function () {});
+    var app1;
     var vueMounted = true;
     var extendedScripts = null;
     var extendedStyles = null;
@@ -1149,6 +2148,7 @@ var toggleMenu = function toggleMenu() {
           } catch (error) {
             console.log(error);
             alert("حدث خطأ ما , استمرت العملية وقت اطول من المتوقع ");
+            location.reload();
           }
         }, 100);
       });
@@ -1160,7 +2160,7 @@ var toggleMenu = function toggleMenu() {
 
     function _vueMount() {
       _vueMount = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var result, app;
+        var result;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -1170,11 +2170,10 @@ var toggleMenu = function toggleMenu() {
 
               case 2:
                 result = _context.sent;
-                console.log(result);
 
                 if (!vueMounted) {
-                  app = new Vue(vueAppOptions);
-                  app.$mount('.app-container');
+                  app1 = new Vue(vueAppOptions);
+                  app1.$mount('.app-container');
                   vueMounted = true;
                   initJQuery();
                   $('.extendedStyles').html(extendedStyles);
@@ -1183,7 +2182,7 @@ var toggleMenu = function toggleMenu() {
                   console.log("vue Mounted");
                 }
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -1228,7 +2227,9 @@ window.vueAppOptions = vueAppOptions; // const files = require.context('./', tru
 Vue.component('navbar', (__webpack_require__(/*! ./components/appLayout/navbar/navbar.vue */ "./resources/js/components/appLayout/navbar/navbar.vue")["default"]));
 Vue.component('sidebar', (__webpack_require__(/*! ./components/appLayout/sidebar/sidebar.vue */ "./resources/js/components/appLayout/sidebar/sidebar.vue")["default"]));
 Vue.component('board', (__webpack_require__(/*! ./components/appLayout/resturant/board.vue */ "./resources/js/components/appLayout/resturant/board.vue")["default"]));
+Vue.component('boards', (__webpack_require__(/*! ./components/appLayout/resturant/boards.vue */ "./resources/js/components/appLayout/resturant/boards.vue")["default"]));
 Vue.component('board-modal', (__webpack_require__(/*! ./components/appLayout/resturant/boardModal.vue */ "./resources/js/components/appLayout/resturant/boardModal.vue")["default"]));
+Vue.component('info-modal', (__webpack_require__(/*! ./components/appLayout/resturant/infoModel.vue */ "./resources/js/components/appLayout/resturant/infoModel.vue")["default"]));
 Vue.component('resturant-menu', (__webpack_require__(/*! ./components/appLayout/resturant/menu.vue */ "./resources/js/components/appLayout/resturant/menu.vue")["default"]));
 var app = new Vue({
   vuetify: _vuetify__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1282,7 +2283,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [{
-  path: '/vue/orders',
+  path: '/vue/orders/:tableNumber',
   component: _components_appLayout_resturant_boards_orders_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
   name: 'orders'
 }, {
@@ -1318,18 +2319,547 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    curerntTable: ''
+    currentTable: '',
+    currentTableStatus: '',
+    boards: [{
+      tableNumber: '1',
+      state: "active",
+      order: 200,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'كباب',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }]
+    }, {
+      tableNumber: '2',
+      state: "",
+      order: 100,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '3',
+      state: "",
+      order: 100,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '4',
+      state: "",
+      order: 100,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '5',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '6',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '7',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '8',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '9',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '10',
+      state: "",
+      order: 100,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '11',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '12',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '13',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '14',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '15',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '16',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '17',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '18',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '19',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '20',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '21',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }, {
+      tableNumber: '22',
+      state: "taken",
+      order: 300,
+      info: {
+        customName: '',
+        slug: '',
+        moreInfo: ''
+      },
+      orders: [{
+        orderName: 'بيبسي',
+        price: 10,
+        quantity: 2
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }, {
+        orderName: 'فروج',
+        price: 60,
+        quantity: 3
+      }]
+    }],
+    aviliabeBoards: []
   },
   getter: {},
   actions: {
-    change: function change(_ref, tableNumber) {
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref, tableNumber) {
       var commit = _ref.commit;
-      commit('setnumber', tableNumber);
+      commit('setCurrentTableNumber', tableNumber);
+    },
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref2, status) {
+      var commit = _ref2.commit;
+      commit('setCurrentTableStatus', status);
+    },
+    getAviliableBoards: function getAviliableBoards(_ref3) {
+      var commit = _ref3.commit;
+      var aviliableBoards = this.state.boards.filter(function (b) {
+        return b.state == '';
+      });
+      commit('setAviliableBoards', aviliableBoards);
+    },
+    changeBoardState: function changeBoardState(_ref4, payload) {
+      var commit = _ref4.commit;
+      var index = this.state.boards.findIndex(function (b) {
+        return b.tableNumber == payload.tableNumber;
+      });
+      var data = {
+        "index": index,
+        "status": payload.status
+      };
+      commit('setBoardState', data);
+      this.dispatch("getAviliableBoards");
+    },
+    saveOrders: function saveOrders(_ref5, payload) {
+      var commit = _ref5.commit;
+      var index = this.state.boards.findIndex(function (b) {
+        return b.tableNumber == payload.tableNumber;
+      });
+      var data = {
+        "index": index,
+        "orders": payload.orders
+      };
+      commit('setoOrders', data);
     }
   },
   mutations: {
-    setnumber: function setnumber(state, tableNumber) {
-      state.curerntTable = tableNumber;
+    setCurrentTableNumber: function setCurrentTableNumber(state, tableNumber) {
+      state.currentTable = tableNumber;
+    },
+    setCurrentTableStatus: function setCurrentTableStatus(state, status) {
+      state.currentTableStatus = status;
+    },
+    setAviliableBoards: function setAviliableBoards(state, aviliableBoards) {
+      state.aviliabeBoards = aviliableBoards;
+    },
+    setBoardState: function setBoardState(state, data) {
+      state.boards[data.index].state = data.status;
+    },
+    setoOrders: function setoOrders(state, data) {
+      state.boards[data.index].orders = data.orders;
     }
   },
   modules: {}
@@ -12384,7 +13914,31 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes animat-alter-modal-data-v-bdf973a2 {\n0%{transform: scale(1);}\n50%{transform: scale(1.03);}\n100%{transform: scale(1);}\n}\n@keyframes animat-alter-modal-data-v-bdf973a2 {\n0%{transform: scale(1);}\n50%{transform: scale(1.03);}\n100%{transform: scale(1);}\n}\n@-webkit-keyframes animat-show-modal-data-v-bdf973a2 {\nfrom{transform: scale(0);}\nto{transform: scale(1);}\n}\n@keyframes animat-show-modal-data-v-bdf973a2 {\nfrom{transform: scale(0);}\nto{transform: scale(1);}\n}\n@-webkit-keyframes animat-hide-modal-data-v-bdf973a2 {\nfrom{-webkit-clip-path: inset(0 0 0 0);clip-path: inset(0 0 0 0);}\nto{-webkit-clip-path: inset( 0 100% 0 0);clip-path: inset( 0 100% 0 0);}\n}\n@keyframes animat-hide-modal-data-v-bdf973a2 {\nfrom{-webkit-clip-path: inset(0 0 0 0);clip-path: inset(0 0 0 0);}\nto{-webkit-clip-path: inset( 0 100% 0 0);clip-path: inset( 0 100% 0 0);}\n}\n.animat-alter-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-alter-modal-data-v-bdf973a2;\n                animation: animat-alter-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s;\n                animation-duration: 0.6s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n        /* color:inherit */\n}\n.animat-show-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-show-modal-data-v-bdf973a2;\n                animation: animat-show-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s;\n                animation-duration: 0.6s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n}\n.animat-hide-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-hide-modal-data-v-bdf973a2;\n                animation: animat-hide-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s;\n                animation-duration: 0.6s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n}\n.board-modal[data-v-bdf973a2]{\n        display :none;\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 999;\n        background-color: rgb(0, 0, 0,45%);\n        overflow: auto;\n        padding-top: 77px;\n}\n.board-modal-content[data-v-bdf973a2]{\n        position: relative;\n        overflow-x: hidden;\n        color: aliceblue;\n        margin: auto;\n        width: 750px;\n\n        background-image: linear-gradient(to left bottom ,rgb(102, 102, 102) ,rgb(109, 109, 109)) ;\n        background-color: hsl(0, 0%, 45%);\n        min-height: 400px;\n        border-radius: 13px;\n        position: relative;\n}\n.modal-title[data-v-bdf973a2]{\n        padding: 5px;\n}\n@-webkit-keyframes bright_text-data-v-bdf973a2 {\n0% { background-position-y:0px; background-position-x:-520px;}\n100% { background-position-y:5px;background-position-x:700px;\n}\n}\n@keyframes bright_text-data-v-bdf973a2 {\n0% { background-position-y:0px; background-position-x:-520px;}\n100% { background-position-y:5px;background-position-x:700px;\n}\n}\n.modal-title h1[data-v-bdf973a2]{\n    background: linear-gradient(172deg,#1171ee,#1171ee,#1171ee, #ffffff,#1171ee, #1171ee , #1171ee, #1171ee , #1171ee, #1171ee);\n    background-size: 200%;\n    background-position-y:0px;\n    background-position-x:-520px;\n\t-webkit-background-clip: text;\n\t        background-clip: text;\n    color: rgb(0, 0, 0,0);\n\t-webkit-animation: bright_text-data-v-bdf973a2 5s ease-in-out;\n\t        animation: bright_text-data-v-bdf973a2 5s ease-in-out;\n    -webkit-animation-iteration-count: infinite ;\n            animation-iteration-count: infinite ;\n    -webkit-animation-delay: 2s;\n            animation-delay: 2s;\n    font-size: 90px;\n    font-weight: bold;\n}\n.modal-navigate[data-v-bdf973a2]{\n        position: relative;\n        display: flex;\n        padding-right: 20px;\n        flex-direction: row;\n        /* gap: 25px; */\n        border-bottom: 2px solid rgb(255, 208, 208);\n        background-color: #5c3636;\n        /* row-gap: 10px; */\n}\n.navunderline[data-v-bdf973a2]{\n        background-color: rgb(0, 69, 116);\n        border-radius: 35%;\n        position: absolute;\n        height: 3px;\n        bottom: 0;\n        transform: translateY(2px);\n        transition: width 0.2s ease-in-out , left 0.2s ease-in-out;\n}\n.modal-navigate button[data-v-bdf973a2]{\n        text-decoration: none ;\n        background: none!important;\n        border: none;\n        color: white;\n}\n@-webkit-keyframes shift-center-left-data-v-bdf973a2 {\nfrom{transform: translateX(0);}\nto{transform: translateX(-100%); opacity: 0;}\n}\n@keyframes shift-center-left-data-v-bdf973a2 {\nfrom{transform: translateX(0);}\nto{transform: translateX(-100%); opacity: 0;}\n}\n@-webkit-keyframes shift-right-center-data-v-bdf973a2 {\nfrom{transform: translateX(100%);}\nto{transform: translateX(0);}\n}\n@keyframes shift-right-center-data-v-bdf973a2 {\nfrom{transform: translateX(100%);}\nto{transform: translateX(0);}\n}\n@-webkit-keyframes shift-center-right-data-v-bdf973a2 {\nfrom{transform: translateX(0);\n}\nto{transform: translateX(100%); opacity: 0;}\n}\n@keyframes shift-center-right-data-v-bdf973a2 {\nfrom{transform: translateX(0);\n}\nto{transform: translateX(100%); opacity: 0;}\n}\n@-webkit-keyframes shift-left-center-data-v-bdf973a2 {\nfrom{transform: translateX(-100%);}\nto{transform: translateX(0);}\n}\n@keyframes shift-left-center-data-v-bdf973a2 {\nfrom{transform: translateX(-100%);}\nto{transform: translateX(0);}\n}\n.shift-right-center[data-v-bdf973a2]{\n        -webkit-animation: shift-right-center-data-v-bdf973a2;\n                animation: shift-right-center-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-center-left[data-v-bdf973a2]{\n        -webkit-animation: shift-center-left-data-v-bdf973a2;\n                animation: shift-center-left-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-left-center[data-v-bdf973a2]{\n        -webkit-animation: shift-left-center-data-v-bdf973a2;\n                animation: shift-left-center-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-center-right[data-v-bdf973a2]{\n        -webkit-animation: shift-center-right-data-v-bdf973a2;\n                animation: shift-center-right-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.modal-navigation-content[data-v-bdf973a2]{\n        position: relative;\n        height: 400px;\n        /* overflow-x: hidden; */\n        /* clip-path: inset(0 0 0 0); */\n}\n.divider[data-v-bdf973a2]{\n      position: absolute;\n      right:-3px;\n      width: 3px;\n      height: 400px;\n      background-color: hsl(0, 0%, 85%);\n}\n.btns[data-v-bdf973a2]{\n        display: flex;\n        gap: 20px;\n        padding: 20px;\n        width: 100%;\n        border-top: 2px outset  rgb(255, 208, 208);\n        position: relative;\n        bottom: 0;\n}\n    /* .btns button{\n        width:70px  !important;\n    } */\n.btns button[data-v-bdf973a2]:first-child{\n        background: rgb(102, 28, 28) !important;\n}\n.btns button[data-v-bdf973a2]:last-child{\n        background: #1b1212 !important;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes animat-alter-modal-data-v-bdf973a2 {\n0%{transform: scale(1);}\n50%{transform: scale(1.03);}\n100%{transform: scale(1);}\n}\n@keyframes animat-alter-modal-data-v-bdf973a2 {\n0%{transform: scale(1);}\n50%{transform: scale(1.03);}\n100%{transform: scale(1);}\n}\n@-webkit-keyframes animat-show-modal-data-v-bdf973a2 {\nfrom{transform: scale(0);}\nto{transform: scale(1);}\n}\n@keyframes animat-show-modal-data-v-bdf973a2 {\nfrom{transform: scale(0);}\nto{transform: scale(1);}\n}\n.animat-alter-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-alter-modal-data-v-bdf973a2;\n                animation: animat-alter-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s;\n                animation-duration: 0.6s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n        /* color:inherit */\n}\n.animat-show-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-show-modal-data-v-bdf973a2;\n                animation: animat-show-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s;\n                animation-duration: 0.6s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n}\n.animat-hide-modal[data-v-bdf973a2]{\n        -webkit-animation: animat-show-modal-data-v-bdf973a2;\n                animation: animat-show-modal-data-v-bdf973a2;\n        -webkit-animation-duration: 0.4s;\n                animation-duration: 0.4s;\n        -webkit-animation-timing-function: ease-in-out;\n                animation-timing-function: ease-in-out;\n        animation-direction: reverse;\n}\n.board-modal[data-v-bdf973a2]{\n        display :none;\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 999;\n        background-color: rgb(0, 0, 0,45%);\n        overflow: auto;\n        padding-top: 77px;\n}\n.board-modal-content[data-v-bdf973a2]{\n        position: relative;\n        overflow-x: hidden;\n        color: aliceblue;\n        margin: auto;\n        width: 750px;\n        min-height: 400px;\n        border-radius: 13px;\n        position: relative;\n}\n.modal-title[data-v-bdf973a2]{\n        padding: 5px;\n}\n@-webkit-keyframes bright_text-data-v-bdf973a2 {\n0% { background-position-y:0px; background-position-x:-520px;}\n100% { background-position-y:5px;background-position-x:700px;\n}\n}\n@keyframes bright_text-data-v-bdf973a2 {\n0% { background-position-y:0px; background-position-x:-520px;}\n100% { background-position-y:5px;background-position-x:700px;\n}\n}\n.modal-title h1[data-v-bdf973a2]{\n    background: linear-gradient(172deg,#1171ee,#1171ee,#1171ee, #ffffff,#1171ee, #1171ee , #1171ee, #1171ee , #1171ee, #1171ee);\n    background-size: 200%;\n    background-position-y:0px;\n    background-position-x:-520px;\n\t-webkit-background-clip: text;\n\t        background-clip: text;\n    color: rgb(0, 0, 0,0);\n\t-webkit-animation: bright_text-data-v-bdf973a2 5s ease-in-out;\n\t        animation: bright_text-data-v-bdf973a2 5s ease-in-out;\n    -webkit-animation-iteration-count: infinite ;\n            animation-iteration-count: infinite ;\n    -webkit-animation-delay: 2s;\n            animation-delay: 2s;\n    font-size: 90px;\n    font-weight: bold;\n}\n.modal-navigate[data-v-bdf973a2]{\n        position: relative;\n        display: flex;\n        padding-right: 20px;\n        flex-direction: row;\n        /* gap: 25px; */\n        border-bottom: 2px solid rgb(255, 208, 208);\n        background-color: #5c3636;\n        /* row-gap: 10px; */\n}\n.navunderline[data-v-bdf973a2]{\n        background-color: rgb(0, 69, 116);\n        border-radius: 35%;\n        position: absolute;\n        height: 3px;\n        bottom: 0;\n        transform: translateY(2px);\n        transition: width 0.2s ease-in-out , left 0.2s ease-in-out;\n}\n.modal-navigate button[data-v-bdf973a2]{\n        text-decoration: none ;\n        background: none!important;\n        border: none;\n        color: white;\n}\n@-webkit-keyframes shift-center-left-data-v-bdf973a2 {\nfrom{transform: translateX(0);}\nto{transform: translateX(-100%); opacity: 0;}\n}\n@keyframes shift-center-left-data-v-bdf973a2 {\nfrom{transform: translateX(0);}\nto{transform: translateX(-100%); opacity: 0;}\n}\n@-webkit-keyframes shift-right-center-data-v-bdf973a2 {\nfrom{transform: translateX(100%);}\nto{transform: translateX(0);}\n}\n@keyframes shift-right-center-data-v-bdf973a2 {\nfrom{transform: translateX(100%);}\nto{transform: translateX(0);}\n}\n@-webkit-keyframes shift-center-right-data-v-bdf973a2 {\nfrom{transform: translateX(0);\n}\nto{transform: translateX(100%); opacity: 0;}\n}\n@keyframes shift-center-right-data-v-bdf973a2 {\nfrom{transform: translateX(0);\n}\nto{transform: translateX(100%); opacity: 0;}\n}\n@-webkit-keyframes shift-left-center-data-v-bdf973a2 {\nfrom{transform: translateX(-100%);}\nto{transform: translateX(0);}\n}\n@keyframes shift-left-center-data-v-bdf973a2 {\nfrom{transform: translateX(-100%);}\nto{transform: translateX(0);}\n}\n.shift-right-center[data-v-bdf973a2]{\n        -webkit-animation: shift-right-center-data-v-bdf973a2;\n                animation: shift-right-center-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-center-left[data-v-bdf973a2]{\n        -webkit-animation: shift-center-left-data-v-bdf973a2;\n                animation: shift-center-left-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-left-center[data-v-bdf973a2]{\n        -webkit-animation: shift-left-center-data-v-bdf973a2;\n                animation: shift-left-center-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.shift-center-right[data-v-bdf973a2]{\n        -webkit-animation: shift-center-right-data-v-bdf973a2;\n                animation: shift-center-right-data-v-bdf973a2;\n        -webkit-animation-duration: 0.6s !important;\n                animation-duration: 0.6s !important;\n        -webkit-animation-fill-mode: forwards;\n                animation-fill-mode: forwards;\n}\n.modal-navigation-content[data-v-bdf973a2]{\n        position: relative;\n        height: 400px;\n        /* overflow-y: auto !important; */\n        overflow-x: hidden !important;\n}\n.divider[data-v-bdf973a2]{\n      position: absolute;\n      top: 0;\n      right:-3px;\n      width: 3px;\n      height: 100%;\n      background-color: hsl(0, 0%, 67%);\n}\n.btns[data-v-bdf973a2]{\n        display: flex;\n        gap: 20px;\n        padding: 20px;\n        width: 100%;\n        border-top: 2px outset  rgb(255, 208, 208);\n        position: relative;\n        bottom: 0;\n}\n    /* .btns button{\n        width:70px  !important;\n    } */\n.btns button[data-v-bdf973a2]:first-child{\n        background: rgb(102, 28, 28) !important;\n}\n.btns button[data-v-bdf973a2]:last-child{\n        background: #1b1212 !important;\n}\n\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* :root{\n} */\n.container[data-v-8313a3d6] {\n    min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n    box-sizing: border-box !important;\n    position: relative;\n    margin-top: 10px;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    display:  flex;\n    align-items: center;\n    background-color: hsl(120, 73%, 75% , 40%);\n    transition: height 10s ease-in-out;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n    -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n            animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n    right: 10px;\n    bottom: 5px;\n    position: absolute;\n    height: 20px;\n    width:  20px;\n    transition: transform 0.2s ease-in-out ;\n    overflow: visible;\n    color:white;\n    transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n    transform: rotate(180deg);\n}\n/* .boards-header-collapse .toggle-boards-header{\n    transform: rotate(180deg);\n} */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n    transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n    color: blue;\n    transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    overflow: hidden;\n    height: inherit;\n    align-items: center;\n    flex-grow: 1;\n    display: flex;\n    justify-content: center;\n}\n.current-nav-val[data-v-8313a3d6]{\n    overflow: hidden;\n    position: relative;\n    height: inherit;\n    margin-left: 20px;\n    font-weight: bold;\n}\n.navigations-links[data-v-8313a3d6]{\n    position: relative;\n    display: flex;\n    gap: 10px;\n    align-items: center;\n}\n.naviga-link[data-v-8313a3d6]{\n    border-radius: 100%;\n    background-color: rgb(90, 117, 65);\n    color: beige;\n    width: 40px;\n    height: 40px;\n    display: flex;\n    transition: transform 0.2s ease-in-out;\n}\n.naviga-link-end[data-v-8313a3d6]{\n    border-radius: 20%;\n    background-color: rgb(65, 77, 54);\n    color: beige;\n    width: 40px;\n    height: 30px;\n    display: flex;\n    padding-bottom: 3px;\n    transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover{\n    transform: scale(1.2) ;\n    cursor: pointer;\n}\n.naviga-link span[data-v-8313a3d6], .naviga-link-end span[data-v-8313a3d6]{\n    margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n    position: relative;\n    overflow: hidden;\n    padding-top: 3px;\n    margin-left: 10px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12408,7 +13962,31 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-grid[data-v-d3600b62]{\n    padding-left: 15px;\n    padding-right: 15px;\n    display: grid;\n    grid-template-areas: \"options display-content\" ;\n    grid-template-columns: 20% 80%;\n}\n/* .display-content{\n\n} */\n.options[data-v-d3600b62]{\n    align-items: flex-start;\n    padding: 10px;\n    display: flex;\n    flex-direction: column;\n    gap: 15px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-grid[data-v-d3600b62]{\n    padding-left: 15px;\n    padding-right: 15px;\n    display: grid;\n    grid-template-areas: \"options display-content\" ;\n    grid-template-columns: 20% 80%;\n}\n/* .display-content{\n\n} */\n.options[data-v-d3600b62]{\n    align-items: flex-start;\n    padding: 10px;\n    padding-top: 20px;\n    display: flex;\n    flex-direction: column;\n    gap: 15px;\n}\ntable[data-v-d3600b62]{\n    text-align: center !important;\n}\ntd[data-v-d3600b62]{\n    position: relative;\n}\n.fa-remove[data-v-d3600b62]{\n    display: none;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n    margin-left: 12px;\n}\n.fa-remove[data-v-d3600b62]:hover{\n    background-color: rgb(255, 0, 0,70%);\n}\n.fa-remove[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n.fa-minus[data-v-d3600b62], .fa-plus[data-v-d3600b62]{\n    display: none;\n    position: absolute;\n    margin-top: unset !important;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n}\n.fa-minus[data-v-d3600b62]{\n   right:10px;\n   top: 10px;\n}\n.fa-minus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]{\n    left:10px;\n    top: 10px;\n}\n.fa-plus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]:active , .fa-minus[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.info-modal{\n    display: none;\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    z-index: 10000;\n    background-color: rgb(0, 0, 0,30%);\n    overflow: auto;\n    padding-top: 30px;\n}\n.info-model-content{\n    padding: 20px;\n    color: aliceblue;\n    margin: auto;\n    width: 750px;\n    min-height: 400px;\n    border-radius: 13px;\n    position: relative;\n    background-color: rgb(209, 209, 209);\n}\n.other-boards{\n    overflow: auto;\n    height: 150px;\n    border: 2px outset black;\n}\n.other-boards-hide{\n    height: 0;\n    transition:height 0.2s ease-in-out ;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12432,7 +14010,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.menu-wraper{\n    display: none;\n    background-color: yellow;\n    position: none;\n    width: 100vw;\n    height: 100vh;\n    top: 0px;\n    left: 0px;\n    z-index: 9999;\n    overflow-y: scroll;\n}\n.resturant-menu{\n    position: relative;\n    width: 1200px;\n    border: 2px solid white;\n    margin: auto;\n}\n.menu-section{\n    border: 2px solid white;\n    padding: 20px;\n    min-height: 500px;\n}\n.menu-section li{\n    display :grid;\n    grid-template-areas: 'resturant-m-item-checkBox resturant-m-item  resturant-m-item-quantity';\n    grid-template-columns: 20px  140px 40px;\n    margin: 13px;\n}\n.resturant-m-item{\n    overflow-x: auto;\n    padding-right:13px ;\n}\n.resturant-m-item-quantity{\n    background-color: rgb(255, 255, 255);\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n@keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n.button-float{\n    -webkit-animation:button-float 2s ease-in-out infinite;\n            animation:button-float 2s ease-in-out infinite;\n    -webkit-animation-play-state: running;\n            animation-play-state: running;\n}\n@-webkit-keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n@keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n.show-order-done-buttun{\n    -webkit-animation-name: show-order-done-buttun  ;\n            animation-name: show-order-done-buttun  ;\n    -webkit-animation-duration: 0.7s;\n            animation-duration: 0.7s;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n@keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n.hide-order-done-buttun{\n    -webkit-animation-name: hide-order-done-buttun  ;\n            animation-name: hide-order-done-buttun  ;\n    -webkit-animation-duration: 0.7s;\n            animation-duration: 0.7s;\n    -webkit-animation-play-state: running !important;\n            animation-play-state: running !important;\n}\n.orderDone{\n    position: fixed;\n    border-radius: 100%;\n    top:10px;\n    right: 23px;\n    width: 150px;\n    height: 150px;\n    background-color: rgb(75, 75, 41);\n    z-index:10000;\n    font-size: 40px;\n}\n.orderDone:hover{\n    -webkit-animation-play-state: paused;\n            animation-play-state: paused;\n    background-color: rgb(75, 75, 41,70%);\n}\n.orderDone:active{\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.RMioptions{\n    position: fixed;\n    background-color: rgb(0, 0, 0 ,0%);\n    left: 23px;\n    top:10px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-content: center;\n    gap: 20px;\n    z-index:10000;\n    height: -webkit-max-content;\n    height: -moz-max-content;\n    height: max-content;\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n@-webkit-keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@-webkit-keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n@keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n.show-RMOptions-buttun{\n    -webkit-animation-name: show-RMOptions-buttun ;\n            animation-name: show-RMOptions-buttun ;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n}\n.hide-RMOptions-buttun{\n    -webkit-animation-name: hide-RMOptions-buttun ;\n            animation-name: hide-RMOptions-buttun ;\n    -webkit-animation-duration: 0.7s !important;\n            animation-duration: 0.7s !important;\n}\n.resetOrder,.rollbackLastOrder,.cancelOrder{\n    border-radius: 5%;\n    width: 150px;\n    height: 50px;\n    font-size: 30px;\n    background-color: rgb(75, 75, 41);\n}\n.resetOrder{\n    -webkit-animation-duration: 0.7s;\n            animation-duration: 0.7s;\n}\n.rollbackLastOrder{\n    -webkit-animation-duration: 1s;\n            animation-duration: 1s;\n}\n.cancelOrder{\n    -webkit-animation-duration: 1.3s;\n            animation-duration: 1.3s;\n}\n.resetOrder:hover,.rollbackLastOrder:hover,.cancelOrder:hover{\n    background-color: rgb(75, 75, 41,70%);\n}\n.resetOrder:active,.rollbackLastOrder:active,.cancelOrder:active{\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.menu-wraper{\n    display: none;\n    position: fixed;\n    background-color: rgba(0, 0, 0, 10%);\n    width: 100vw;\n    height: 100vh;\n    top: 0px;\n    left: 0px;\n    z-index: 9999;\n}\n@-webkit-keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n@keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n.r-menu-navigation{\n    padding-top: 10px;\n    padding-bottom: 10px;\n    display: flex;\n    flex-grow :1;\n    background-color: rgb(75, 75, 41);\n    position: relative;\n    width: 1100px;\n    border: 2px outset white;\n    margin: auto;\n    gap: 2px;\n}\n.r-menu-navigation .v-btn{\n    color: white !important;\n    background-color: rgb(109, 109, 55) !important;\n}\n.resturant-menu-show{\n    -webkit-animation-name:  resturant-menu-show  ;\n            animation-name:  resturant-menu-show  ;\n    -webkit-animation-duration: 0.7s;\n            animation-duration: 0.7s;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n@keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n.resturant-menu-hide{\n    -webkit-animation-name:  resturant-menu-hide  ;\n            animation-name:  resturant-menu-hide  ;\n    -webkit-animation-duration: 0.7s;\n            animation-duration: 0.7s;\n}\n.resturant-menu{\n    background-color: rgb(75, 75, 41);\n    position: relative;\n    overflow-y: auto !important;\n    width: 1100px;\n    height: 100vh;\n    border: 2px outset white;\n    margin: auto;\n}\n::-webkit-scrollbar {\n        width: 10px;\n        border-radius: 10px;\n}\n::-webkit-scrollbar-track {\n    background: rgb(75, 75, 41 / 90%);\n    border-radius: 10px;\n}\n::-webkit-scrollbar-thumb {\n    size: 10px;\n    border-radius: 10px;\n    background-color: #ad8181;\n}\n::-webkit-scrollbar-thumb:hover {\n    background:  rgb(204, 204, 204);\n}\n.menu-section{\n    border: 2px outset rgb(139, 139, 139);\n    /* padding: 20px; */\n    width:-webkit-max-content;\n    width:-moz-max-content;\n    width:max-content;\n\n    min-height: 500px;\n}\n.menu-section-list{\n    display: block;\n    width:-webkit-max-content;\n    width:-moz-max-content;\n    width:max-content;\n}\n.menu-section .menu-section-list-item{\n    width:-webkit-max-content;\n    width:-moz-max-content;\n    width:max-content;\n    display :flex;\n    flex-direction: row;\n    margin: 1rem;\n    border-bottom: 2px groove rgb(139, 139, 139);\n    padding-bottom: 1rem;\n}\n.resturant-m-item-checkBox , .resturant-m-item ,.resturant-m-item-quantity{\n    margin-right: 10px;\n    align-self: center !important;\n    cursor: pointer;\n}\n.resturant-m-item{\n\n    width: 120px !important;\n    overflow-x: auto;\n    font-size: large;\n}\n.resturant-m-item-quantity{\n    display: flex;\n    visibility: hidden;\n    float: left;\n}\n.resturant-m-item-quantity input[type=text]{\n    width:40px;\n    height:40px;\n    background-color: rgb(224, 224, 224);\n}\n.resturant-m-item-quantity button{\n    background-color: rgb(124, 80, 80);\n    width:40px ;\n    height:40px ;\n    font-size: 10px;\n}\n.resturant-m-item-quantity button:first-child{\n    border-radius: 0 100% 100% 0;\n}\n.resturant-m-item-quantity button:last-child{\n    /* float: left; */\n    border-radius: 100% 0 0 100%  ;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12685,6 +14263,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_style_index_0_id_8313a3d6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_style_index_0_id_8313a3d6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_style_index_0_id_8313a3d6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards/orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards/orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css& ***!
@@ -12712,6 +14320,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_orders_vue_vue_type_style_index_0_id_d3600b62_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./infoModel.vue?vue&type=style&index=0&lang=css& */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -13177,6 +14815,47 @@ component.options.__file = "resources/js/components/appLayout/resturant/boardMod
 
 /***/ }),
 
+/***/ "./resources/js/components/appLayout/resturant/boards.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/boards.vue ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./boards.vue?vue&type=template&id=8313a3d6&scoped=true& */ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true&");
+/* harmony import */ var _boards_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./boards.vue?vue&type=script&lang=js& */ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js&");
+/* harmony import */ var _boards_vue_vue_type_style_index_0_id_8313a3d6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& */ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _boards_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "8313a3d6",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/appLayout/resturant/boards.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/appLayout/resturant/boards/info.vue":
 /*!*********************************************************************!*\
   !*** ./resources/js/components/appLayout/resturant/boards/info.vue ***!
@@ -13292,6 +14971,47 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/components/appLayout/resturant/boards/reservations.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/appLayout/resturant/infoModel.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/infoModel.vue ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./infoModel.vue?vue&type=template&id=44ee92fa& */ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa&");
+/* harmony import */ var _infoModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./infoModel.vue?vue&type=script&lang=js& */ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js&");
+/* harmony import */ var _infoModel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./infoModel.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _infoModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__.render,
+  _infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/appLayout/resturant/infoModel.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -13426,6 +15146,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./boards.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/appLayout/resturant/boards/info.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/appLayout/resturant/boards/info.vue?vue&type=script&lang=js& ***!
@@ -13471,6 +15207,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_reservations_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./reservations.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards/reservations.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_reservations_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./infoModel.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -13545,6 +15297,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&":
+/*!*************************************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& ***!
+  \*************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_style_index_0_id_8313a3d6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=style&index=0&id=8313a3d6&scoped=true&lang=css&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/appLayout/resturant/boards/orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css&":
 /*!********************************************************************************************************************************!*\
   !*** ./resources/js/components/appLayout/resturant/boards/orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css& ***!
@@ -13554,6 +15319,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_orders_vue_vue_type_style_index_0_id_d3600b62_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/style-loader/dist/cjs.js!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards/orders.vue?vue&type=style&index=0&id=d3600b62&scoped=true&lang=css&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./infoModel.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=style&index=0&lang=css&");
 
 
 /***/ }),
@@ -13635,6 +15413,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true&":
+/*!***********************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true& ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_boards_vue_vue_type_template_id_8313a3d6_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./boards.vue?vue&type=template&id=8313a3d6&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/appLayout/resturant/boards/info.vue?vue&type=template&id=617d9c18&":
 /*!****************************************************************************************************!*\
   !*** ./resources/js/components/appLayout/resturant/boards/info.vue?vue&type=template&id=617d9c18& ***!
@@ -13682,6 +15477,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_reservations_vue_vue_type_template_id_0de01711___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_reservations_vue_vue_type_template_id_0de01711___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./reservations.vue?vue&type=template&id=0de01711& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards/reservations.vue?vue&type=template&id=0de01711&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_infoModel_vue_vue_type_template_id_44ee92fa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./infoModel.vue?vue&type=template&id=44ee92fa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa&");
 
 
 /***/ }),
@@ -13899,11 +15711,21 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "board-modal" },
-    [
-      _c("div", { staticClass: "board-modal-content" }, [
+  return _c("div", { staticClass: "board-modal" }, [
+    _c(
+      "div",
+      {
+        staticClass: "board-modal-content",
+        style: {
+          "background-color":
+            _vm.currentTableStaus == "taken"
+              ? "hsl(0, 57%, 11%)"
+              : _vm.currentTableStaus == "active"
+              ? "hsl(0, 0%, 45%)"
+              : "hsl(0, 0%, 66%)",
+        },
+      },
+      [
         _c(
           "div",
           { staticClass: "modal-title" },
@@ -13919,6 +15741,9 @@ var render = function () {
               "v-btn",
               {
                 staticClass: "naveB",
+                style:
+                  "display:" +
+                  (_vm.currentTableStaus != "active" ? "none" : "block"),
                 attrs: { depressed: "" },
                 on: {
                   click: function ($event) {
@@ -13997,14 +15822,124 @@ var render = function () {
           ],
           1
         ),
-      ]),
+      ]
+    ),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/boards.vue?vue&type=template&id=8313a3d6&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _vm._m(0),
       _vm._v(" "),
-      _c("resturant-menu"),
+      _c(
+        "div",
+        { staticClass: "d-flex flex-row flex-wrap justify-content-center" },
+        _vm._l(_vm.boards, function (board) {
+          return _c(
+            "div",
+            {
+              key: board.tableNumber,
+              staticClass: "col-lg-3 col-md-4",
+              style: "order:" + board.order,
+              attrs: { id: board.tableNumber },
+            },
+            [
+              _c("board", {
+                staticClass: "animate-fade-in-down",
+                style: "animation-delay: " + board.tableNumber * 0.1 + "s",
+                attrs: { status: board.state, tablenumber: board.tableNumber },
+              }),
+            ],
+            1
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("board-modal"),
+      _vm._v(" "),
+      _c("info-modal"),
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("header", { staticClass: "boards-header" }, [
+      _c("div", { staticClass: "toggle-boards-header" }, [
+        _c("span", [_c("i", { staticClass: "fa fa-angle-double-up" })]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "hall-navigation" }, [
+        _c("div", { staticClass: "navigations-title" }, [
+          _c("h4", [_vm._v("الصالة :")]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "navigations-links" }, [
+          _c("div", { staticClass: "naviga-link-end" }, [
+            _c("span", { attrs: { href: "" } }, [
+              _c("i", { staticClass: "fa fa-angle-right" }),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "naviga-link",
+              staticStyle: { "background-color": "rgb(199, 176, 146)" },
+            },
+            [_c("span", { attrs: { href: "" } }, [_vm._v("1")])]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "naviga-link" }, [
+            _c("span", { attrs: { href: "" } }, [_vm._v("2")]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "naviga-link" }, [
+            _c("span", { attrs: { href: "" } }, [_vm._v("3")]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "naviga-link-end" }, [
+            _c("span", { attrs: { href: "" } }, [
+              _c("i", { staticClass: "fa fa-angle-left" }),
+            ]),
+          ]),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "current-nav-val" }, [
+        _c("h1", [_vm._v("الصالة الاولى")]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
@@ -14052,52 +15987,110 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    { staticClass: "modal-grid" },
+    [
+      _c(
+        "div",
+        { staticClass: "options" },
+        [
+          _c(
+            "v-btn",
+            {
+              attrs: { rounded: "", color: "primary", dark: "" },
+              on: { click: _vm.toggleMenu },
+            },
+            [_vm._v("أضف طلب")]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: { rounded: "", color: "primary", dark: "" },
+              on: { click: _vm.updateOrder },
+            },
+            [_vm._v("تعديل طلب")]
+          ),
+          _vm._v(" "),
+          _c("v-btn", { attrs: { rounded: "", color: "primary", dark: "" } }, [
+            _vm._v(" إسال الطلب"),
+          ]),
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "display-content" }, [
+        _c("table", { staticClass: "table table-dark table-striped" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.currentTable.orders, function (order) {
+              return _c("tr", { key: order.id }, [
+                _c("td", [
+                  _vm._v(_vm._s(order.orderName) + " "),
+                  _c("i", {
+                    staticClass: "fa fa-remove",
+                    on: {
+                      click: function ($event) {
+                        return _vm.deleteOrder(order.id)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(order.price) + "  ل.س")]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("i", {
+                    staticClass: "fa fa-plus",
+                    on: {
+                      click: function ($event) {
+                        return _vm.increseQ(order.id)
+                      },
+                    },
+                  }),
+                  _vm._v(_vm._s(order.quantity)),
+                  _c("i", {
+                    staticClass: "fa fa-minus",
+                    on: {
+                      click: function ($event) {
+                        return _vm.decreseQ(order.id)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(_vm._s(order.quantity * order.price) + " ل.س"),
+                ]),
+              ])
+            }),
+            0
+          ),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("resturant-menu"),
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-grid" }, [
-      _c("div", { staticClass: "options" }, [
-        _c("button", [_vm._v("أضف طلب")]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("اسم الطلب")]),
         _vm._v(" "),
-        _c("button", [_vm._v("حذف طلب")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("السعر")]),
         _vm._v(" "),
-        _c("button", [_vm._v("تعديل طلب")]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "display-content" }, [
-        _c("table", { staticClass: "table table-dark table-striped" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", { attrs: { scope: "col" } }, [_vm._v("اسم الطلب")]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [_vm._v("السعر")]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [_vm._v("الكمية")]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [_vm._v("المجموع")]),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("بيبسي")]),
-              _c("td", [_vm._v("10 ل.س")]),
-              _c("td", [_vm._v("3")]),
-              _c("td", [_vm._v("30 ل.س")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("td", [_vm._v("فروج")]),
-              _c("td", [_vm._v("60 ل.س")]),
-              _c("td", [_vm._v("1")]),
-              _c("td", [_vm._v("60 ل.س")]),
-            ]),
-          ]),
-        ]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("الكمية")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("المجموع")]),
       ]),
     ])
   },
@@ -14133,6 +16126,160 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/infoModel.vue?vue&type=template&id=44ee92fa& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "info-modal" }, [
+    _c("div", { staticClass: "info-model-content" }, [
+      _c(
+        "form",
+        {
+          attrs: {
+            id: "myform",
+            action: "",
+            method: "",
+            enctype: "multipart/form-data",
+          },
+        },
+        [
+          _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-12 mb-3" },
+              [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { dark: "", block: "" },
+                    on: { click: _vm.showOtherTable },
+                  },
+                  [_vm._v("اضافة طاولات اخرى")]
+                ),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12 mb-3" }, [
+              _c(
+                "div",
+                { staticClass: "other-boards" },
+                [
+                  _c(
+                    "v-chip-group",
+                    {
+                      staticClass: "pl-2",
+                      attrs: { column: "", multiple: "" },
+                    },
+                    _vm._l(_vm.aviliableBoards, function (board) {
+                      return _c(
+                        "v-chip",
+                        {
+                          key: board.tableNumber,
+                          attrs: {
+                            filter: "",
+                            outlined: "",
+                            color: "black",
+                            "text-color": "black",
+                          },
+                        },
+                        [_vm._v(_vm._s(board.tableNumber))]
+                      )
+                    }),
+                    1
+                  ),
+                ],
+                1
+              ),
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "btn btn-primry saveInfo",
+              attrs: { value: "حفظ" },
+              on: {
+                click: function ($event) {
+                  return _vm.$emit("infoDone")
+                },
+              },
+            }),
+          ]),
+        ]
+      ),
+    ]),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6 mb-3" }, [
+      _c("label", { attrs: { for: "name" } }, [_vm._v("اسم الزبون")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", name: "name", placeholder: " (اختياري)" },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6 mb-3" }, [
+      _c("label", { attrs: { for: "slug" } }, [_vm._v("معرف خاص")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          name: "slug",
+          placeholder: "(اجباري)ادخل معرف خاص في حال تشابه الاسماء",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12 mb-3" }, [
+      _c("label", { attrs: { for: "description" } }, [
+        _vm._v("معلومات اضافية"),
+      ]),
+      _vm._v(" "),
+      _c("textarea", {
+        staticClass: "form-control",
+        staticStyle: { resize: "none" },
+        attrs: { name: "description", placeholder: "(اختياري)" },
+      }),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/menu.vue?vue&type=template&id=7601a827&":
 /*!************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/resturant/menu.vue?vue&type=template&id=7601a827& ***!
@@ -14150,6 +16297,40 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "menu-wraper" }, [
+    _c("button", { staticClass: "orderDone" }, [_vm._v("تم!")]),
+    _vm._v(" "),
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "r-menu-navigation" }, [
+      _c(
+        "div",
+        { staticClass: "display-all-section" },
+        [_c("v-btn", { attrs: { tile: "" } }, [_vm._v("عرض الكل")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "section-nav" },
+        [_c("v-btn", { attrs: { tile: "" } }, [_vm._v("مقبلات")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "section-nav" },
+        [_c("v-btn", { attrs: { tile: "" } }, [_vm._v("غداء")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "section-nav" },
+        [_c("v-btn", { attrs: { tile: "" } }, [_vm._v("مشروبات")])],
+        1
+      ),
+    ]),
+    _vm._v(" "),
     _c(
       "div",
       {
@@ -14164,19 +16345,6 @@ var render = function () {
             [
               _c("center", [_c("h1", [_vm._v("مقبلات")])]),
               _vm._v(" "),
-              _vm._m(0),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("غداء")])]),
-              _vm._v(" "),
               _vm._m(1),
             ],
             1
@@ -14188,7 +16356,7 @@ var render = function () {
             "div",
             { staticClass: "menu-section" },
             [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
+              _c("center", [_c("h1", [_vm._v("غداء")])]),
               _vm._v(" "),
               _vm._m(2),
             ],
@@ -14214,7 +16382,7 @@ var render = function () {
             "div",
             { staticClass: "menu-section" },
             [
-              _c("center", [_c("h1", [_vm._v("غداء")])]),
+              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
               _vm._v(" "),
               _vm._m(4),
             ],
@@ -14240,7 +16408,7 @@ var render = function () {
             "div",
             { staticClass: "menu-section" },
             [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
+              _c("center", [_c("h1", [_vm._v("غداء")])]),
               _vm._v(" "),
               _vm._m(6),
             ],
@@ -14260,6 +16428,19 @@ var render = function () {
             1
           ),
         ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "div",
+            { staticClass: "menu-section" },
+            [
+              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
+              _vm._v(" "),
+              _vm._m(8),
+            ],
+            1
+          ),
+        ]),
       ]
     ),
   ])
@@ -14269,110 +16450,192 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "RMioptions" }, [
+      _c("button", { staticClass: "resetOrder" }, [_vm._v("إعادة الطلب")]),
+      _vm._v(" "),
+      _c("button", { staticClass: "rollbackLastOrder" }, [_vm._v("تراجع")]),
+      _vm._v(" "),
+      _c("button", { staticClass: "cancelOrder" }, [_vm._v("إلغاء")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بطاطا"),
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+          _vm._v("بطاطا بطاط بطاطا بطاطا بطاطا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("طرطور"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("حمص ناعم"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("متبل"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فتوش"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سلطة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("تبولة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -14380,110 +16643,180 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فروج"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شيش"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كباب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سودي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كبة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سمك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شوربة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -14491,230 +16824,380 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كولا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سلس"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شاي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("قهوة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فانتا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كلاسيك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كوكتيل فواكه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كابيتشينو"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("نسكافيه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("حليب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -14722,170 +17205,280 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كولا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سلس"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شاي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("قهوة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فانتا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كلاسيك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كوكتيل فواكه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كابيتشينو"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("نسكافيه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("حليب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -14893,110 +17486,180 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فروج"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شيش"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كباب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سودي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كبة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سمك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شوربة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -15004,110 +17667,180 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فروج"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شيش"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كباب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سودي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كبة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سمك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شوربة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -15115,170 +17848,280 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كولا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سلس"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شاي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("قهوة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فانتا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كلاسيك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كوكتيل فواكه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كابيتشينو"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("نسكافيه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("حليب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
@@ -15286,170 +18129,280 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", [
+    return _c("div", { staticClass: "menu-section-list" }, [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("بيبسي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كولا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("سلس"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("شاي"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("قهوة"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("فانتا"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كلاسيك"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كوكتيل فواكه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("كابيتشينو"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("نسكافيه"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
-      _c("li", [
+      _c("div", { staticClass: "menu-section-list-item" }, [
         _c("input", {
           staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "radio", name: "", id: "" },
+          attrs: { type: "checkbox", name: "" },
         }),
-        _c("label", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
+        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
           _vm._v("حليب"),
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "resturant-m-item-quantity",
-          attrs: { type: "number", name: "", id: "" },
-        }),
+        _c("div", { staticClass: "resturant-m-item-quantity" }, [
+          _c("button", { staticClass: "decrement-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-minus" }),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "qty-input text-center",
+            attrs: { type: "text", name: "quantity" },
+          }),
+          _vm._v(" "),
+          _c("button", { staticClass: "increment-btn" }, [
+            _c("i", { staticClass: "fa-solid fa-plus" }),
+          ]),
+        ]),
       ]),
     ])
   },
