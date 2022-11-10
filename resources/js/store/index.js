@@ -1,696 +1,709 @@
+import axios from "axios";
 import Vue from "vue";
 import vuex from "vuex";
-// import axios from "axios";
-// import axiosClient from "../axios";
 Vue.use(vuex);
 
 const store = new vuex.Store({
     state: {
         currentTable: '',
         currentTableStatus: '',
-        boards: [{
-                tableNumber: '1',
-                state: "active",
-                order: 200,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [{
-                        orderName: 'كباب',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-
-                ]
-            },
-            {
-                tableNumber: '2',
-                state: "",
-                order: 100,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '3',
-                state: "",
-                order: 100,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '4',
-                state: "",
-                order: 100,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '5',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '6',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '7',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '8',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '9',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '10',
-                state: "",
-                order: 100,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '11',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '12',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '13',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '14',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '15',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '16',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '17',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '18',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '19',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '20',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '21',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            }, {
-                tableNumber: '22',
-                state: "taken",
-                order: 300,
-                info: {
-                    customName: '',
-                    slug: '',
-                    moreInfo: '',
-
-                },
-                orders: [
-
-
-                    {
-                        orderName: 'بيبسي',
-                        price: 10,
-                        quantity: 2,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-                    {
-                        orderName: 'فروج',
-                        price: 60,
-                        quantity: 3,
-                    },
-
-                ],
-
-            },
-        ],
+        // boards: [{
+        //         tableNumber: '1',
+        //         state: "active",
+        //         order: 200,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [{
+        //                 orderName: 'كباب',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+
+        //         ]
+        //     },
+        //     {
+        //         tableNumber: '2',
+        //         state: "",
+        //         order: 100,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '3',
+        //         state: "",
+        //         order: 100,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '4',
+        //         state: "",
+        //         order: 100,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '5',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '6',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '7',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '8',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '9',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '10',
+        //         state: "",
+        //         order: 100,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '11',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '12',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '13',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '14',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '15',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '16',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '17',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '18',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '19',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '20',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '21',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     }, {
+        //         tableNumber: '22',
+        //         state: "taken",
+        //         order: 300,
+        //         info: {
+        //             customName: '',
+        //             slug: '',
+        //             moreInfo: '',
+
+        //         },
+        //         orders: [
+
+
+        //             {
+        //                 orderName: 'بيبسي',
+        //                 price: 10,
+        //                 quantity: 2,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+        //             {
+        //                 orderName: 'فروج',
+        //                 price: 60,
+        //                 quantity: 3,
+        //             },
+
+        //         ],
+
+        //     },
+        // ],
+        boards: [],
         aviliabeBoards: []
 
 
     },
-    getter: {},
+    getters: {
+        currentOrder(state) {
+            console.log(state.currentTable);
+            var board = state.boards.find(board => board.tableNumber === state.currentTable);
+            return board.orders;
+        }
+    },
     actions: {
+        pringAllBoardsInThisHall({ commit }, hallNumber) {
+            axios.get(`/boards/${hallNumber}`)
+                .then((response) => {
+                    // response = JSON.parse(response.);
+                    commit("setBoards", response.data.tables)
+                })
+        },
         changeCurrentTableNumber({ commit }, tableNumber) {
             commit('setCurrentTableNumber', tableNumber)
         },
@@ -720,6 +733,9 @@ const store = new vuex.Store({
         }
     },
     mutations: {
+        setBoards: (state, boards) => {
+            state.boards = boards;
+        },
         setCurrentTableNumber: (state, tableNumber) => {
             state.currentTable = tableNumber;
         },

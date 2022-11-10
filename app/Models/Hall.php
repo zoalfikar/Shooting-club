@@ -11,6 +11,7 @@ class Hall extends Model
     protected $table = 'halls' ;
     protected $primaryKey = 'hallNumber';
     public $incrementing = false;
-    protected $fiilable = ['description'];
+    protected $fillable = ['hallNumber','hallName','description','active','maxCapacity'];
+
 
 }

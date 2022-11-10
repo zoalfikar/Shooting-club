@@ -82,7 +82,7 @@
                 <div class="item-icon">
                     <i class="fa fa-chair" aria-hidden="true"></i>
                 </div>
-                <span class="item-text"> <span>الطاولات</span></span>
+                <span class="item-text"> <span>الطاولات والصالات</span></span>
             </div>
             <div class="item-children ">
                 <div class="item-child">
@@ -90,6 +90,9 @@
                 </div>
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
+                </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-hall-form'">صالة جديدة</a></span>
                 </div>
             </div>
         </div>
@@ -219,6 +222,7 @@ export default {
         async function vueMount()
         {
             var result = await appContainerLoadFinished();
+            console.log(result);
             if (!vueMounted) {
                 app1 = new Vue(vueAppOptions);
                 app1.$mount('.app-container');
@@ -314,7 +318,7 @@ export default {
         display: grid;
         grid-template-areas: 'item-icon item-text';
         grid-template-columns: calc(2rem + 28px) auto;
-        grid-gap:  17px ;
+        grid-gap:  11px ;
         font-size: 2rem;
         position: relative;
         border: 2px solid white;
@@ -342,7 +346,11 @@ export default {
 
    .item-text  {
         overflow: hidden;
+        white-space:nowrap;
         transition:transform 0.2s ease-in ;
+   }
+   .is_expanded .item-text{
+        white-space:normal;
    }
 
    .item-icon  {

@@ -85,6 +85,11 @@ export default {
 
     }
 
+    },
+    mounted:function () {
+        function function2222222222222 (){
+             console.log("it works");
+        }
     }
 };
 </script>

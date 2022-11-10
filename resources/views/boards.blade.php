@@ -8,7 +8,7 @@
 
 @section('scripts')
     <script>
-            const header = document.querySelector(".boards-header");
+            var header = document.querySelector(".boards-header");
             var headerIsExpended=true;
             var group = document.querySelector(".d-flex");
             var nodes = document.querySelectorAll(".col-lg-3");
@@ -141,6 +141,7 @@
                 $('.boards-header').toggleClass('hide-header');
                 $(".toggle-boards-header").toggleClass("rotate-toggle-boards-header")
             });
+
 
     </script>
 @endsection

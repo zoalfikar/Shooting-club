@@ -7,11 +7,11 @@
                 <h4>الصالة :</h4>
             </div>
             <div class="navigations-links">
-                <div class="naviga-link-end"><span href=""><i class="fa fa-angle-right"></i></span></div>
-                <div class="naviga-link" style="background-color: rgb(199, 176, 146)"><span href="">1</span></div>
-                <div class="naviga-link"><span href="">2</span></div>
-                <div class="naviga-link"><span href="">3</span></div>
-                <div class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></div>
+                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-right"></i></span></button>
+                <button value="1" class="naviga-link" style="background-color: rgb(199, 176, 146)"><span href="">1</span></button>
+                <button value="2" class="naviga-link"><span href="">2</span></button>
+                <button value="3" class="naviga-link"><span href="">3</span></button>
+                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
             </div>
         </div>
         <div class="current-nav-val">
@@ -37,7 +37,12 @@
 
         },
         mounted: function () {
-
+            $('.naviga-link').click(function (e) {
+                e.preventDefault();
+                store.dispatch("pringAllBoardsInThisHall",$(this).val())
+                //
+            });
+            $( ".naviga-link" ).first().trigger('click');
         }
     }
 </script>

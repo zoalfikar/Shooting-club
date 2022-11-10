@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\AvailableTableNumber;
-use App\Rules\TableHallRule;
+use App\Rules\AvailableHallNumber;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class TableRequest extends FormRequest
+class HallRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,7 +17,6 @@ class TableRequest extends FormRequest
         return true;
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,8 +25,8 @@ class TableRequest extends FormRequest
     public function rules()
     {
         return [
-            'tableNumber' => ['required','numeric', Rule::unique('tables')->where(fn ($query) => $query->where('hallNumber', $this->hallNumber)), new AvailableTableNumber($this->hallNumber)],
-            'hallNumber' => ['required','numeric', new TableHallRule()],
+            'hallNumber' => ['required','unique:halls,hallNumber', new AvailableHallNumber(),'numeric'],
+            'hallName' => ['required'],
             'maxCapacity' => 'required|numeric|min:1',
             'active'=>'required'
         ];

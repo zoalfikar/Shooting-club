@@ -1,9 +1,9 @@
 // require('./bootstrap');
-import jQuery from 'jquery';
+// import jQuery from 'jquery';
 import router from './routes';
 import vuetify from './vuetify';
 import store from './store';
-window.$ = jQuery;
+// window.$ = jQuery;
 window.Vue = require('vue').default;
 const vueAppOptions = {
     vuetify,
@@ -29,3 +29,10 @@ const app = new Vue({
     router,
 
 }).$mount('#app');
+// var app = new Vue({
+//     vuetify,
+//     store,
+//     router,
+
+// }).$mount('#app');
+// window.vueApp = app;

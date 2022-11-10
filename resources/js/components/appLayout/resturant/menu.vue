@@ -1,6 +1,6 @@
 <template>
 <div class="menu-wraper">
-    <button class="orderDone">تم!</button>
+    <button class="orderDone" @click="takeOrder">تم!</button>
     <div class="RMioptions">
         <button class="resetOrder">إعادة الطلب</button>
         <button class="rollbackLastOrder">تراجع</button>
@@ -19,7 +19,8 @@
                 <center><h1>مقبلات</h1></center>
                 <div class="menu-section-list">
                     <div class="menu-section-list-item">
-                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="" ><div for="" class="resturant-m-item">بطاطا بطاط بطاطا بطاطا بطاطا</div>
+                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="" >
+                        <div for="" class="resturant-m-item">بطاطا بطاط بطاطا بطاطا بطاطا</div>
                         <div class="resturant-m-item-quantity">
                             <button  class="  decrement-btn  "><i class='fa-solid fa-minus'></i></button>
                             <input type="text" name="quantity"  class=" qty-input text-center">
@@ -757,59 +758,101 @@
 </template>
 
 <script>
+import store from '../../../store';
+
     export default {
+        data (){
+            return {
+            }
+        },
+        computed:{
+            currentTable:()=> store.state.currentTable
+        },
+        methods:{
+            // addOrder:function () {
+
+            // },
+            // removOrder:function () {
+
+            // },
+            takeOrder:function () {
+                var newOrders = []
+                $( ".menu-section-list-item" ).each(function( index ) {
+                    if ($(this).children(".resturant-m-item-checkBox" ).prop("checked")==true) {
+                        var order = {}
+                        order.orderName = $(this).children(".resturant-m-item").text();
+                        order.quantity = $(this).children(".resturant-m-item-quantity").find(".qty-input").val();
+                        order.price = 100;
+                        newOrders.push(order)
+                    }
+                });
+                store.dispatch("saveOrders",{"tableNumber": this.currentTable ,"orders":newOrders })
+            }
+        },
         mounted : function()
         {
+
+            var currentOrders = store.getters.currentOrder;
+            $( ".menu-section-list-item" ).each(function( index ) {
+                    for (let i = 0; i < currentOrders.length; i++) {
+                        if ($(this).children(".resturant-m-item").text()==currentOrders[i].orderName) {
+                            $(this).children(".resturant-m-item-checkBox" ).prop("checked",true)
+                            $(this).children(".resturant-m-item-quantity").find(".qty-input").val(currentOrders[i].quantity);
+                            $(this).children(".resturant-m-item-quantity").css("visibility","visible")
+                        }
+                    }
+                });
+            $('.display-all-section').css("margin-top",'-4px');
             const RWMenu = document.querySelector(".menu-wraper");
             var oldRWMenuDisplay = getComputedStyle(RWMenu).display
             var currentRWMenuDisplay ;
             var momento =[]
             const REMenuMutationCallback = (mutationsList) => {
-            for (const mutation of mutationsList) {
-                if (mutation.attributeName == "style")
-                {
-                    currentRWMenuDisplay = getComputedStyle(RWMenu).display;
-                    if (oldRWMenuDisplay == "none" && currentRWMenuDisplay == "block") {
-                        $(".resturant-menu").toggleClass("resturant-menu-show");
-                        $(".resetOrder").toggleClass("show-RMOptions-buttun");
-                        $(".rollbackLastOrder").toggleClass("show-RMOptions-buttun");
-                        $(".cancelOrder").toggleClass("show-RMOptions-buttun");
-                        $(".orderDone").toggleClass("show-order-done-buttun");
-                        setTimeout(() => {
-                        $(".resturant-menu").toggleClass("resturant-menu-show");
-                            $(".orderDone").toggleClass("show-order-done-buttun");
-                            $(".orderDone").toggleClass("button-float");
+                for (const mutation of mutationsList) {
+                    if (mutation.attributeName == "style")
+                    {
+                        currentRWMenuDisplay = getComputedStyle(RWMenu).display;
+                        if (oldRWMenuDisplay == "none" && currentRWMenuDisplay == "block") {
+                            $(".resturant-menu").toggleClass("resturant-menu-show");
                             $(".resetOrder").toggleClass("show-RMOptions-buttun");
                             $(".rollbackLastOrder").toggleClass("show-RMOptions-buttun");
                             $(".cancelOrder").toggleClass("show-RMOptions-buttun");
-                        }, 1300);
-                        oldRWMenuDisplay = 'block';
+                            $(".orderDone").toggleClass("show-order-done-buttun");
+                            setTimeout(() => {
+                            $(".resturant-menu").toggleClass("resturant-menu-show");
+                                $(".orderDone").toggleClass("show-order-done-buttun");
+                                $(".orderDone").toggleClass("button-float");
+                                $(".resetOrder").toggleClass("show-RMOptions-buttun");
+                                $(".rollbackLastOrder").toggleClass("show-RMOptions-buttun");
+                                $(".cancelOrder").toggleClass("show-RMOptions-buttun");
+                            }, 1300);
+                            oldRWMenuDisplay = 'block';
+                        }
+                        if (oldRWMenuDisplay == "block" && currentRWMenuDisplay == "none") {
+                            oldRWMenuDisplay = 'none'
+                        }
                     }
-                    if (oldRWMenuDisplay == "block" && currentRWMenuDisplay == "none") {
-                        oldRWMenuDisplay = 'none'
-                    }
-                }
 
+                }
             }
-        }
-        const REMObserver = new MutationObserver(REMenuMutationCallback)
-        REMObserver.observe(RWMenu, { attributes: true })
-        function closeRMenu(){
-            $(".resturant-menu").toggleClass("resturant-menu-hide");
-            $(".orderDone").toggleClass("button-float");
-            $(".orderDone").toggleClass("hide-order-done-buttun");
-            $(".resetOrder").toggleClass("hide-RMOptions-buttun");
-            $(".rollbackLastOrder").toggleClass("hide-RMOptions-buttun");
-            $(".cancelOrder").toggleClass("hide-RMOptions-buttun");
-            setTimeout(() => {
+            const REMObserver = new MutationObserver(REMenuMutationCallback)
+            REMObserver.observe(RWMenu, { attributes: true })
+            function closeRMenu(){
                 $(".resturant-menu").toggleClass("resturant-menu-hide");
+                $(".orderDone").toggleClass("button-float");
                 $(".orderDone").toggleClass("hide-order-done-buttun");
                 $(".resetOrder").toggleClass("hide-RMOptions-buttun");
                 $(".rollbackLastOrder").toggleClass("hide-RMOptions-buttun");
                 $(".cancelOrder").toggleClass("hide-RMOptions-buttun");
-                RWMenu.style.display='none';
-            }, 700);
-        }
+                setTimeout(() => {
+                    $(".resturant-menu").toggleClass("resturant-menu-hide");
+                    $(".orderDone").toggleClass("hide-order-done-buttun");
+                    $(".resetOrder").toggleClass("hide-RMOptions-buttun");
+                    $(".rollbackLastOrder").toggleClass("hide-RMOptions-buttun");
+                    $(".cancelOrder").toggleClass("hide-RMOptions-buttun");
+                    RWMenu.style.display='none';
+                }, 700);
+            }
             $(".resturant-m-item").click(function (e) {
                 e.preventDefault();
                 $(this).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
