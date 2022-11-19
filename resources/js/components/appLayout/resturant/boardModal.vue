@@ -118,7 +118,7 @@ export default {
                     if (oldModalDisplay == "block" && currentModalDisplay == "none") {
                         underline.style.width = '0';
                         oldModalDisplay = 'none'
-                        removeAlternative ()
+                        // removeAlternative ()
 
                     }
                 }
@@ -132,6 +132,7 @@ export default {
             modConAlternative.style.display="none"
             modConAlternative.innerHTML = modCon.innerHTML
             modConAlternative.removeEventListener("animationend",clearLS)
+            removeAlternative ()
         }
         var clearContentLS=()=>{
             modCon.classList.remove('shift-right-center')
@@ -141,6 +142,7 @@ export default {
             modConAlternative.classList.remove('shift-center-right');
             modConAlternative.style.display="none"
             modConAlternative.innerHTML = modCon.innerHTML
+            removeAlternative ()
             modConAlternative.removeEventListener("animationend",clearRS)
 
         }

@@ -28,15 +28,29 @@ Route::get('/vue/{vue_capture?}', function () {
 
 Route::get('/test', function () {
     $object = (object) [
+        'tableNumber' => 10,
         'hallNumber' => 1,
-        'hallName' => "الصالة الاولى",
         'active' => 1,
         'maxCapacity' => 50,
       ];
+     dd(getHallsFromRedis());
+    // Redis::hmset('hall:1' . ':tables:1', [
+    //     'tableNumber' =>  999,
+    //     'hallNumber' =>  1,
+    //     'active' =>  1,
+    //     'maxCapacity' => 1
+    // ]);
+// dd(Redis::hgetall('hall:1'.':table:1'));
+
+
+    // addSetTableInRedis(1,$object);
+    // dd(getOrderRange(1));
+// dd(Redis::hgetall('hall:1'.':table:4'));
+
     //   addSetHallInRedis($object);
     // deleteHallInRedis($object->hallNumber);
     //   dd(Redis::hgetall('hall:' . 1 .':table:'. 1));
-      dd((getHallTablesFromRedis(3))[0]->active);
+    //   dd((getHallTablesFromRedis(3))[0]->active);
     // Redis::hmset('client:' . 1, [
     //     'id' => 1,
     //     'name' => 'zoalfikar alsaad',
@@ -67,9 +81,18 @@ Route::get('/test', function () {
     //             //  echo $stored->email;
     //             // echo $stored['name'];
     //         }
-// dd( Redis::hget('client:2','id'));
+// Redis::hmset('hall:1'.':table:1', "order", 66);
+
 
 });
+
+// Route::get('/show-new-section-form', function ($hallNumber)
+// {
+//     $tables = getHallTablesFromRedis($hallNumber);
+//     return response()->json([
+//         'tables' => $tables
+//     ]);
+// });
 Route::get('boards/{hallNumber}', function ($hallNumber)
 {
     $tables = getHallTablesFromRedis($hallNumber);
@@ -77,7 +100,13 @@ Route::get('boards/{hallNumber}', function ($hallNumber)
         'tables' => $tables
     ]);
 });
-
+Route::get('halls', function ()
+{
+    $halls = getHallsFromRedis();
+    return response()->json([
+        'halls' => $halls
+    ]);
+});
 Route::get('/dev', function (Request $req) {
     if ($req->ajax()) {
         $sections = view('boards')->renderSections();
@@ -96,6 +125,7 @@ Route::middleware('authenticate')->group(function () {
     });
     Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
     Route::post('/add-new-table', [Resturant::class,'addNewTable']);
+    Route::post('/add-many-new-tables', [Resturant::class,'addManyNewTable']);
     Route::get('/show-new-hall-form', [Resturant::class,'showFormNewHall']);
     Route::post('/add-new-hall', [Resturant::class,'addNewHall']);
 

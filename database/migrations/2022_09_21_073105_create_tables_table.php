@@ -14,7 +14,7 @@ class CreateTablesTable extends Migration
     public function up()
     {
         Schema::create('tables', function (Blueprint $table) {
-            $table->string('hall-table')->virtualAs('concat(concat(tableNumber,"--"),hallNumber)')->unique()->primary();
+            $table->string('hall-table')->virtualAs('concat(concat(tableNumber,"--"),hallNumber)')->unique();
             $table->unsignedInteger('tableNumber');
             $table->unsignedInteger('hallNumber')->default(1);
             $table->tinyInteger('active')->default(1);

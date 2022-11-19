@@ -37,6 +37,18 @@ if (! function_exists('addSetHallInRedis')) {
         ]);
     }
 }
+if (! function_exists('getHallsFromRedis')) {
+    function getHallsFromRedis(){
+        $halls = [];
+        $keys = Redis::keys('halls:*');
+        foreach ($keys as $key) {
+            $key=str_replace('laravel_database_','',$key);
+            $hall= Redis::hgetall($key);
+            array_push( $halls,$hall);
+        }
+        return $halls;
+    }
+}
 if (! function_exists('deleteHallFromRedis')) {
     function deleteHallInRedis($hallNumber)
     {
@@ -46,7 +58,10 @@ if (! function_exists('deleteHallFromRedis')) {
 if (! function_exists('addSetTableInRedis')) {
     function addSetTableInRedis($hallNumber,$table)
     {
-
+         $rangeExpended = false;
+         if ($table->tableNumber >= getOrderRange($hallNumber)) {
+            $rangeExpended = true;
+         }
         Redis::pipeline(function ($pipe) use ($hallNumber ,$table) {
                 $pipe->hmset('hall:' . $hallNumber .':tables:'. $table->tableNumber, [
                     'tableNumber' =>  $table->tableNumber,
@@ -54,16 +69,43 @@ if (! function_exists('addSetTableInRedis')) {
                     'active' =>  $table->active,
                     'maxCapacity' => $table->maxCapacity
                 ]);
-                if ($table->tableNumber==getOrderRange($hallNumber)) {
-                    resetOrderRange($hallNumber);
-                }
+
                 $order=setTableOrder($table,'');
                 $pipe->hmset('hall:' . $hallNumber .':table:'. $table->tableNumber,[
                     'status' =>  '',
-                    'orders' =>  $order,
+                    'orders' =>  '',
+                    'order' =>  $order,
+
                 ]);
         });
+        if ( $rangeExpended ) {
+            resetOrderRange($hallNumber);
+        }
 
+    }
+}
+if (! function_exists('addSetManyTablesInRedis')) {
+    function addSetManyTablesInRedis($hallNumber,$tables)
+    {
+
+        Redis::pipeline(function ($pipe) use ($hallNumber ,$tables) {
+            for ($i=0; $i < count($tables) ; $i++) {
+                $pipe->hmset('hall:' . $hallNumber .':tables:'. intval($tables[$i]["tableNumber"]), [
+                    'tableNumber' =>  intval($tables[$i]["tableNumber"]),
+                    'hallNumber' =>intval($hallNumber),
+                    'active' =>  intval($tables[$i]["active"]),
+                    'maxCapacity' => intval($tables[$i]["maxCapacity"])
+                ]);
+                $pipe->hmset('hall:' . intval($hallNumber) .':table:'. intval($tables[$i]["tableNumber"]),[
+                    'status' =>  '',
+                    'orders' =>  '',
+                    'order' =>  0,
+
+                ]);
+
+            }
+        });
+        resetOrderRange(intval($hallNumber));
     }
 }
 if (! function_exists('deleteTableFromRedis')) {

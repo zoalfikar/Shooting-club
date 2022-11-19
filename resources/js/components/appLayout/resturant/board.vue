@@ -46,8 +46,9 @@ import store from "../../../store";
 export default {
     props:{
         'status': String ,
-        'tablenumber' : String
+        'tablenumber' : String,
         },
+        // emits:['statusChanged'],
     data () {
         return {
         }
@@ -58,18 +59,23 @@ export default {
     methods : {
         reservation: function(){
             this.status = 'taken';
-            moveitem('3', this.tablenumber);
+            this.$emit('statusChanged' , {order:3,tableNumber:this.tablenumber });
+            // moveitem('3', this.tablenumber);
             store.dispatch("changeBoardState" ,  {"status":'taken' ,"tableNumber":this.tablenumber} );
         },
         empty: function(){
             this.status = '';
-            moveitem('1',this.tablenumber)
+            this.$emit('statusChanged' , {order:1,tableNumber:this.tablenumber });
+
+            // moveitem('1',this.tablenumber)
             store.dispatch("changeBoardState" ,  {"status":'' ,"tableNumber":this.tablenumber} );
         },
         active: function(){
             this.status = 'active';
-            moveitem('2',this.tablenumber)
-            $(".info-modal").css("display", "block");
+            // moveitem('2',this.tablenumber)
+            this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
+
+            // $(".info-modal").css("display", "block");
             store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tablenumber}  );
         },
         toggleBoardModal : function() {
@@ -87,9 +93,7 @@ export default {
 
     },
     mounted:function () {
-        function function2222222222222 (){
-             console.log("it works");
-        }
+
     }
 };
 </script>

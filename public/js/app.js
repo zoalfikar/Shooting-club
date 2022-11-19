@@ -2417,6 +2417,7 @@ __webpack_require__.r(__webpack_exports__);
     'status': String,
     'tablenumber': String
   },
+  // emits:['statusChanged'],
   data: function data() {
     return {};
   },
@@ -2425,7 +2426,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     reservation: function reservation() {
       this.status = 'taken';
-      moveitem('3', this.tablenumber);
+      this.$emit('statusChanged', {
+        order: 3,
+        tableNumber: this.tablenumber
+      }); // moveitem('3', this.tablenumber);
+
       _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
         "status": 'taken',
         "tableNumber": this.tablenumber
@@ -2433,16 +2438,24 @@ __webpack_require__.r(__webpack_exports__);
     },
     empty: function empty() {
       this.status = '';
-      moveitem('1', this.tablenumber);
+      this.$emit('statusChanged', {
+        order: 1,
+        tableNumber: this.tablenumber
+      }); // moveitem('1',this.tablenumber)
+
       _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
         "status": '',
         "tableNumber": this.tablenumber
       });
     },
     active: function active() {
-      this.status = 'active';
-      moveitem('2', this.tablenumber);
-      $(".info-modal").css("display", "block");
+      this.status = 'active'; // moveitem('2',this.tablenumber)
+
+      this.$emit('statusChanged', {
+        order: 2,
+        tableNumber: this.tablenumber
+      }); // $(".info-modal").css("display", "block");
+
       _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
         "status": 'active',
         "tableNumber": this.tablenumber
@@ -2462,11 +2475,7 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector(".board-modal-content").addEventListener('animationend', clearShowModel);
     }
   },
-  mounted: function mounted() {
-    function function2222222222222() {
-      console.log("it works");
-    }
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -2614,8 +2623,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
             if (oldModalDisplay == "block" && currentModalDisplay == "none") {
               underline.style.width = '0';
-              oldModalDisplay = 'none';
-              removeAlternative();
+              oldModalDisplay = 'none'; // removeAlternative ()
             }
           }
         }
@@ -2636,6 +2644,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       modConAlternative.style.display = "none";
       modConAlternative.innerHTML = modCon.innerHTML;
       modConAlternative.removeEventListener("animationend", clearLS);
+      removeAlternative();
     };
 
     var clearContentLS = function clearContentLS() {
@@ -2647,6 +2656,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       modConAlternative.classList.remove('shift-center-right');
       modConAlternative.style.display = "none";
       modConAlternative.innerHTML = modCon.innerHTML;
+      removeAlternative();
       modConAlternative.removeEventListener("animationend", clearRS);
     };
 
@@ -2797,20 +2807,366 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+ // import  gsap  from "gsap";
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  emits: ['statusChanged'],
+  data: function data() {
+    return {
+      currentButtun: 0 // boxes:[],
+      // nodes:'',
+      // total:0,
+      // ease:null,
+      // group:null,
+      // orderHelper:0,
+      // currentHall:0,
+      // containerPadding:0,
+
+    };
+  },
   computed: {
+    halls: function halls() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.halls;
+    },
+    currentHall: function currentHall() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.currentHall;
+    },
+    currentHallName: function currentHallName() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.currentHallName;
+    },
     boards: function boards() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.boards;
+    },
+    loading: function loading() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.boardsLoading;
+    } // header: function () {
+    //     return this.$el.querySelector(".boards-header")
+    // },
+    // headerIsExpended: ()=> true,
+    // group: function () {
+    //     return this.$el.querySelector(".d-flex")
+    // },
+    // rectContainer : function () {
+    //     return this.$el.getBoundingClientRect()
+    // },
+    // containerPadding: function () {
+    //     return  (getComputedStyle(this.$el).padding).replace('px','')
+    // },
+    // boxes: function () {
+    //     var boxes = []
+    //     for (var i = 0; i < this.total; i++) {
+    //   var node = this.nodes[i];
+    //   TweenLite.set(node, { x: 0});
+    //       boxes[i] = {
+    //           transform: node._gsTransform,
+    //           x: node.offsetLeft,
+    //           y: node.offsetTop,
+    //           order: node.style.order,
+    //           node
+    //       };
+    //   }
+    //   return boxes;
+    //     // return this.initBoardsPositions ()
+    // } ,
+    // nodes: function () {
+    //     return this.$el.querySelectorAll(".col-lg-3")
+    // },
+    // total: function () {
+    //     return this.nodes.length;
+    // },
+    // orderHelper: function () {
+    //     return  Math.pow (10 , parseInt( String(this.total).length))
+    // },
+
+  },
+  watch: {
+    boards: function boards(newQuestion, oldQuestion) {
+      this.showHallName(); // console.log(newQuestion);
+      // // console.log(newQuestion);
+      // // console.log(this.boxes);
+      //     // setTimeout(() => {
+      //     this.group = this.$el.querySelector(".d-flex")
+      //     this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
+      //     this.total= this.nodes.length;
+      //     this.orderHelper = Math.pow (10 , parseInt( String(this.total).length));
+      //     this.ease = Power1.easeInOut;
+      //     console.log(this.group);
+      //     console.log(this.nodes);
+      //     console.log(this.total);
+      //     console.log(this.orderHelper);
+      // }, 2000);
+      // setTimeout(() => {
+      // this.boxes = this.initBoardsPositions ();
+      // console.log(this.boxes);
+      // }, 5000);
     }
   },
-  methods: {},
+  methods: {
+    // t:function(){
+    //     this.containerPadding =(getComputedStyle(this.$el).padding).replace('px','')
+    //     console.log(this.containerPadding);
+    // },
+    bringHalls: function bringHalls(event) {
+      event.preventDefault(); // this.loading = true;
+      // this.group = null
+      // this.nodes = [];
+      // this.total= 0;
+      // this.orderHelper =0;
+      // this.boxes = null;
+
+      var target = event.target;
+
+      if (target.tagName == 'SPAN') {
+        target = event.target.parentElement;
+      }
+
+      this.currentButtun = target.value;
+      this.$el.querySelector(".current-nav-val").animate([{
+        clipPath: getComputedStyle(this.$el.querySelector(".current-nav-val")).clipPath
+      }, {
+        clipPath: "inset(0% 0% 0% 100%)"
+      }], {
+        duration: 300,
+        fill: 'forwards'
+      });
+      setTimeout(function () {
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentHallNumber", target.value);
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllBoardsInThisHall", target.value);
+      }, 300); //   reinit()
+      // console.log(this.currentHall);
+    },
+    showHallName: function showHallName() {
+      this.$el.querySelector(".current-nav-val").animate([{
+        clipPath: "inset(0% 0% 0% 100%)"
+      }, {
+        clipPath: "inset(0% 0% 0% 0%)"
+      }], {
+        duration: 300,
+        fill: 'forwards'
+      });
+    },
+    //   numberOfElementsInRows: function () {
+    //       if (this.total == 0) throw new Error("no elements"); ;
+    //       var count = 1;
+    //       for (var i = 0; i < this.total - 1; i++) {
+    //           if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
+    //               if (i+1==this.total-1) {
+    //                   break;
+    //               };
+    //               continue;
+    //               }
+    //           count++;
+    //           if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
+    //               break;
+    //           }
+    //       }
+    //       return count;
+    //   },
+    //   layout:function(orderChanged) {
+    //     // console.log(Power1.easeIn);
+    //       var numberOfElementsInRow = this.numberOfElementsInRows();
+    //       if (!numberOfElementsInRow) return 0 ;
+    //       for (var i = 0; i < this.total; i++) {
+    //           var box = this.boxes[i];
+    //           var isEdge = false;
+    //           var positionReplaced = false ;
+    //           var moveUp = false;
+    //           var rect = box.node.getBoundingClientRect();
+    //           var lastX = box.x;
+    //           var lastY = box.y;
+    //           var ease = this.ease;
+    //           box.x = box.node.offsetLeft;
+    //           box.y = box.node.offsetTop;
+    //           if (lastX === box.x && lastY === box.y) continue;
+    //           if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
+    //           if (lastY !== box.y) {
+    //               isEdge = true;
+    //               var substitutional = box.node.cloneNode(true);
+    //               substitutional.style.position='absolute';
+    //               substitutional.firstChild.classList.remove("animate-fade-in-down");
+    //               substitutional.classList.add("temporary-alternative");
+    //               substitutional.style.top = parseInt(lastY)+'px';
+    //               substitutional.style.left = parseInt(lastX)+'px';
+    //               substitutional.style.width= rect.width;
+    //               substitutional.style.height= rect.height;
+    //               if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
+    //           }
+    //           var x = box.transform.x + lastX - box.x;
+    //           var y = box.transform.y + lastY - box.y;
+    //           if (!positionReplaced && numberOfElementsInRow > 1) {
+    //                 var duration ;
+    //               if (!isEdge) {
+    //                   duration = parseInt(Math.round(parseInt(Math.abs(x))/parseInt(rect.width)));
+    //                   TweenLite.fromTo(box.node, duration, { x:x, y:y }, { x: 0, y: 0 , ease }).delay();
+    //               }
+    //               else
+    //               {
+    //                     this.group.appendChild(substitutional);
+    //                     var substitutionalRect = substitutional.getBoundingClientRect();
+    //                     var delay ;
+    //                     var distanceOFedgeSubstitutionalRect;
+    //                     var distanceSubstitutionalRect;
+    //                     var distance;
+    //                     var durationSubstitutional ;
+    //                   if (moveUp) {
+    //                     distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
+    //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)))
+    //                     // console.log(distance);
+    //                     distanceSubstitutionalRect=parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
+    //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)));
+    //                     distanceOFedgeSubstitutionalRect =parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
+    //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+    //                     // TweenLite.fromTo(substitutional, 10, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none'});
+    //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
+    //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
+    //                     TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+    //                     // TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+    //                     // TweenLite.fromTo(box.node,0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
+    //                     // console.log("top"+delay);
+    //                     // console.log(distance);
+    //                     // console.log(duration);
+    //                     // console.log(distanceSubstitutionalRect);
+    //                     // console.log(durationSubstitutional);
+    //                     // console.log(distanceOFedgeSubstitutionalRect);
+    //                     // console.log(delay);
+    //                   }
+    //                   else  {
+    //                     distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
+    //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)));
+    //                     distanceSubstitutionalRect=parseInt(substitutionalRect.right)-parseInt(this.rectContainer.left) ;
+    //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)))
+    //                     distanceOFedgeSubstitutionalRect =parseInt(substitutionalRect.left)-parseInt(this.rectContainer.left) ;
+    //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+    //                     // TweenLite.fromTo(substitutional, 10, { x:0},{ x:-(distanceSubstitutionalRect),display:'none' });
+    //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
+    //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
+    //                     // TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+    //                     TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+    //                     // TweenLite.fromTo(box.node, 0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
+    //                     // console.log("down"+delay);
+    //                     // console.log(distance);
+    //                     // console.log(duration);
+    //                     // console.log(distanceSubstitutionalRect);
+    //                     // console.log(durationSubstitutional);
+    //                     // console.log(distanceOFedgeSubstitutionalRect);
+    //                     // console.log(delay);
+    //                   }
+    //               }
+    //           } else {
+    //               TweenLite.fromTo(box.node, 1, { x:x, y:y , zIndex:-9 }, { x: 0, y: 0 ,zIndex:0, ease });
+    //           }
+    //       }
+    //       return new Promise((resolve, reject) => {
+    //           setTimeout(() => {
+    //               resolve('');
+    //           }, 1000);  //longest animation is 1s ;
+    //       })
+    //   },
+    //   removeTemporaryAlternatives:function () {
+    //       var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
+    //       for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
+    //           if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
+    //               temporaryAlternativesNodes[i].remove();
+    //           }
+    //       }
+    //   },
+    //   initBoardsPositions : function () {
+    //       var boxes = [];
+    //       for (var i = 0; i < this.total; i++) {
+    //       var node = this.nodes[i];
+    //       TweenLite.set(node, { x: 0});
+    //             boxes[i] = {
+    //               transform: node._gsTransform,
+    //               x: node.offsetLeft,
+    //               y: node.offsetTop,
+    //               order: node.style.order,
+    //               node
+    //           };
+    //       }
+    //       return boxes;
+    //   },
+    //   reinitBoardsPositions : function () {
+    //       for (var i = 0; i < this.total; i++) {
+    //       var node = this.nodes[i];
+    //           this.boxes[i] = {
+    //               transform: node._gsTransform,
+    //               x: node.offsetLeft,
+    //               y: node.offsetTop,
+    //               order: node.style.order,
+    //               node
+    //           };
+    //       }
+    //   },
+    moveitem: function moveitem(data) {// var array=[];
+      // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+      // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
+      // array.push(newOrder)
+      // document.getElementById(1).style.order =  301;
+      // document.getElementById(2).style.order =  302;
+      // document.getElementById(3).style.order =  303;
+      // document.getElementById(1).style.order =  newOrder;
+      // this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
+    }
+  },
   mounted: function mounted() {
-    $('.naviga-link').click(function (e) {
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllHalls");
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllBoardsInThisHall", 1); //   window.addEventListener('resize',(e)=>{this.reinitBoardsPositions()}  );
+
+    var scrollLef = function scrollLef() {
+      document.querySelector('.navigations-links').scrollBy({
+        left: -200,
+        behavior: 'smooth'
+      });
+    };
+
+    var scrollRigh = function scrollRigh() {
+      document.querySelector('.navigations-links').scrollBy({
+        left: 200,
+        behavior: 'smooth'
+      });
+    };
+
+    $('.naviga-link-end').click(function (e) {
       e.preventDefault();
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllBoardsInThisHall", $(this).val()); //
+      scrollLef();
     });
-    $(".naviga-link").first().trigger('click');
+    $('.naviga-link-start').click(function (e) {
+      e.preventDefault();
+      scrollRigh();
+    }); //   this.reinitBoardsPositions()/
+    //   const reinit=()=>{
+    //       this.reinitBoardsPositions()
+    //   }
+    // $(document).ready(function () {
+    //   $( ".naviga-link" ).first().trigger('click');
+    // });
+    //   $('.naviga-link').click(function (e) {
+    //       e.preventDefault();
+    //       store.dispatch("changeCurrentHallNumber")
+    //       console.log($(this).val());
+    //       store.dispatch("pringAllBoardsInThisHall",$(this).val())
+    //       reinit()
+    //   });
+    //   $( ".naviga-link" ).first().trigger('click');
+    //               setTimeout(() => {
+    // $( ".naviga-link" ).first().trigger('click');
+    //                 //   console.log(this.total);
+    //                 //   console.log(this.nodes);
+    //                 //   console.log(this.boxes);
+    //                   // console.log(this.nodes);
+    //                   // console.log(this.nodes);
+    //                   // console.log(this.nodes);
+    //               }, 3000);
   }
 });
 
@@ -2879,12 +3235,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      currentTable: {}
+      currentTable: {},
+      editMode: 0
     };
   },
   methods: {
@@ -2912,26 +3274,16 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector(".menu-wraper").style.display = "block";
     },
     updateOrder: function updateOrder(e) {
-      var _this = this;
-
-      var save = function save() {
-        _this.saveOrder();
-      };
-
-      if (e.target.innerHTML == "تعديل طلب") {
-        e.target.innerHTML = "حفظ";
-        $('.fa-remove').css('display', "block");
-        $('.fa-plus').css('display', "block");
-        $('.fa-minus').css('display', "block");
-      } else {
-        e.target.innerHTML = "تعديل طلب";
-        $('.fa-remove').css('display', "none");
-        $('.fa-plus').css('display', "none");
-        $('.fa-minus').css('display', "none");
-        save();
-      }
+      this.editMode = 1;
+      $('.fa-remove').css('display', "block");
+      $('.fa-plus').css('display', "block");
+      $('.fa-minus').css('display', "block");
     },
-    saveOrder: function saveOrder() {
+    saveOrder: function saveOrder(e) {
+      this.editMode = 0;
+      $('.fa-remove').css('display', "none");
+      $('.fa-plus').css('display', "none");
+      $('.fa-minus').css('display', "none");
       var itemsToDelete = [];
       var newOrders = this.currentTable.orders;
 
@@ -2965,6 +3317,7 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     this.currentTable = value[0];
+    $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
   }
 });
 
@@ -4435,583 +4788,17 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
+    halls: [],
+    currentHall: '',
+    currentHallName: '',
     currentTable: '',
     currentTableStatus: '',
-    // boards: [{
-    //         tableNumber: '1',
-    //         state: "active",
-    //         order: 200,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [{
-    //                 orderName: 'كباب',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //         ]
-    //     },
-    //     {
-    //         tableNumber: '2',
-    //         state: "",
-    //         order: 100,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '3',
-    //         state: "",
-    //         order: 100,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '4',
-    //         state: "",
-    //         order: 100,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '5',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '6',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '7',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '8',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '9',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '10',
-    //         state: "",
-    //         order: 100,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '11',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '12',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '13',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '14',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '15',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '16',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '17',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '18',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '19',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '20',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '21',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     }, {
-    //         tableNumber: '22',
-    //         state: "taken",
-    //         order: 300,
-    //         info: {
-    //             customName: '',
-    //             slug: '',
-    //             moreInfo: '',
-    //         },
-    //         orders: [
-    //             {
-    //                 orderName: 'بيبسي',
-    //                 price: 10,
-    //                 quantity: 2,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //             {
-    //                 orderName: 'فروج',
-    //                 price: 60,
-    //                 quantity: 3,
-    //             },
-    //         ],
-    //     },
-    // ],
     boards: [],
+    boardsLoading: false,
     aviliabeBoards: []
   },
   getters: {
     currentOrder: function currentOrder(state) {
-      console.log(state.currentTable);
       var board = state.boards.find(function (board) {
         return board.tableNumber === state.currentTable;
       });
@@ -5019,30 +4806,42 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     }
   },
   actions: {
-    pringAllBoardsInThisHall: function pringAllBoardsInThisHall(_ref, hallNumber) {
+    pringAllHalls: function pringAllHalls(_ref) {
       var commit = _ref.commit;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("/halls/").then(function (response) {
+        commit("setHalls", response.data.halls);
+      });
+    },
+    changeCurrentHallNumber: function changeCurrentHallNumber(_ref2, hallNumber) {
+      var commit = _ref2.commit;
+      commit('setCurrentHallNumber', hallNumber);
+    },
+    pringAllBoardsInThisHall: function pringAllBoardsInThisHall(_ref3, hallNumber) {
+      var commit = _ref3.commit;
+      // commit("setBoards", [])
+      commit('setBoardsLoading', true);
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/boards/".concat(hallNumber)).then(function (response) {
-        // response = JSON.parse(response.);
+        commit("setBoardsLoading", false);
         commit("setBoards", response.data.tables);
       });
     },
-    changeCurrentTableNumber: function changeCurrentTableNumber(_ref2, tableNumber) {
-      var commit = _ref2.commit;
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref4, tableNumber) {
+      var commit = _ref4.commit;
       commit('setCurrentTableNumber', tableNumber);
     },
-    changeCurrentTableStatus: function changeCurrentTableStatus(_ref3, status) {
-      var commit = _ref3.commit;
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref5, status) {
+      var commit = _ref5.commit;
       commit('setCurrentTableStatus', status);
     },
-    getAviliableBoards: function getAviliableBoards(_ref4) {
-      var commit = _ref4.commit;
+    getAviliableBoards: function getAviliableBoards(_ref6) {
+      var commit = _ref6.commit;
       var aviliableBoards = this.state.boards.filter(function (b) {
-        return b.state == '';
+        return b.status == '';
       });
       commit('setAviliableBoards', aviliableBoards);
     },
-    changeBoardState: function changeBoardState(_ref5, payload) {
-      var commit = _ref5.commit;
+    changeBoardState: function changeBoardState(_ref7, payload) {
+      var commit = _ref7.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -5053,8 +4852,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       commit('setBoardState', data);
       this.dispatch("getAviliableBoards");
     },
-    saveOrders: function saveOrders(_ref6, payload) {
-      var commit = _ref6.commit;
+    saveOrders: function saveOrders(_ref8, payload) {
+      var commit = _ref8.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -5066,8 +4865,24 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     }
   },
   mutations: {
+    setHalls: function setHalls(state, halls) {
+      state.halls = halls.sort(function (a, b) {
+        return a.hallNumber - b.hallNumber;
+      });
+    },
+    setCurrentHallNumber: function setCurrentHallNumber(state, hallNumber) {
+      state.currentHall = hallNumber;
+      state.currentHallName = state.halls.find(function (hall) {
+        return hall.hallNumber == hallNumber;
+      }).name;
+    },
+    setBoardsLoading: function setBoardsLoading(state, loading) {
+      state.boardsLoading = loading;
+    },
     setBoards: function setBoards(state, boards) {
-      state.boards = boards;
+      state.boards = boards.sort(function (a, b) {
+        return a.order - b.order;
+      }); // console.log(state.boards);
     },
     setCurrentTableNumber: function setCurrentTableNumber(state, tableNumber) {
       state.currentTable = tableNumber;
@@ -5079,7 +4894,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.aviliabeBoards = aviliableBoards;
     },
     setBoardState: function setBoardState(state, data) {
-      state.boards[data.index].state = data.status;
+      state.boards[data.index].status = data.status;
     },
     setoOrders: function setoOrders(state, data) {
       state.boards[data.index].orders = data.orders;
@@ -5241,7 +5056,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* :root{\n} */\n.container[data-v-8313a3d6] {\n    min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n    box-sizing: border-box !important;\n    position: relative;\n    margin-top: 10px;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    display:  flex;\n    align-items: center;\n    background-color: hsl(120, 73%, 75% , 40%);\n    transition: height 10s ease-in-out;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n    -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n            animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n    right: 10px;\n    bottom: 5px;\n    position: absolute;\n    height: 20px;\n    width:  20px;\n    transition: transform 0.2s ease-in-out ;\n    overflow: visible;\n    color:white;\n    transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n    transform: rotate(180deg);\n}\n/* .boards-header-collapse .toggle-boards-header{\n    transform: rotate(180deg);\n} */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n    transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n    color: blue;\n    transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    overflow: hidden;\n    height: inherit;\n    align-items: center;\n    flex-grow: 1;\n    display: flex;\n    justify-content: center;\n}\n.current-nav-val[data-v-8313a3d6]{\n    overflow: hidden;\n    position: relative;\n    height: inherit;\n    margin-left: 20px;\n    font-weight: bold;\n}\n.navigations-links[data-v-8313a3d6]{\n    position: relative;\n    display: flex;\n    gap: 10px;\n    align-items: center;\n}\n.naviga-link[data-v-8313a3d6]{\n    border-radius: 100%;\n    background-color: rgb(90, 117, 65);\n    color: beige;\n    width: 40px;\n    height: 40px;\n    display: flex;\n    transition: transform 0.2s ease-in-out;\n}\n.naviga-link-end[data-v-8313a3d6]{\n    border-radius: 20%;\n    background-color: rgb(65, 77, 54);\n    color: beige;\n    width: 40px;\n    height: 30px;\n    display: flex;\n    padding-bottom: 3px;\n    transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover{\n    transform: scale(1.2) ;\n    cursor: pointer;\n}\n.naviga-link span[data-v-8313a3d6], .naviga-link-end span[data-v-8313a3d6]{\n    margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n    position: relative;\n    overflow: hidden;\n    padding-top: 3px;\n    margin-left: 10px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5265,7 +5080,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-grid[data-v-d3600b62]{\n    padding-left: 15px;\n    padding-right: 15px;\n    display: grid;\n    grid-template-areas: \"options display-content\" ;\n    grid-template-columns: 20% 80%;\n}\n/* .display-content{\n\n} */\n.options[data-v-d3600b62]{\n    align-items: flex-start;\n    padding: 10px;\n    padding-top: 20px;\n    display: flex;\n    flex-direction: column;\n    gap: 15px;\n}\ntable[data-v-d3600b62]{\n    text-align: center !important;\n}\ntd[data-v-d3600b62]{\n    position: relative;\n}\n.fa-remove[data-v-d3600b62]{\n    display: none;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n    margin-left: 12px;\n}\n.fa-remove[data-v-d3600b62]:hover{\n    background-color: rgb(255, 0, 0,70%);\n}\n.fa-remove[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n.fa-minus[data-v-d3600b62], .fa-plus[data-v-d3600b62]{\n    display: none;\n    position: absolute;\n    margin-top: unset !important;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n}\n.fa-minus[data-v-d3600b62]{\n   right:10px;\n   top: 10px;\n}\n.fa-minus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]{\n    left:10px;\n    top: 10px;\n}\n.fa-plus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]:active , .fa-minus[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-grid[data-v-d3600b62]{\n    padding-left: 15px;\n    padding-right: 15px;\n    display: grid;\n    grid-template-areas: \"optionplusTotal display-content\" ;\n    grid-template-columns: 20% 80%;\n    min-height: 100%;\n}\n/* .display-content{\n\n} */\n.optionplusTotal[data-v-d3600b62]{\n    position: sticky;\n    top:0;\n}\n.options[data-v-d3600b62]{\n    align-items: flex-start;\n    padding: 10px;\n    padding-top: 20px;\n    display: flex;\n    flex-direction: column;\n    gap: 15px;\n}\n.total[data-v-d3600b62]{\n    display: flex;\n    align-items:center;\n    justify-content:center;\n    position: absolute;\n    bottom: 40px;\n    width: 90%;\n    height: 70px;\n    background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0));\n    -webkit-backdrop-filter: blur(10px);\n            backdrop-filter: blur(10px);\n    border:1px solid rgba(255,255,255,0.18);\n    margin-left: 20px;\n    border-radius: 30%;\n    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.37);\n}\ntable[data-v-d3600b62]{\n    text-align: center !important;\n}\ntd[data-v-d3600b62]{\n    position: relative;\n}\n.fa-remove[data-v-d3600b62]{\n    display: none;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n    margin-left: 12px;\n}\n.fa-remove[data-v-d3600b62]:hover{\n    background-color: rgb(255, 0, 0,70%);\n}\n.fa-remove[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n.fa-minus[data-v-d3600b62], .fa-plus[data-v-d3600b62]{\n    display: none;\n    position: absolute;\n    margin-top: unset !important;\n    cursor: pointer;\n    border-radius: 100%;\n    width:20px;\n    height: 20px;\n    text-align: center;\n}\n.fa-minus[data-v-d3600b62]{\n   right:10px;\n   top: 10px;\n}\n.fa-minus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]{\n    left:10px;\n    top: 10px;\n}\n.fa-plus[data-v-d3600b62]:hover{\n    background-color: rgba(0, 47, 255, 0.7);\n}\n.fa-plus[data-v-d3600b62]:active , .fa-minus[data-v-d3600b62]:active{\n    transform: scale(1.1);\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7350,32 +7165,89 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "d-flex flex-row flex-wrap justify-content-center" },
-        _vm._l(_vm.boards, function (board) {
-          return _c(
+      _c("header", { staticClass: "boards-header" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "hall-navigation" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _c(
             "div",
-            {
-              key: board.tableNumber,
-              staticClass: "col-lg-3 col-md-4",
-              style: "order:" + board.order,
-              attrs: { id: board.tableNumber },
-            },
-            [
-              _c("board", {
-                staticClass: "animate-fade-in-down",
-                style: "animation-delay: " + board.tableNumber * 0.1 + "s",
-                attrs: { status: board.state, tablenumber: board.tableNumber },
-              }),
-            ],
-            1
-          )
-        }),
-        0
-      ),
+            { staticClass: "navigations-links" },
+            _vm._l(_vm.halls, function (hall) {
+              return _c(
+                "button",
+                {
+                  key: hall.hallNumber,
+                  staticClass: "naviga-link",
+                  style:
+                    "background-color:" +
+                    (hall.hallNumber == _vm.currentButtun
+                      ? "rgb(199, 176, 146)"
+                      : "rgb(90, 117, 65)") +
+                    " ",
+                  attrs: { value: hall.hallNumber },
+                  on: {
+                    click: function (event) {
+                      _vm.bringHalls(event)
+                    },
+                  },
+                },
+                [_c("span", [_vm._v(_vm._s(hall.hallNumber))])]
+              )
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _vm._m(3),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "current-nav-val" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.currentHallName))]),
+        ]),
+      ]),
+      _vm._v(" "),
+      _vm.loading
+        ? _c("div", { staticClass: "flex justify-center" }, [
+            _vm._v("تحميل ..."),
+          ])
+        : _c(
+            "div",
+            { staticClass: "d-flex flex-row flex-wrap justify-content-center" },
+            _vm._l(_vm.boards, function (board, index) {
+              return _c(
+                "div",
+                {
+                  key: "" + ("h:" + _vm.currentHall + "t:" + board.tableNumber),
+                  class: "" + ("col-lg-3 col-md-4 h" + _vm.currentHall),
+                  style: "order:" + board.order,
+                  attrs: {
+                    id:
+                      "" + ("h:" + _vm.currentHall + "t:" + board.tableNumber),
+                  },
+                },
+                [
+                  _c("board", {
+                    staticClass: "animate-fade-in-down",
+                    style: "animation-delay: " + index * 0.1 + "s",
+                    attrs: {
+                      status: board.status,
+                      tablenumber: board.tableNumber,
+                    },
+                    on: {
+                      statusChanged: function (data) {
+                        return _vm.moveitem(data)
+                      },
+                    },
+                  }),
+                ],
+                1
+              )
+            }),
+            0
+          ),
       _vm._v(" "),
       _c("board-modal"),
       _vm._v(" "),
@@ -7389,61 +7261,45 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("header", { staticClass: "boards-header" }, [
-      _c("div", { staticClass: "toggle-boards-header" }, [
-        _c("span", [_c("i", { staticClass: "fa fa-angle-double-up" })]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hall-navigation" }, [
-        _c("div", { staticClass: "navigations-title" }, [
-          _c("h4", [_vm._v("الصالة :")]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "navigations-links" }, [
-          _c(
-            "button",
-            { staticClass: "naviga-link-end", attrs: { value: "" } },
-            [
-              _c("span", { attrs: { href: "" } }, [
-                _c("i", { staticClass: "fa fa-angle-right" }),
-              ]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "naviga-link",
-              staticStyle: { "background-color": "rgb(199, 176, 146)" },
-              attrs: { value: "1" },
-            },
-            [_c("span", { attrs: { href: "" } }, [_vm._v("1")])]
-          ),
-          _vm._v(" "),
-          _c("button", { staticClass: "naviga-link", attrs: { value: "2" } }, [
-            _c("span", { attrs: { href: "" } }, [_vm._v("2")]),
-          ]),
-          _vm._v(" "),
-          _c("button", { staticClass: "naviga-link", attrs: { value: "3" } }, [
-            _c("span", { attrs: { href: "" } }, [_vm._v("3")]),
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "naviga-link-end", attrs: { value: "" } },
-            [
-              _c("span", { attrs: { href: "" } }, [
-                _c("i", { staticClass: "fa fa-angle-left" }),
-              ]),
-            ]
-          ),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "current-nav-val" }, [
-        _c("h1", [_vm._v("الصالة الاولى")]),
-      ]),
+    return _c("div", { staticClass: "toggle-boards-header" }, [
+      _c("span", [_c("i", { staticClass: "fa fa-angle-double-up" })]),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "navigations-title" }, [
+      _c("h4", [_vm._v("الصالة :")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "naviga-link-start", attrs: { value: "" } },
+      [
+        _c("span", { attrs: { href: "" } }, [
+          _c("i", { staticClass: "fa fa-angle-right" }),
+        ]),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "naviga-link-end", attrs: { value: "" } },
+      [
+        _c("span", { attrs: { href: "" } }, [
+          _c("i", { staticClass: "fa fa-angle-left" }),
+        ]),
+      ]
+    )
   },
 ]
 render._withStripped = true
@@ -7497,34 +7353,49 @@ var render = function () {
     "div",
     { staticClass: "modal-grid" },
     [
-      _c(
-        "div",
-        { staticClass: "options" },
-        [
-          _c(
-            "v-btn",
-            {
-              attrs: { rounded: "", color: "primary", dark: "" },
-              on: { click: _vm.toggleMenu },
-            },
-            [_vm._v("أضف طلب")]
-          ),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: { rounded: "", color: "primary", dark: "" },
-              on: { click: _vm.updateOrder },
-            },
-            [_vm._v("تعديل طلب")]
-          ),
-          _vm._v(" "),
-          _c("v-btn", { attrs: { rounded: "", color: "primary", dark: "" } }, [
-            _vm._v(" إسال الطلب"),
-          ]),
-        ],
-        1
-      ),
+      _c("div", { staticClass: "optionplusTotal" }, [
+        _c(
+          "div",
+          { staticClass: "options" },
+          [
+            _c(
+              "v-btn",
+              {
+                attrs: { rounded: "", color: "primary", dark: "" },
+                on: { click: _vm.toggleMenu },
+              },
+              [_vm._v("أضف طلب")]
+            ),
+            _vm._v(" "),
+            _vm.editMode
+              ? _c(
+                  "v-btn",
+                  {
+                    attrs: { rounded: "", color: "primary", dark: "" },
+                    on: { click: _vm.saveOrder },
+                  },
+                  [_vm._v("حفظ")]
+                )
+              : _c(
+                  "v-btn",
+                  {
+                    attrs: { rounded: "", color: "primary", dark: "" },
+                    on: { click: _vm.updateOrder },
+                  },
+                  [_vm._v("تعديل طلب")]
+                ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              { attrs: { rounded: "", color: "primary", dark: "" } },
+              [_vm._v(" إسال الطلب")]
+            ),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "total" }, [_vm._v("9.000.000.000 ل.س")]),
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "display-content" }, [
         _c("table", { staticClass: "table table-dark table-striped" }, [
@@ -10046,7 +9917,21 @@ var render = function () {
           [_vm._m(13), _vm._v(" "), _vm._m(14)]
         ),
         _vm._v(" "),
-        _vm._m(15),
+        _c("div", { staticClass: "item-children" }, [
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(15),
+            _vm._v("   "),
+            _c("span", [
+              _c(
+                "a",
+                { attrs: { href: "" + _vm.url + "/show-new-section-form" } },
+                [_vm._v("طاولة جديدة")]
+              ),
+            ]),
+          ]),
+          _vm._v(" "),
+          _vm._m(16),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "menu-item-itemChild" }, [
@@ -10060,12 +9945,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(16), _vm._v(" "), _vm._m(17)]
+          [_vm._m(17), _vm._v(" "), _vm._m(18)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(18),
+            _vm._m(19),
             _vm._v("   "),
             _c("span", [
               _c("a", { attrs: { href: "" + _vm.url + "/dev" } }, [
@@ -10075,7 +9960,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(19),
+            _vm._m(20),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10087,7 +9972,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(20),
+            _vm._m(21),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10311,28 +10196,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "item-children" }, [
-      _c("div", { staticClass: "item-child" }, [
-        _c("span", [
-          _c("i", {
-            staticClass: "fa fa-angle-double-left",
-            attrs: { "aria-hidden": "true" },
-          }),
-        ]),
-        _vm._v("   "),
-        _c("span", [_c("a", { attrs: { href: "" } }, [_vm._v("فرع أول")])]),
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "item-child" }, [
+      _c("span", [
+        _c("i", {
+          staticClass: "fa fa-angle-double-left",
+          attrs: { "aria-hidden": "true" },
+        }),
       ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "item-child" }, [
-        _c("span", [
-          _c("i", {
-            staticClass: "fa fa-angle-double-left",
-            attrs: { "aria-hidden": "true" },
-          }),
-        ]),
-        _vm._v("   "),
-        _c("span", [_c("a", { attrs: { href: "" } }, [_vm._v("فرع ثاني")])]),
-      ]),
+      _vm._v("   "),
+      _c("span", [_c("a", { attrs: { href: "" } }, [_vm._v("فرع ثاني")])]),
     ])
   },
   function () {

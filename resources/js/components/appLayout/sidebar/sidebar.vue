@@ -70,7 +70,7 @@
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع أول</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-section-form'">طاولة جديدة</a></span>
                 </div>
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>

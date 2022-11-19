@@ -1,157 +1,550 @@
 <template>
-  <div class="container">
-    <header class="boards-header">
-        <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
-        <div class="hall-navigation">
-            <div class="navigations-title">
-                <h4>الصالة :</h4>
-            </div>
-            <div class="navigations-links">
-                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-right"></i></span></button>
-                <button value="1" class="naviga-link" style="background-color: rgb(199, 176, 146)"><span href="">1</span></button>
-                <button value="2" class="naviga-link"><span href="">2</span></button>
-                <button value="3" class="naviga-link"><span href="">3</span></button>
-                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
-            </div>
-        </div>
-        <div class="current-nav-val">
-            <h1>الصالة الاولى</h1>
-        </div>
-    </header>
-    <div class="d-flex flex-row flex-wrap justify-content-center">
-        <div  v-for="board in boards" v-bind:key="board.tableNumber" :id="board.tableNumber" :style="`order:${board.order}`"  class="col-lg-3 col-md-4">  <board :status="board.state" :tablenumber="board.tableNumber" :style="`animation-delay: ${board.tableNumber* 0.1}s`"  class="animate-fade-in-down"></board></div>
-    </div>
-    <board-modal></board-modal>
-    <info-modal></info-modal>
-</div>
-</template>
+    <div class="container">
+      <header class="boards-header">
+          <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
+          <div class="hall-navigation">
+              <div class="navigations-title">
+                  <h4>الصالة :</h4>
+              </div>
+              <button value="" class="naviga-link-start"><span href=""><i class="fa fa-angle-right"></i></span></button>
+              <div class="navigations-links">
+                  <button @click="(event)=>{bringHalls(event)}" v-for="hall in halls" :key="hall.hallNumber" :value="hall.hallNumber" class="naviga-link"  :style=" `background-color:${ hall.hallNumber == currentButtun ? 'rgb(199, 176, 146)':'rgb(90, 117, 65)'} `"><span>{{hall.hallNumber}}</span></button>
+              </div>
+              <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
+          </div>
+          <div  class="current-nav-val">
+              <h1>{{currentHallName}}</h1>
+          </div>
+      </header>
+    <div v-if="loading" class="flex justify-center">تحميل ...</div>
+      <div v-else class="d-flex flex-row flex-wrap justify-content-center">
+          <div  v-for="(board,index) in boards"
+              v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
+              :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
+              :style="`order:${board.order}`"
+              :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
+                  <board :status="board.status"
+                      :tablenumber="board.tableNumber"
+                      :style="`animation-delay: ${(index) * 0.1}s`"
+                      class="animate-fade-in-down"
+                      @statusChanged="(data)=>moveitem(data)" >
+                  </board>
+          </div>
+      </div>
+      <board-modal></board-modal>
+      <info-modal></info-modal>
+  </div>
+  </template>
 
-<script>
-    import store from '../../../store';
-    export default {
+  <script>
+  import store from '../../../store';
+    // import  gsap  from "gsap";
 
-       computed: {
-            boards: ()=> store.state.boards,
-        },
-        methods:{
+      export default {
+          emits:['statusChanged'],
+          data(){
+              return{
+                currentButtun:0,
+                // boxes:[],
+                // nodes:'',
+                // total:0,
+                // ease:null,
+                // group:null,
+                // orderHelper:0,
+                // currentHall:0,
+                // containerPadding:0,
 
-        },
-        mounted: function () {
-            $('.naviga-link').click(function (e) {
+              }
+          },
+
+         computed: {
+                halls: ()=> store.state.halls,
+                currentHall: ()=> store.state.currentHall,
+                currentHallName: ()=> store.state.currentHallName,
+
+                boards: ()=> store.state.boards,
+                loading : ()=>store.state.boardsLoading,
+
+                // header: function () {
+                //     return this.$el.querySelector(".boards-header")
+                // },
+                // headerIsExpended: ()=> true,
+                // group: function () {
+                //     return this.$el.querySelector(".d-flex")
+                // },
+                // rectContainer : function () {
+                //     return this.$el.getBoundingClientRect()
+                // },
+                // containerPadding: function () {
+                //     return  (getComputedStyle(this.$el).padding).replace('px','')
+                // },
+                // boxes: function () {
+                //     var boxes = []
+                //     for (var i = 0; i < this.total; i++) {
+                //   var node = this.nodes[i];
+                //   TweenLite.set(node, { x: 0});
+                //       boxes[i] = {
+                //           transform: node._gsTransform,
+                //           x: node.offsetLeft,
+                //           y: node.offsetTop,
+                //           order: node.style.order,
+                //           node
+                //       };
+                //   }
+                //   return boxes;
+                //     // return this.initBoardsPositions ()
+                // } ,
+                // nodes: function () {
+                //     return this.$el.querySelectorAll(".col-lg-3")
+                // },
+                // total: function () {
+
+                //     return this.nodes.length;
+                // },
+                // orderHelper: function () {
+                //     return  Math.pow (10 , parseInt( String(this.total).length))
+                // },
+
+          },
+            watch: {
+                    boards(newQuestion, oldQuestion) {
+                        this.showHallName();
+                        // console.log(newQuestion);
+                        // // console.log(newQuestion);
+                        // // console.log(this.boxes);
+                        //     // setTimeout(() => {
+                        //     this.group = this.$el.querySelector(".d-flex")
+
+                        //     this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
+                        //     this.total= this.nodes.length;
+                        //     this.orderHelper = Math.pow (10 , parseInt( String(this.total).length));
+                        //     this.ease = Power1.easeInOut;
+                        //     console.log(this.group);
+                        //     console.log(this.nodes);
+                        //     console.log(this.total);
+                        //     console.log(this.orderHelper);
+                            // }, 2000);
+                        // setTimeout(() => {
+
+                            // this.boxes = this.initBoardsPositions ();
+
+                            // console.log(this.boxes);
+                        // }, 5000);
+
+                },
+            },
+          methods:{
+            // t:function(){
+            //     this.containerPadding =(getComputedStyle(this.$el).padding).replace('px','')
+            //     console.log(this.containerPadding);
+            // },
+            bringHalls:function (event) {
+                    event.preventDefault();
+                    // this.loading = true;
+                    // this.group = null
+
+                    // this.nodes = [];
+                    // this.total= 0;
+                    // this.orderHelper =0;
+                    // this.boxes = null;
+                    var target = event.target ;
+                    if (target.tagName == 'SPAN') {
+                        target = event.target.parentElement
+                    }
+                    this.currentButtun = target.value;
+
+                    this.$el.querySelector(".current-nav-val").animate([
+                    { clipPath  : getComputedStyle(this.$el.querySelector(".current-nav-val")).clipPath },
+                    { clipPath  : "inset(0% 0% 0% 100%)", }
+                    ],
+                    {
+                        duration: 300,
+                        fill: 'forwards'
+                    })
+
+                        setTimeout(() => {
+                            store.dispatch("changeCurrentHallNumber",target.value)
+                            store.dispatch("pringAllBoardsInThisHall",target.value)
+                        }, 300);
+
+                    //   reinit()
+                    // console.log(this.currentHall);
+            },
+            showHallName:function(){
+                this.$el.querySelector(".current-nav-val").animate([
+                    { clipPath  : "inset(0% 0% 0% 100%)" },
+                    { clipPath  : "inset(0% 0% 0% 0%)", }
+                    ],
+                    {
+                        duration: 300,
+                        fill: 'forwards'
+                })
+            },
+
+            //   numberOfElementsInRows: function () {
+            //       if (this.total == 0) throw new Error("no elements"); ;
+            //       var count = 1;
+
+            //       for (var i = 0; i < this.total - 1; i++) {
+            //           if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
+            //               if (i+1==this.total-1) {
+            //                   break;
+            //               };
+            //               continue;
+            //               }
+            //           count++;
+            //           if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
+            //               break;
+            //           }
+            //       }
+            //       return count;
+            //   },
+            //   layout:function(orderChanged) {
+            //     // console.log(Power1.easeIn);
+            //       var numberOfElementsInRow = this.numberOfElementsInRows();
+            //       if (!numberOfElementsInRow) return 0 ;
+            //       for (var i = 0; i < this.total; i++) {
+            //           var box = this.boxes[i];
+            //           var isEdge = false;
+            //           var positionReplaced = false ;
+            //           var moveUp = false;
+            //           var rect = box.node.getBoundingClientRect();
+            //           var lastX = box.x;
+            //           var lastY = box.y;
+            //           var ease = this.ease;
+            //           box.x = box.node.offsetLeft;
+            //           box.y = box.node.offsetTop;
+            //           if (lastX === box.x && lastY === box.y) continue;
+            //           if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
+            //           if (lastY !== box.y) {
+            //               isEdge = true;
+            //               var substitutional = box.node.cloneNode(true);
+            //               substitutional.style.position='absolute';
+            //               substitutional.firstChild.classList.remove("animate-fade-in-down");
+            //               substitutional.classList.add("temporary-alternative");
+            //               substitutional.style.top = parseInt(lastY)+'px';
+            //               substitutional.style.left = parseInt(lastX)+'px';
+            //               substitutional.style.width= rect.width;
+            //               substitutional.style.height= rect.height;
+            //               if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
+            //           }
+            //           var x = box.transform.x + lastX - box.x;
+            //           var y = box.transform.y + lastY - box.y;
+            //           if (!positionReplaced && numberOfElementsInRow > 1) {
+            //                 var duration ;
+            //               if (!isEdge) {
+            //                   duration = parseInt(Math.round(parseInt(Math.abs(x))/parseInt(rect.width)));
+            //                   TweenLite.fromTo(box.node, duration, { x:x, y:y }, { x: 0, y: 0 , ease }).delay();
+            //               }
+            //               else
+            //               {
+            //                     this.group.appendChild(substitutional);
+            //                     var substitutionalRect = substitutional.getBoundingClientRect();
+            //                     var delay ;
+            //                     var distanceOFedgeSubstitutionalRect;
+            //                     var distanceSubstitutionalRect;
+            //                     var distance;
+            //                     var durationSubstitutional ;
+            //                   if (moveUp) {
+            //                     distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
+            //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)))
+            //                     // console.log(distance);
+            //                     distanceSubstitutionalRect=parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
+            //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)));
+            //                     distanceOFedgeSubstitutionalRect =parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
+            //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+            //                     // TweenLite.fromTo(substitutional, 10, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none'});
+            //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
+            //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
+            //                     TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+            //                     // TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+            //                     // TweenLite.fromTo(box.node,0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
+            //                     // console.log("top"+delay);
+            //                     // console.log(distance);
+            //                     // console.log(duration);
+            //                     // console.log(distanceSubstitutionalRect);
+            //                     // console.log(durationSubstitutional);
+            //                     // console.log(distanceOFedgeSubstitutionalRect);
+            //                     // console.log(delay);
+            //                   }
+            //                   else  {
+            //                     distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
+            //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)));
+
+            //                     distanceSubstitutionalRect=parseInt(substitutionalRect.right)-parseInt(this.rectContainer.left) ;
+            //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)))
+            //                     distanceOFedgeSubstitutionalRect =parseInt(substitutionalRect.left)-parseInt(this.rectContainer.left) ;
+            //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+            //                     // TweenLite.fromTo(substitutional, 10, { x:0},{ x:-(distanceSubstitutionalRect),display:'none' });
+            //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
+            //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
+            //                     // TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+            //                     TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+            //                     // TweenLite.fromTo(box.node, 0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
+            //                     // console.log("down"+delay);
+            //                     // console.log(distance);
+            //                     // console.log(duration);
+            //                     // console.log(distanceSubstitutionalRect);
+            //                     // console.log(durationSubstitutional);
+            //                     // console.log(distanceOFedgeSubstitutionalRect);
+            //                     // console.log(delay);
+
+            //                   }
+            //               }
+            //           } else {
+            //               TweenLite.fromTo(box.node, 1, { x:x, y:y , zIndex:-9 }, { x: 0, y: 0 ,zIndex:0, ease });
+            //           }
+
+
+            //       }
+            //       return new Promise((resolve, reject) => {
+            //           setTimeout(() => {
+            //               resolve('');
+            //           }, 1000);  //longest animation is 1s ;
+            //       })
+            //   },
+            //   removeTemporaryAlternatives:function () {
+            //       var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
+            //       for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
+            //           if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
+            //               temporaryAlternativesNodes[i].remove();
+            //           }
+            //       }
+            //   },
+            //   initBoardsPositions : function () {
+            //       var boxes = [];
+            //       for (var i = 0; i < this.total; i++) {
+            //       var node = this.nodes[i];
+            //       TweenLite.set(node, { x: 0});
+            //             boxes[i] = {
+            //               transform: node._gsTransform,
+            //               x: node.offsetLeft,
+            //               y: node.offsetTop,
+            //               order: node.style.order,
+            //               node
+            //           };
+            //       }
+            //       return boxes;
+            //   },
+            //   reinitBoardsPositions : function () {
+            //       for (var i = 0; i < this.total; i++) {
+            //       var node = this.nodes[i];
+            //           this.boxes[i] = {
+            //               transform: node._gsTransform,
+            //               x: node.offsetLeft,
+            //               y: node.offsetTop,
+            //               order: node.style.order,
+            //               node
+            //           };
+            //       }
+            //   },
+              moveitem: function (data) {
+                    // var array=[];
+                    // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+                    // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
+                    // array.push(newOrder)
+                    // document.getElementById(1).style.order =  301;
+                    // document.getElementById(2).style.order =  302;
+                    // document.getElementById(3).style.order =  303;
+                    // document.getElementById(1).style.order =  newOrder;
+
+
+                    // this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
+              }
+          },
+          mounted: function () {
+
+            store.dispatch("pringAllHalls")
+
+              store.dispatch("pringAllBoardsInThisHall",1)
+
+            //   window.addEventListener('resize',(e)=>{this.reinitBoardsPositions()}  );
+
+
+              const scrollLef = ()=>{
+                document.querySelector('.navigations-links').scrollBy({
+                    left: -200,
+                    behavior: 'smooth'
+                });
+              }
+              const scrollRigh = ()=>{
+                document.querySelector('.navigations-links').scrollBy({
+                    left: 200,
+                    behavior: 'smooth'
+                });
+              }
+              $('.naviga-link-end').click(function (e) {
                 e.preventDefault();
-                store.dispatch("pringAllBoardsInThisHall",$(this).val())
-                //
-            });
-            $( ".naviga-link" ).first().trigger('click');
-        }
-    }
-</script>
+                scrollLef();
+              });
+              $('.naviga-link-start').click(function (e) {
+                e.preventDefault();
+                scrollRigh();
 
-<style scoped >
-    /* :root{
-    } */
-    .container {
-        min-width: 700px;
-    }
-    .boards-header{
-        box-sizing: border-box !important;
-        position: relative;
-        margin-top: 10px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        display:  flex;
-        align-items: center;
-        background-color: hsl(120, 73%, 75% , 40%);
-        transition: height 10s ease-in-out;
-    }
-    @keyframes animate-header{
-        from{height:unset ;}
-        to{height:0 ;}
-    }
-    .hide-header{
-        animation: animate-header 0.3s ease-in-out ;
-        animation-fill-mode: forwards;
-    }
-    .toggle-boards-header{
-        right: 10px;
-        bottom: 5px;
-        position: absolute;
-        height: 20px;
-        width:  20px;
-        transition: transform 0.2s ease-in-out ;
-        overflow: visible;
-        color:white;
-        transform: rotate(0);
-    }
-    .rotate-toggle-boards-header{
-        transform: rotate(180deg);
-    }
-    /* .boards-header-collapse .toggle-boards-header{
-        transform: rotate(180deg);
-    } */
-    .toggle-boards-header:hover{
+              });
+            //   this.reinitBoardsPositions()/
+            //   const reinit=()=>{
+            //       this.reinitBoardsPositions()
+            //   }
+            // $(document).ready(function () {
+            //   $( ".naviga-link" ).first().trigger('click');
+
+            // });
+            //   $('.naviga-link').click(function (e) {
+            //       e.preventDefault();
+            //       store.dispatch("changeCurrentHallNumber")
+            //       console.log($(this).val());
+            //       store.dispatch("pringAllBoardsInThisHall",$(this).val())
+            //       reinit()
+
+
+            //   });
+            //   $( ".naviga-link" ).first().trigger('click');
+
+//               setTimeout(() => {
+// $( ".naviga-link" ).first().trigger('click');
+
+//                 //   console.log(this.total);
+//                 //   console.log(this.nodes);
+//                 //   console.log(this.boxes);
+//                   // console.log(this.nodes);
+//                   // console.log(this.nodes);
+//                   // console.log(this.nodes);
+
+//               }, 3000);
+          }
+      }
+  </script>
+
+  <style scoped >
+      /* :root{
+      } */
+      .container {
+          align-self :stretch;
+          min-width: 700px;
+      }
+      .boards-header{
+          box-sizing: border-box !important;
+          position: relative;
+          margin-top: 10px;
+          min-height: 70px;
+
+          display:  flex;
+          align-items: center;
+          background-color: hsla(120, 100%, 13%, 0.4);
+          transition: height 10s ease-in-out;
+          flex-grow: 1;
+      }
+      @keyframes animate-header{
+          from{height:unset ;}
+          to{height:0 ;}
+      }
+      .hide-header{
+          animation: animate-header 0.3s ease-in-out ;
+          animation-fill-mode: forwards;
+      }
+      .toggle-boards-header{
+          right: 10px;
+          bottom: 5px;
+          position: absolute;
+          height: 20px;
+          width:  20px;
+          transition: transform 0.2s ease-in-out ;
+          overflow: visible;
+          color:white;
+          transform: rotate(0);
+      }
+      .rotate-toggle-boards-header{
+          transform: rotate(180deg);
+      }
+      /* .boards-header-collapse .toggle-boards-header{
+          transform: rotate(180deg);
+      } */
+      .toggle-boards-header:hover{
+          transform: translateY(-4px)
+      }
+      .rotate-toggle-boards-header.toggle-boards-header:hover{
+          color: blue;
+          transform: rotate(180deg);
+      }
+
+      .hall-navigation{
+        padding-right: 100px;
+          overflow: hidden;
+          height: 70px;
+          align-items: center;
+          flex-grow: 1;
+          display: flex;
+          justify-content: center;
+          width:80%;
+
+      }
+
+      .navigations-links{
+          height: 70px;
+          position: relative;
+          display: flex;
+          padding-left:10px;
+          padding-right:10px;
+          gap: 10px;
+          align-items: center;
+          width: 210px;
+          overflow: scroll ;
+      }
+      .navigations-links::-webkit-scrollbar{
+        display: none;
+      }
+
+
+      .naviga-link{
+          border-radius: 100%;
+          color: beige;
+          min-width: 40px;
+          height: 40px;
+          display: flex;
+          transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;
+      }
+      .naviga-link-end , .naviga-link-start{
+          border-radius: 20%;
+          background-color: rgb(65, 77, 54);
+          color: beige;
+          width: 40px;
+          height: 30px;
+          display: flex;
+          padding-bottom: 3px;
+          transition: transform 0.2s ease-in-out;
+      }
+      .naviga-link:hover,.naviga-link-end:hover ,.naviga-link-start:hover{
+          transform: scale(1.2) ;
+          cursor: pointer;
+      }
+      /* .naviga-link:active{
         transform: translateY(-4px)
-    }
-    .rotate-toggle-boards-header.toggle-boards-header:hover{
-        color: blue;
-        transform: rotate(180deg);
-    }
+      } */
+      .naviga-link span , .naviga-link-start span,.naviga-link-end span{
+          margin: auto;
+      }
+      .navigations-title{
+          position: relative;
+          overflow: hidden;
+          padding-top: 3px;
+          margin-left: 10px;
+          color:hsl(0, 9%, 27%);
 
-    .hall-navigation{
-        overflow: hidden;
-        height: inherit;
-        align-items: center;
-        flex-grow: 1;
-        display: flex;
-        justify-content: center;
+      }
+      .current-nav-val{
+        white-space: nowrap;
+          overflow: hidden;
+          position: relative;
+          height: inherit;
+          font-weight: bold;
+          color:hsl(0, 9%, 27%);
+          flex-grow: 1;
+          text-align:center;
+          width:20%;
     }
-    .current-nav-val{
-        overflow: hidden;
-        position: relative;
-        height: inherit;
-        margin-left: 20px;
-        font-weight: bold;
-    }
-    .navigations-links{
-        position: relative;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    .naviga-link{
-        border-radius: 100%;
-        background-color: rgb(90, 117, 65);
-        color: beige;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        transition: transform 0.2s ease-in-out;
-    }
-    .naviga-link-end{
-        border-radius: 20%;
-        background-color: rgb(65, 77, 54);
-        color: beige;
-        width: 40px;
-        height: 30px;
-        display: flex;
-        padding-bottom: 3px;
-        transition: transform 0.2s ease-in-out;
-    }
-    .naviga-link:hover,.naviga-link-end:hover{
-        transform: scale(1.2) ;
-        cursor: pointer;
-    }
-    .naviga-link span , .naviga-link-end span{
-        margin: auto;
-    }
-    .navigations-title{
-        position: relative;
-        overflow: hidden;
-        padding-top: 3px;
-        margin-left: 10px;
-    }
-    .d-flex {
-        overflow: hidden;
-        clip-path: inset(0 0 0 0);
-    }
-</style>
+      .d-flex {
+          overflow: hidden;
+          clip-path: inset(0 0 0 0);
+      }
+  </style>
