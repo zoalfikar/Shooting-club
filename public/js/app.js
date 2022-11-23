@@ -2817,24 +2817,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // import  gsap  from "gsap";
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['statusChanged'],
   data: function data() {
     return {
-      currentButtun: 0 // boxes:[],
-      // nodes:'',
-      // total:0,
-      // ease:null,
-      // group:null,
-      // orderHelper:0,
-      // currentHall:0,
-      // containerPadding:0,
-
+      currentButtun: 0,
+      boxes: [],
+      nodes: '',
+      total: 0,
+      orderHelper: 0
     };
   },
   computed: {
+    layoutWorker: function layoutWorker() {
+      return new Worker("assets/custom/appLayout/resturant/boards/workers/layoutWorker.js");
+    },
     halls: function halls() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.halls;
     },
@@ -2849,81 +2847,54 @@ __webpack_require__.r(__webpack_exports__);
     },
     loading: function loading() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.boardsLoading;
-    } // header: function () {
-    //     return this.$el.querySelector(".boards-header")
-    // },
-    // headerIsExpended: ()=> true,
-    // group: function () {
-    //     return this.$el.querySelector(".d-flex")
-    // },
-    // rectContainer : function () {
-    //     return this.$el.getBoundingClientRect()
-    // },
-    // containerPadding: function () {
-    //     return  (getComputedStyle(this.$el).padding).replace('px','')
-    // },
-    // boxes: function () {
-    //     var boxes = []
-    //     for (var i = 0; i < this.total; i++) {
-    //   var node = this.nodes[i];
-    //   TweenLite.set(node, { x: 0});
-    //       boxes[i] = {
-    //           transform: node._gsTransform,
-    //           x: node.offsetLeft,
-    //           y: node.offsetTop,
-    //           order: node.style.order,
-    //           node
-    //       };
-    //   }
-    //   return boxes;
-    //     // return this.initBoardsPositions ()
-    // } ,
-    // nodes: function () {
-    //     return this.$el.querySelectorAll(".col-lg-3")
-    // },
-    // total: function () {
-    //     return this.nodes.length;
-    // },
-    // orderHelper: function () {
-    //     return  Math.pow (10 , parseInt( String(this.total).length))
-    // },
-
+    },
+    header: function header() {
+      return this.$el.querySelector(".boards-header");
+    },
+    headerIsExpended: function headerIsExpended() {
+      return true;
+    },
+    group: function group() {
+      return this.$el.querySelector(".d-flex");
+    },
+    rectContainer: function rectContainer() {
+      return this.$el.getBoundingClientRect();
+    },
+    containerPadding: function containerPadding() {
+      return getComputedStyle(this.$el).padding.replace('px', '');
+    },
+    ease: function ease() {
+      return Power1.easeInOut;
+    }
   },
   watch: {
     boards: function boards(newQuestion, oldQuestion) {
-      this.showHallName(); // console.log(newQuestion);
-      // // console.log(newQuestion);
-      // // console.log(this.boxes);
-      //     // setTimeout(() => {
-      //     this.group = this.$el.querySelector(".d-flex")
-      //     this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
-      //     this.total= this.nodes.length;
-      //     this.orderHelper = Math.pow (10 , parseInt( String(this.total).length));
-      //     this.ease = Power1.easeInOut;
-      //     console.log(this.group);
-      //     console.log(this.nodes);
-      //     console.log(this.total);
-      //     console.log(this.orderHelper);
-      // }, 2000);
-      // setTimeout(() => {
-      // this.boxes = this.initBoardsPositions ();
-      // console.log(this.boxes);
-      // }, 5000);
+      var _this = this;
+
+      this.showHallName();
+      this.getNewBoards(newQuestion).then(function (value) {
+        _this.nodes = _this.group.querySelectorAll(".h" + _this.currentHall);
+        _this.total = _this.nodes.length;
+        _this.orderHelper = Math.pow(10, parseInt(String(_this.total).length));
+        return _this.getNewNods(_this.nodes).then(function (value) {
+          _this.initBoardsPositions();
+        });
+      });
     }
   },
   methods: {
-    // t:function(){
-    //     this.containerPadding =(getComputedStyle(this.$el).padding).replace('px','')
-    //     console.log(this.containerPadding);
-    // },
+    getNewBoards: function getNewBoards(boards) {
+      return new Promise(function (resolve, reject) {
+        resolve(boards);
+      });
+    },
+    getNewNods: function getNewNods(nodes) {
+      return new Promise(function (resolve, reject) {
+        resolve(nodes);
+      });
+    },
     bringHalls: function bringHalls(event) {
-      event.preventDefault(); // this.loading = true;
-      // this.group = null
-      // this.nodes = [];
-      // this.total= 0;
-      // this.orderHelper =0;
-      // this.boxes = null;
-
+      event.preventDefault();
       var target = event.target;
 
       if (target.tagName == 'SPAN') {
@@ -2942,8 +2913,7 @@ __webpack_require__.r(__webpack_exports__);
       setTimeout(function () {
         _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentHallNumber", target.value);
         _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllBoardsInThisHall", target.value);
-      }, 300); //   reinit()
-      // console.log(this.currentHall);
+      }, 300);
     },
     showHallName: function showHallName() {
       this.$el.querySelector(".current-nav-val").animate([{
@@ -2955,218 +2925,225 @@ __webpack_require__.r(__webpack_exports__);
         fill: 'forwards'
       });
     },
-    //   numberOfElementsInRows: function () {
-    //       if (this.total == 0) throw new Error("no elements"); ;
-    //       var count = 1;
-    //       for (var i = 0; i < this.total - 1; i++) {
-    //           if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
-    //               if (i+1==this.total-1) {
-    //                   break;
-    //               };
-    //               continue;
-    //               }
-    //           count++;
-    //           if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
-    //               break;
-    //           }
-    //       }
-    //       return count;
-    //   },
-    //   layout:function(orderChanged) {
-    //     // console.log(Power1.easeIn);
-    //       var numberOfElementsInRow = this.numberOfElementsInRows();
-    //       if (!numberOfElementsInRow) return 0 ;
-    //       for (var i = 0; i < this.total; i++) {
-    //           var box = this.boxes[i];
-    //           var isEdge = false;
-    //           var positionReplaced = false ;
-    //           var moveUp = false;
-    //           var rect = box.node.getBoundingClientRect();
-    //           var lastX = box.x;
-    //           var lastY = box.y;
-    //           var ease = this.ease;
-    //           box.x = box.node.offsetLeft;
-    //           box.y = box.node.offsetTop;
-    //           if (lastX === box.x && lastY === box.y) continue;
-    //           if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
-    //           if (lastY !== box.y) {
-    //               isEdge = true;
-    //               var substitutional = box.node.cloneNode(true);
-    //               substitutional.style.position='absolute';
-    //               substitutional.firstChild.classList.remove("animate-fade-in-down");
-    //               substitutional.classList.add("temporary-alternative");
-    //               substitutional.style.top = parseInt(lastY)+'px';
-    //               substitutional.style.left = parseInt(lastX)+'px';
-    //               substitutional.style.width= rect.width;
-    //               substitutional.style.height= rect.height;
-    //               if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
-    //           }
-    //           var x = box.transform.x + lastX - box.x;
-    //           var y = box.transform.y + lastY - box.y;
-    //           if (!positionReplaced && numberOfElementsInRow > 1) {
-    //                 var duration ;
-    //               if (!isEdge) {
-    //                   duration = parseInt(Math.round(parseInt(Math.abs(x))/parseInt(rect.width)));
-    //                   TweenLite.fromTo(box.node, duration, { x:x, y:y }, { x: 0, y: 0 , ease }).delay();
-    //               }
-    //               else
-    //               {
-    //                     this.group.appendChild(substitutional);
-    //                     var substitutionalRect = substitutional.getBoundingClientRect();
-    //                     var delay ;
-    //                     var distanceOFedgeSubstitutionalRect;
-    //                     var distanceSubstitutionalRect;
-    //                     var distance;
-    //                     var durationSubstitutional ;
-    //                   if (moveUp) {
-    //                     distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
-    //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)))
-    //                     // console.log(distance);
-    //                     distanceSubstitutionalRect=parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
-    //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)));
-    //                     distanceOFedgeSubstitutionalRect =parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
-    //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
-    //                     // TweenLite.fromTo(substitutional, 10, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none'});
-    //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
-    //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
-    //                     TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-    //                     // TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-    //                     // TweenLite.fromTo(box.node,0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
-    //                     // console.log("top"+delay);
-    //                     // console.log(distance);
-    //                     // console.log(duration);
-    //                     // console.log(distanceSubstitutionalRect);
-    //                     // console.log(durationSubstitutional);
-    //                     // console.log(distanceOFedgeSubstitutionalRect);
-    //                     // console.log(delay);
-    //                   }
-    //                   else  {
-    //                     distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
-    //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)));
-    //                     distanceSubstitutionalRect=parseInt(substitutionalRect.right)-parseInt(this.rectContainer.left) ;
-    //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)))
-    //                     distanceOFedgeSubstitutionalRect =parseInt(substitutionalRect.left)-parseInt(this.rectContainer.left) ;
-    //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
-    //                     // TweenLite.fromTo(substitutional, 10, { x:0},{ x:-(distanceSubstitutionalRect),display:'none' });
-    //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
-    //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
-    //                     // TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-    //                     TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-    //                     // TweenLite.fromTo(box.node, 0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
-    //                     // console.log("down"+delay);
-    //                     // console.log(distance);
-    //                     // console.log(duration);
-    //                     // console.log(distanceSubstitutionalRect);
-    //                     // console.log(durationSubstitutional);
-    //                     // console.log(distanceOFedgeSubstitutionalRect);
-    //                     // console.log(delay);
-    //                   }
-    //               }
-    //           } else {
-    //               TweenLite.fromTo(box.node, 1, { x:x, y:y , zIndex:-9 }, { x: 0, y: 0 ,zIndex:0, ease });
-    //           }
-    //       }
-    //       return new Promise((resolve, reject) => {
-    //           setTimeout(() => {
-    //               resolve('');
-    //           }, 1000);  //longest animation is 1s ;
-    //       })
-    //   },
-    //   removeTemporaryAlternatives:function () {
-    //       var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
-    //       for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
-    //           if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
-    //               temporaryAlternativesNodes[i].remove();
-    //           }
-    //       }
-    //   },
-    //   initBoardsPositions : function () {
-    //       var boxes = [];
-    //       for (var i = 0; i < this.total; i++) {
-    //       var node = this.nodes[i];
-    //       TweenLite.set(node, { x: 0});
-    //             boxes[i] = {
-    //               transform: node._gsTransform,
-    //               x: node.offsetLeft,
-    //               y: node.offsetTop,
-    //               order: node.style.order,
-    //               node
-    //           };
-    //       }
-    //       return boxes;
-    //   },
-    //   reinitBoardsPositions : function () {
-    //       for (var i = 0; i < this.total; i++) {
-    //       var node = this.nodes[i];
-    //           this.boxes[i] = {
-    //               transform: node._gsTransform,
-    //               x: node.offsetLeft,
-    //               y: node.offsetTop,
-    //               order: node.style.order,
-    //               node
-    //           };
-    //       }
-    //   },
-    moveitem: function moveitem(data) {// var array=[];
-      // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
-      // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
-      // array.push(newOrder)
-      // document.getElementById(1).style.order =  301;
-      // document.getElementById(2).style.order =  302;
-      // document.getElementById(3).style.order =  303;
-      // document.getElementById(1).style.order =  newOrder;
-      // this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
+    numberOfElementsInRows: function numberOfElementsInRows() {
+      if (this.total == 0) throw new Error("no elements");
+      ;
+      var count = 1;
+
+      for (var i = 0; i < this.total - 1; i++) {
+        if (this.nodes[i].offsetTop !== this.nodes[i + 1].offsetTop) {
+          if (i + 1 == this.total - 1) {
+            break;
+          }
+
+          ;
+          continue;
+        }
+
+        count++;
+
+        if (this.nodes[i + 1].offsetTop !== this.nodes[i + 2].offsetTop) {
+          break;
+        }
+      }
+
+      return count;
+    },
+    layout: function layout(orderChanged) {
+      var numberOfElementsInRow = this.numberOfElementsInRows();
+      if (!numberOfElementsInRow) return 0;
+
+      for (var i = 0; i < this.total; i++) {
+        var box = this.boxes[i];
+        var isEdge = false;
+        var positionReplaced = false;
+        var moveUp = false;
+        var rect = box.node.getBoundingClientRect();
+        var lastX = box.x;
+        var lastY = box.y;
+        var ease = this.ease;
+        box.x = box.node.offsetLeft;
+        box.y = box.node.offsetTop;
+        if (lastX === box.x && lastY === box.y) continue;
+        if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
+
+        if (lastY !== box.y) {
+          isEdge = true;
+          var substitutional = box.node.cloneNode(true);
+          substitutional.style.position = 'absolute';
+          substitutional.firstChild.classList.remove("animate-fade-in-down");
+          substitutional.classList.add("temporary-alternative");
+          substitutional.style.top = parseInt(lastY) + 'px';
+          substitutional.style.left = parseInt(lastX) + 'px';
+          substitutional.style.width = rect.width;
+          substitutional.style.height = rect.height;
+          if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
+        }
+
+        var x = box.transform.x + lastX - box.x;
+        var y = box.transform.y + lastY - box.y;
+
+        if (!positionReplaced && numberOfElementsInRow > 1) {
+          var duration;
+
+          if (!isEdge) {
+            duration = parseInt(Math.round(parseInt(Math.abs(x)) / parseInt(rect.width)));
+            TweenLite.fromTo(box.node, duration, {
+              x: x,
+              y: y
+            }, {
+              x: 0,
+              y: 0,
+              ease: ease
+            }).delay();
+          } else {
+            this.group.appendChild(substitutional);
+            var substitutionalRect = substitutional.getBoundingClientRect();
+            var delay;
+            var distanceOFedgeSubstitutionalRect;
+            var distanceSubstitutionalRect;
+            var distance;
+            var durationSubstitutional;
+
+            if (moveUp) {
+              distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
+              duration = parseInt(Math.round(parseInt(distance) / parseInt(rect.width)));
+              distanceSubstitutionalRect = parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
+              durationSubstitutional = parseInt(Math.round(parseInt(distanceSubstitutionalRect) / parseInt(substitutionalRect.width)));
+              distanceOFedgeSubstitutionalRect = parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
+              delay = parseInt(durationSubstitutional) * parseInt(distanceOFedgeSubstitutionalRect) / parseInt(distanceSubstitutionalRect);
+              TweenLite.fromTo(substitutional, durationSubstitutional, {
+                x: 0
+              }, {
+                x: distanceSubstitutionalRect,
+                display: 'none',
+                ease: ease
+              });
+              TweenLite.fromTo(box.node, duration, {
+                x: -distance,
+                y: 0
+              }, {
+                x: 0,
+                y: 0,
+                ease: ease
+              }).delay(delay);
+            } else {
+              distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
+              duration = parseInt(Math.round(parseInt(distance) / parseInt(rect.width)));
+              distanceSubstitutionalRect = parseInt(substitutionalRect.right) - parseInt(this.rectContainer.left);
+              durationSubstitutional = parseInt(Math.round(parseInt(distanceSubstitutionalRect) / parseInt(substitutionalRect.width)));
+              distanceOFedgeSubstitutionalRect = parseInt(substitutionalRect.left) - parseInt(this.rectContainer.left);
+              delay = parseInt(durationSubstitutional) * parseInt(distanceOFedgeSubstitutionalRect) / parseInt(distanceSubstitutionalRect);
+              TweenLite.fromTo(substitutional, durationSubstitutional, {
+                x: 0
+              }, {
+                x: -distanceSubstitutionalRect,
+                display: 'none',
+                ease: ease
+              });
+              TweenLite.fromTo(box.node, duration, {
+                x: distance,
+                y: 0
+              }, {
+                x: 0,
+                y: 0,
+                ease: ease
+              }).delay(delay);
+            }
+          }
+        } else {
+          duration = parseInt(Math.round(parseInt(Math.abs(y)) / parseInt(rect.height)) * 0.2 + 1);
+          TweenLite.fromTo(box.node, duration, {
+            x: x,
+            y: y,
+            zIndex: -9
+          }, {
+            x: 0,
+            y: 0,
+            zIndex: 0,
+            ease: ease
+          });
+        }
+      }
+
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve('');
+        }, numberOfElementsInRow * 1000); //longest animation
+      });
+    },
+    initBoardsPositions: function initBoardsPositions() {
+      for (var i = 0; i < this.total; i++) {
+        var node = this.nodes[i];
+        TweenLite.set(node, {
+          x: 0,
+          y: 0
+        });
+        this.boxes[i] = {
+          transform: node._gsTransform,
+          x: node.offsetLeft,
+          y: node.offsetTop,
+          order: node.style.order,
+          node: node
+        };
+      }
+    },
+    removeTemporaryAlternatives: function removeTemporaryAlternatives() {
+      var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
+
+      for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
+        if (temporaryAlternativesNodes[i].getBoundingClientRect().right <= temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >= temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
+          temporaryAlternativesNodes[i].remove();
+        }
+      }
+    },
+    moveitem: function moveitem(data) {
+      var _this2 = this;
+
+      var array = [];
+      var newOrder = data.order * Math.pow(10, parseInt(String(this.total).length)) + parseInt(data.tableNumber);
+      document.getElementById('h:' + this.currentHall + 't:' + data.tableNumber).style.order = newOrder;
+      array.push(newOrder);
+      this.layout(array).then(function () {
+        _this2.removeTemporaryAlternatives();
+      });
     }
   },
   mounted: function mounted() {
-    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllHalls");
-    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllBoardsInThisHall", 1); //   window.addEventListener('resize',(e)=>{this.reinitBoardsPositions()}  );
+    var _this3 = this;
 
-    var scrollLef = function scrollLef() {
-      document.querySelector('.navigations-links').scrollBy({
-        left: -200,
-        behavior: 'smooth'
-      });
-    };
-
-    var scrollRigh = function scrollRigh() {
-      document.querySelector('.navigations-links').scrollBy({
-        left: 200,
-        behavior: 'smooth'
-      });
-    };
-
-    $('.naviga-link-end').click(function (e) {
-      e.preventDefault();
-      scrollLef();
+    window.addEventListener('resize', function (e) {
+      _this3.initBoardsPositions();
     });
-    $('.naviga-link-start').click(function (e) {
-      e.preventDefault();
-      scrollRigh();
-    }); //   this.reinitBoardsPositions()/
-    //   const reinit=()=>{
-    //       this.reinitBoardsPositions()
-    //   }
-    // $(document).ready(function () {
-    //   $( ".naviga-link" ).first().trigger('click');
-    // });
-    //   $('.naviga-link').click(function (e) {
-    //       e.preventDefault();
-    //       store.dispatch("changeCurrentHallNumber")
-    //       console.log($(this).val());
-    //       store.dispatch("pringAllBoardsInThisHall",$(this).val())
-    //       reinit()
-    //   });
-    //   $( ".naviga-link" ).first().trigger('click');
-    //               setTimeout(() => {
-    // $( ".naviga-link" ).first().trigger('click');
-    //                 //   console.log(this.total);
-    //                 //   console.log(this.nodes);
-    //                 //   console.log(this.boxes);
-    //                   // console.log(this.nodes);
-    //                   // console.log(this.nodes);
-    //                   // console.log(this.nodes);
-    //               }, 3000);
+    $(document).ready(function () {
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllHalls");
+      setTimeout(function () {
+        $(".naviga-link").first().trigger('click');
+      }, 2000);
+
+      var scrollLef = function scrollLef() {
+        document.querySelector('.navigations-links').scrollBy({
+          left: -200,
+          behavior: 'smooth'
+        });
+      };
+
+      var scrollRigh = function scrollRigh() {
+        document.querySelector('.navigations-links').scrollBy({
+          left: 200,
+          behavior: 'smooth'
+        });
+      };
+
+      $('.naviga-link-end').click(function (e) {
+        e.preventDefault();
+        scrollLef();
+      });
+      $('.naviga-link-start').click(function (e) {
+        e.preventDefault();
+        scrollRigh();
+      });
+    });
   }
 });
 
@@ -5056,7 +5033,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
