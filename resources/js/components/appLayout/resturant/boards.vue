@@ -37,116 +37,69 @@
   </template>
 
   <script>
-  import store from '../../../store';
-    // import  gsap  from "gsap";
-
+import store from '../../../store';
       export default {
           emits:['statusChanged'],
           data(){
               return{
                 currentButtun:0,
-                // boxes:[],
-                // nodes:'',
-                // total:0,
-                // ease:null,
-                // group:null,
-                // orderHelper:0,
-                // currentHall:0,
-                // containerPadding:0,
-
+                boxes:[],
+                nodes:'',
+                total:0,
+                orderHelper:0,
               }
           },
 
          computed: {
+                layoutWorker:()=> new Worker("assets/custom/appLayout/resturant/boards/workers/layoutWorker.js"),
                 halls: ()=> store.state.halls,
                 currentHall: ()=> store.state.currentHall,
                 currentHallName: ()=> store.state.currentHallName,
 
                 boards: ()=> store.state.boards,
                 loading : ()=>store.state.boardsLoading,
-
-                // header: function () {
-                //     return this.$el.querySelector(".boards-header")
-                // },
-                // headerIsExpended: ()=> true,
-                // group: function () {
-                //     return this.$el.querySelector(".d-flex")
-                // },
-                // rectContainer : function () {
-                //     return this.$el.getBoundingClientRect()
-                // },
-                // containerPadding: function () {
-                //     return  (getComputedStyle(this.$el).padding).replace('px','')
-                // },
-                // boxes: function () {
-                //     var boxes = []
-                //     for (var i = 0; i < this.total; i++) {
-                //   var node = this.nodes[i];
-                //   TweenLite.set(node, { x: 0});
-                //       boxes[i] = {
-                //           transform: node._gsTransform,
-                //           x: node.offsetLeft,
-                //           y: node.offsetTop,
-                //           order: node.style.order,
-                //           node
-                //       };
-                //   }
-                //   return boxes;
-                //     // return this.initBoardsPositions ()
-                // } ,
-                // nodes: function () {
-                //     return this.$el.querySelectorAll(".col-lg-3")
-                // },
-                // total: function () {
-
-                //     return this.nodes.length;
-                // },
-                // orderHelper: function () {
-                //     return  Math.pow (10 , parseInt( String(this.total).length))
-                // },
+                header: function () {
+                    return this.$el.querySelector(".boards-header")
+                },
+                headerIsExpended: ()=> true,
+                group: function () {
+                    return this.$el.querySelector(".d-flex")
+                },
+                rectContainer : function () {
+                    return this.$el.getBoundingClientRect()
+                },
+                containerPadding: function () {
+                    return  (getComputedStyle(this.$el).padding).replace('px','')
+                },
+                ease: ()=> Power1.easeInOut ,
 
           },
             watch: {
                     boards(newQuestion, oldQuestion) {
                         this.showHallName();
-                        // console.log(newQuestion);
-                        // // console.log(newQuestion);
-                        // // console.log(this.boxes);
-                        //     // setTimeout(() => {
-                        //     this.group = this.$el.querySelector(".d-flex")
-
-                        //     this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
-                        //     this.total= this.nodes.length;
-                        //     this.orderHelper = Math.pow (10 , parseInt( String(this.total).length));
-                        //     this.ease = Power1.easeInOut;
-                        //     console.log(this.group);
-                        //     console.log(this.nodes);
-                        //     console.log(this.total);
-                        //     console.log(this.orderHelper);
-                            // }, 2000);
-                        // setTimeout(() => {
-
-                            // this.boxes = this.initBoardsPositions ();
-
-                            // console.log(this.boxes);
-                        // }, 5000);
-
+                        this.getNewBoards(newQuestion).then((value) => {
+                            this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
+                            this.total= this.nodes.length;
+                            this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
+                            return this.getNewNods(this.nodes).then((value) => {
+                                this.initBoardsPositions ();
+                            });
+                        });
                 },
             },
           methods:{
-            // t:function(){
-            //     this.containerPadding =(getComputedStyle(this.$el).padding).replace('px','')
-            //     console.log(this.containerPadding);
-            // },
+            getNewBoards:function(boards){
+                return new Promise((resolve, reject) => {
+                    resolve(boards);
+                });
+            },
+            getNewNods:function(nodes){
+                return new Promise((resolve, reject) => {
+                    resolve(nodes);
+                });
+            },
             bringHalls:function (event) {
                     event.preventDefault();
-                    // this.loading = true;
-                    // this.group = null
-
-                    // this.nodes = [];
-                    // this.total= 0;
-                    // this.orderHelper =0;
-                    // this.boxes = null;
                     var target = event.target ;
                     if (target.tagName == 'SPAN') {
                         target = event.target.parentElement
@@ -167,8 +120,6 @@
                             store.dispatch("pringAllBoardsInThisHall",target.value)
                         }, 300);
 
-                    //   reinit()
-                    // console.log(this.currentHall);
             },
             showHallName:function(){
                 this.$el.querySelector(".current-nav-val").animate([
@@ -181,237 +132,169 @@
                 })
             },
 
-            //   numberOfElementsInRows: function () {
-            //       if (this.total == 0) throw new Error("no elements"); ;
-            //       var count = 1;
+              numberOfElementsInRows: function () {
+                  if (this.total == 0) throw new Error("no elements"); ;
+                  var count = 1;
 
-            //       for (var i = 0; i < this.total - 1; i++) {
-            //           if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
-            //               if (i+1==this.total-1) {
-            //                   break;
-            //               };
-            //               continue;
-            //               }
-            //           count++;
-            //           if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
-            //               break;
-            //           }
-            //       }
-            //       return count;
-            //   },
-            //   layout:function(orderChanged) {
-            //     // console.log(Power1.easeIn);
-            //       var numberOfElementsInRow = this.numberOfElementsInRows();
-            //       if (!numberOfElementsInRow) return 0 ;
-            //       for (var i = 0; i < this.total; i++) {
-            //           var box = this.boxes[i];
-            //           var isEdge = false;
-            //           var positionReplaced = false ;
-            //           var moveUp = false;
-            //           var rect = box.node.getBoundingClientRect();
-            //           var lastX = box.x;
-            //           var lastY = box.y;
-            //           var ease = this.ease;
-            //           box.x = box.node.offsetLeft;
-            //           box.y = box.node.offsetTop;
-            //           if (lastX === box.x && lastY === box.y) continue;
-            //           if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
-            //           if (lastY !== box.y) {
-            //               isEdge = true;
-            //               var substitutional = box.node.cloneNode(true);
-            //               substitutional.style.position='absolute';
-            //               substitutional.firstChild.classList.remove("animate-fade-in-down");
-            //               substitutional.classList.add("temporary-alternative");
-            //               substitutional.style.top = parseInt(lastY)+'px';
-            //               substitutional.style.left = parseInt(lastX)+'px';
-            //               substitutional.style.width= rect.width;
-            //               substitutional.style.height= rect.height;
-            //               if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
-            //           }
-            //           var x = box.transform.x + lastX - box.x;
-            //           var y = box.transform.y + lastY - box.y;
-            //           if (!positionReplaced && numberOfElementsInRow > 1) {
-            //                 var duration ;
-            //               if (!isEdge) {
-            //                   duration = parseInt(Math.round(parseInt(Math.abs(x))/parseInt(rect.width)));
-            //                   TweenLite.fromTo(box.node, duration, { x:x, y:y }, { x: 0, y: 0 , ease }).delay();
-            //               }
-            //               else
-            //               {
-            //                     this.group.appendChild(substitutional);
-            //                     var substitutionalRect = substitutional.getBoundingClientRect();
-            //                     var delay ;
-            //                     var distanceOFedgeSubstitutionalRect;
-            //                     var distanceSubstitutionalRect;
-            //                     var distance;
-            //                     var durationSubstitutional ;
-            //                   if (moveUp) {
-            //                     distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
-            //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)))
-            //                     // console.log(distance);
-            //                     distanceSubstitutionalRect=parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
-            //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)));
-            //                     distanceOFedgeSubstitutionalRect =parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
-            //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
-            //                     // TweenLite.fromTo(substitutional, 10, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none'});
-            //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
-            //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
-            //                     TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-            //                     // TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-            //                     // TweenLite.fromTo(box.node,0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
-            //                     // console.log("top"+delay);
-            //                     // console.log(distance);
-            //                     // console.log(duration);
-            //                     // console.log(distanceSubstitutionalRect);
-            //                     // console.log(durationSubstitutional);
-            //                     // console.log(distanceOFedgeSubstitutionalRect);
-            //                     // console.log(delay);
-            //                   }
-            //                   else  {
-            //                     distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
-            //                     duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)));
-
-            //                     distanceSubstitutionalRect=parseInt(substitutionalRect.right)-parseInt(this.rectContainer.left) ;
-            //                     durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)))
-            //                     distanceOFedgeSubstitutionalRect =parseInt(substitutionalRect.left)-parseInt(this.rectContainer.left) ;
-            //                     delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
-            //                     // TweenLite.fromTo(substitutional, 10, { x:0},{ x:-(distanceSubstitutionalRect),display:'none' });
-            //                     TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
-            //                     // TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
-            //                     // TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-            //                     TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
-            //                     // TweenLite.fromTo(box.node, 0.00001, { display:'none'}, { display:"block" ,ease }).delay(delay);
-            //                     // console.log("down"+delay);
-            //                     // console.log(distance);
-            //                     // console.log(duration);
-            //                     // console.log(distanceSubstitutionalRect);
-            //                     // console.log(durationSubstitutional);
-            //                     // console.log(distanceOFedgeSubstitutionalRect);
-            //                     // console.log(delay);
-
-            //                   }
-            //               }
-            //           } else {
-            //               TweenLite.fromTo(box.node, 1, { x:x, y:y , zIndex:-9 }, { x: 0, y: 0 ,zIndex:0, ease });
-            //           }
+                  for (var i = 0; i < this.total - 1; i++) {
+                      if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
+                          if (i+1==this.total-1) {
+                              break;
+                          };
+                          continue;
+                          }
+                      count++;
+                      if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
+                          break;
+                      }
+                  }
+                  return count;
+            },
+            layout:function(orderChanged) {
+                var numberOfElementsInRow = this.numberOfElementsInRows();
+                if (!numberOfElementsInRow) return 0 ;
+                for (var i = 0; i < this.total; i++) {
+                    var box = this.boxes[i];
+                    var isEdge = false;
+                    var positionReplaced = false ;
+                    var moveUp = false;
+                    var rect = box.node.getBoundingClientRect();
+                    var lastX = box.x;
+                    var lastY = box.y;
+                    var ease = this.ease;
+                    box.x = box.node.offsetLeft;
+                    box.y = box.node.offsetTop;
+                    if (lastX === box.x && lastY === box.y) continue;
+                    if (orderChanged.includes(parseInt(box.node.style.order))) positionReplaced = true;
+                    if (lastY !== box.y) {
+                        isEdge = true;
+                        var substitutional = box.node.cloneNode(true);
+                        substitutional.style.position='absolute';
+                        substitutional.firstChild.classList.remove("animate-fade-in-down");
+                        substitutional.classList.add("temporary-alternative");
+                        substitutional.style.top = parseInt(lastY)+'px';
+                        substitutional.style.left = parseInt(lastX)+'px';
+                        substitutional.style.width= rect.width;
+                        substitutional.style.height= rect.height;
+                        if (parseInt(box.y) < parseInt(lastY)) moveUp = true;
+                    }
+                    var x = box.transform.x + lastX - box.x;
+                    var y = box.transform.y + lastY - box.y;
+                    if (!positionReplaced && numberOfElementsInRow > 1) {
+                        var duration ;
+                        if (!isEdge) {
+                            duration = parseInt(Math.round(parseInt(Math.abs(x))/parseInt(rect.width)));
+                            TweenLite.fromTo(box.node, duration, { x:x, y:y }, { x: 0, y: 0 , ease }).delay();
+                        }
+                        else
+                        {
+                            this.group.appendChild(substitutional);
+                            var substitutionalRect = substitutional.getBoundingClientRect();
+                            var delay ;
+                            var distanceOFedgeSubstitutionalRect;
+                            var distanceSubstitutionalRect;
+                            var distance;
+                            var durationSubstitutional ;
+                            if (moveUp) {
+                            distance = parseInt(rect.right) - parseInt(this.rectContainer.left);
+                            duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)))
+                            distanceSubstitutionalRect=parseInt(this.rectContainer.right) - parseInt(substitutionalRect.left);
+                            durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)));
+                            distanceOFedgeSubstitutionalRect =parseInt(this.rectContainer.right) - parseInt(substitutionalRect.right);
+                            delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+                            TweenLite.fromTo(substitutional, durationSubstitutional, { x:0 },{ x: (distanceSubstitutionalRect) , display:'none',ease});
+                            TweenLite.fromTo(box.node, duration, { x: -(distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
+                            }
+                            else  {
+                            distance = parseInt(this.rectContainer.right) - parseInt(rect.left);
+                            duration = parseInt(Math.round(parseInt(distance)/parseInt(rect.width)));
+                            distanceSubstitutionalRect=parseInt(substitutionalRect.right)-parseInt(this.rectContainer.left) ;
+                            durationSubstitutional=parseInt(Math.round(parseInt(distanceSubstitutionalRect)/parseInt(substitutionalRect.width)))
+                            distanceOFedgeSubstitutionalRect =parseInt(substitutionalRect.left)-parseInt(this.rectContainer.left) ;
+                            delay = (parseInt(durationSubstitutional)*parseInt(distanceOFedgeSubstitutionalRect)) / parseInt(distanceSubstitutionalRect);
+                            TweenLite.fromTo(substitutional, durationSubstitutional, { x:0},{ x:-(distanceSubstitutionalRect),display:'none',ease });
+                            TweenLite.fromTo(box.node, duration, { x: (distance) ,y:0}, { x: 0, y: 0 ,ease }).delay(delay);
 
 
-            //       }
-            //       return new Promise((resolve, reject) => {
-            //           setTimeout(() => {
-            //               resolve('');
-            //           }, 1000);  //longest animation is 1s ;
-            //       })
-            //   },
-            //   removeTemporaryAlternatives:function () {
-            //       var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
-            //       for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
-            //           if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
-            //               temporaryAlternativesNodes[i].remove();
-            //           }
-            //       }
-            //   },
-            //   initBoardsPositions : function () {
-            //       var boxes = [];
-            //       for (var i = 0; i < this.total; i++) {
-            //       var node = this.nodes[i];
-            //       TweenLite.set(node, { x: 0});
-            //             boxes[i] = {
-            //               transform: node._gsTransform,
-            //               x: node.offsetLeft,
-            //               y: node.offsetTop,
-            //               order: node.style.order,
-            //               node
-            //           };
-            //       }
-            //       return boxes;
-            //   },
-            //   reinitBoardsPositions : function () {
-            //       for (var i = 0; i < this.total; i++) {
-            //       var node = this.nodes[i];
-            //           this.boxes[i] = {
-            //               transform: node._gsTransform,
-            //               x: node.offsetLeft,
-            //               y: node.offsetTop,
-            //               order: node.style.order,
-            //               node
-            //           };
-            //       }
-            //   },
-              moveitem: function (data) {
-                    // var array=[];
-                    // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
-                    // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
-                    // array.push(newOrder)
-                    // document.getElementById(1).style.order =  301;
-                    // document.getElementById(2).style.order =  302;
-                    // document.getElementById(3).style.order =  303;
-                    // document.getElementById(1).style.order =  newOrder;
+                            }
+                        }
+                    } else {
+                        duration = parseInt(Math.round(parseInt(Math.abs(y))/parseInt(rect.height))*0.2 + 1);
+                        TweenLite.fromTo(box.node, duration , { x:x, y:y , zIndex:-9 }, { x: 0, y: 0 ,zIndex:0, ease });
+                    }
 
+                }
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve('');
 
-                    // this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
-              }
+                    }, (numberOfElementsInRow * 1000));  //longest animation
+                })
+            },
+            initBoardsPositions : function () {
+                for (var i = 0; i < this.total; i++) {
+                    var node = this.nodes[i];
+                    TweenLite.set(node, { x: 0 , y:0});
+                        this.boxes[i] = {
+                            transform: node._gsTransform,
+                            x: node.offsetLeft,
+                            y: node.offsetTop,
+                            order: node.style.order,
+                            node
+                        };
+                }
+            },
+            removeTemporaryAlternatives:function () {
+                var temporaryAlternativesNodes = this.$el.querySelectorAll(".temporary-alternative");
+                for (var i = 0; i < temporaryAlternativesNodes.length; i++) {
+                    if (temporaryAlternativesNodes[i].getBoundingClientRect().right <=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().left || temporaryAlternativesNodes[i].getBoundingClientRect().left >=temporaryAlternativesNodes[i].parentElement.getBoundingClientRect().right) {
+                        temporaryAlternativesNodes[i].remove();
+                    }
+                }
+            },
+            moveitem: function (data) {
+                var array=[];
+                var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+                document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
+                array.push(newOrder)
+                this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
+            }
           },
           mounted: function () {
+            window.addEventListener('resize',(e)=>{ this.initBoardsPositions()}  );
+            $(document).ready(function () {
 
-            store.dispatch("pringAllHalls")
+                store.dispatch("pringAllHalls")
+                setTimeout(() => {
+                    $( ".naviga-link" ).first().trigger('click');
+                }, 2000);
 
-              store.dispatch("pringAllBoardsInThisHall",1)
-
-            //   window.addEventListener('resize',(e)=>{this.reinitBoardsPositions()}  );
 
 
-              const scrollLef = ()=>{
+                const scrollLef = ()=>{
                 document.querySelector('.navigations-links').scrollBy({
                     left: -200,
                     behavior: 'smooth'
                 });
-              }
-              const scrollRigh = ()=>{
+                }
+                const scrollRigh = ()=>{
                 document.querySelector('.navigations-links').scrollBy({
                     left: 200,
                     behavior: 'smooth'
                 });
-              }
-              $('.naviga-link-end').click(function (e) {
+                }
+                $('.naviga-link-end').click(function (e) {
                 e.preventDefault();
                 scrollLef();
-              });
-              $('.naviga-link-start').click(function (e) {
+                });
+                $('.naviga-link-start').click(function (e) {
                 e.preventDefault();
                 scrollRigh();
 
-              });
-            //   this.reinitBoardsPositions()/
-            //   const reinit=()=>{
-            //       this.reinitBoardsPositions()
-            //   }
-            // $(document).ready(function () {
-            //   $( ".naviga-link" ).first().trigger('click');
+                });
 
-            // });
-            //   $('.naviga-link').click(function (e) {
-            //       e.preventDefault();
-            //       store.dispatch("changeCurrentHallNumber")
-            //       console.log($(this).val());
-            //       store.dispatch("pringAllBoardsInThisHall",$(this).val())
-            //       reinit()
+            });
 
-
-            //   });
-            //   $( ".naviga-link" ).first().trigger('click');
-
-//               setTimeout(() => {
-// $( ".naviga-link" ).first().trigger('click');
-
-//                 //   console.log(this.total);
-//                 //   console.log(this.nodes);
-//                 //   console.log(this.boxes);
-//                   // console.log(this.nodes);
-//                   // console.log(this.nodes);
-//                   // console.log(this.nodes);
-
-//               }, 3000);
           }
       }
   </script>
