@@ -78,7 +78,7 @@ if (! function_exists('addSetTableInRedis')) {
 
                 ]);
         });
-        if ( $rangeExpended ) {
+        if ( $rangeExpended) {
             resetOrderRange($hallNumber);
         }
 

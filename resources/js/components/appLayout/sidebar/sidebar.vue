@@ -94,6 +94,9 @@
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-hall-form'">صالة جديدة</a></span>
                 </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-update-hall-form'">تعديل الصالات</a></span>h
+                </div>
             </div>
         </div>
         </div>
