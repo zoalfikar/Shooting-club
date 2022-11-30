@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Resturant;
 use App\Http\Middleware\UnAuth;
+use App\Models\Hall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -27,13 +28,20 @@ Route::get('/vue/{vue_capture?}', function () {
    })->where('vue_capture', '[\/\w\.-]*');
 
 Route::get('/test', function () {
-    $object = (object) [
-        'tableNumber' => 10,
-        'hallNumber' => 1,
-        'active' => 1,
-        'maxCapacity' => 50,
-      ];
-     dd(getHallsFromRedis());
+    // $value =55;
+    // dd($value <= Hall::where('hallNumber', 1)->pluck('maxCapacity')->first());
+    // return $value == Hall::where('hallNumber', 1)->pluck('maxCapacity')->first();
+    // $object = (object) [
+    //     'tableNumber' => 10,
+    //     'hallNumber' => 1,
+    //     'active' => 1,
+    //     'maxCapacity' => 50,
+    //   ];
+    session("s",'s');
+    return "ok";
+    //   $tableInfo=Redis::hgetall('hall:' . 1 .':table:'. 2);
+    //   dd($tableInfo);
+    //  dd(getHallsFromRedis());
     // Redis::hmset('hall:1' . ':tables:1', [
     //     'tableNumber' =>  999,
     //     'hallNumber' =>  1,
@@ -46,7 +54,9 @@ Route::get('/test', function () {
     // addSetTableInRedis(1,$object);
     // dd(getOrderRange(1));
 // dd(Redis::hgetall('hall:1'.':table:4'));
-
+// setTableOrder($object,'');
+// setTableOrder($object,'',"ddddd");
+// deleteTableFromRedis(2,2);
     //   addSetHallInRedis($object);
     // deleteHallInRedis($object->hallNumber);
     //   dd(Redis::hgetall('hall:' . 1 .':table:'. 1));
@@ -95,22 +105,21 @@ Route::get('/test', function () {
 // });
 Route::get('boards/{hallNumber}', function ($hallNumber)
 {
-    $tables = getHallTablesFromRedis($hallNumber);
+    $tables = getHallTables($hallNumber);
     return response()->json([
         'tables' => $tables
     ]);
 });
 Route::get('halls', function ()
 {
-    $halls = getHallsFromRedis();
+    $halls = getHalls();
     return response()->json([
         'halls' => $halls
     ]);
 });
 Route::get('/dev', function (Request $req) {
     if ($req->ajax()) {
-        $sections = view('boards')->renderSections();
-        return response(["extendedScripts"=>$sections["scripts"] , "content"=>$sections["content"],"extendedStyles"=>$sections["styles"]]);
+        return response( getAjaxResponse('boards',[]));
     }
     return view('boards');
 
@@ -124,11 +133,17 @@ Route::middleware('authenticate')->group(function () {
 
     });
     Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
+    Route::get('/show-update-tables-form', [Resturant::class,'showFormUpdateTables']);
     Route::post('/add-new-table', [Resturant::class,'addNewTable']);
     Route::post('/add-many-new-tables', [Resturant::class,'addManyNewTable']);
+    Route::post('/update-tables', [Resturant::class,'updateTables']);
+    Route::post('/delete-tables', [Resturant::class,'deleteTables']);
     Route::get('/show-new-hall-form', [Resturant::class,'showFormNewHall']);
     Route::post('/add-new-hall', [Resturant::class,'addNewHall']);
-
+    Route::get('/show-update-hall-form', [Resturant::class,'showFormUpdteaHall']);
+    Route::get('/get-hall-data/{hallNumber}', [Resturant::class,'getHallData']);
+    Route::post('/update-hall', [Resturant::class,'updateHall']);
+    Route::post('/delete-hall', [Resturant::class,'deleteHall']);
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

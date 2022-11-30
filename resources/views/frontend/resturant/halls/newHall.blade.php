@@ -20,8 +20,8 @@
 @section('content')
     <form class="w-full max-w-lg" action="{{url('add-new-hall')}}" method="POST">
       @csrf
-        <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div class="flex flex-wrap -mx-3 mb-6 space-y-5">
+            <div class="w-full md:w-1/2 px-3 md:mb-0" style="margin-top: 20px !important">
                 <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="hall-number">
                     رقم الصالة
                 </label>
@@ -42,9 +42,8 @@
                         {{str_replace("hall name","اسم الصالة",$message)}}
                     </p>
                 @enderror
-
             </div>
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <div class="w-full md:w-1/2 px-3 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="max-capacity">
                      السعة القصوى (عدد الطاولات)
                 </label>
@@ -74,7 +73,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="w-full md:w-1/2 px-3 mt-6">
+            <div class="w-full md:w-1/2 px-3" style="margin-top: 40px !important">
                 <button type="submit" class="bg-gray-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                     تم !
                 </button>

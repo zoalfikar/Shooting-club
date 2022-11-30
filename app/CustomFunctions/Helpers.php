@@ -25,34 +25,18 @@ if (! function_exists('getAvailableHallNumber')) {
        return Hall::max('hallNumber') + 1;
     }
 }
-
-if (! function_exists('addSetHallInRedis')) {
-    function addSetHallInRedis($hall)
-    {
-        Redis::hmset('halls:' . $hall->hallNumber, [
-            'hallNumber' =>  $hall->hallNumber,
-            'name' => $hall->hallName,
-            'active' =>  $hall->active,
-            'maxCapacity' => $hall->maxCapacity,
-        ]);
-    }
-}
-if (! function_exists('getHallsFromRedis')) {
-    function getHallsFromRedis(){
-        $halls = [];
-        $keys = Redis::keys('halls:*');
-        foreach ($keys as $key) {
-            $key=str_replace('laravel_database_','',$key);
-            $hall= Redis::hgetall($key);
-            array_push( $halls,$hall);
-        }
+if (! function_exists('getHalls')) {
+    function getHalls(){
+        $halls = Hall::all();
         return $halls;
     }
 }
-if (! function_exists('deleteHallFromRedis')) {
-    function deleteHallInRedis($hallNumber)
-    {
-        Redis::del('halls:' . $hallNumber);
+if (! function_exists('deleteHallTablesFromRedis')) {
+    function deleteHallTablesFromRedis($hallNumber){
+        $tables =Table::where('hallNumber' , $hallNumber)->get();
+        foreach ($tables as $table) {
+            deleteTableFromRedis($table->hallNumber,$table->tableNumber);
+        }
     }
 }
 if (! function_exists('addSetTableInRedis')) {
@@ -62,14 +46,8 @@ if (! function_exists('addSetTableInRedis')) {
          if ($table->tableNumber >= getOrderRange($hallNumber)) {
             $rangeExpended = true;
          }
-        Redis::pipeline(function ($pipe) use ($hallNumber ,$table) {
-                $pipe->hmset('hall:' . $hallNumber .':tables:'. $table->tableNumber, [
-                    'tableNumber' =>  $table->tableNumber,
-                    'hallNumber' =>  $table->hallNumber,
-                    'active' =>  $table->active,
-                    'maxCapacity' => $table->maxCapacity
-                ]);
-
+        Redis::pipeline(function ($pipe) use ($hallNumber ,$table)
+        {
                 $order=setTableOrder($table,'');
                 $pipe->hmset('hall:' . $hallNumber .':table:'. $table->tableNumber,[
                     'status' =>  '',
@@ -90,19 +68,11 @@ if (! function_exists('addSetManyTablesInRedis')) {
 
         Redis::pipeline(function ($pipe) use ($hallNumber ,$tables) {
             for ($i=0; $i < count($tables) ; $i++) {
-                $pipe->hmset('hall:' . $hallNumber .':tables:'. intval($tables[$i]["tableNumber"]), [
-                    'tableNumber' =>  intval($tables[$i]["tableNumber"]),
-                    'hallNumber' =>intval($hallNumber),
-                    'active' =>  intval($tables[$i]["active"]),
-                    'maxCapacity' => intval($tables[$i]["maxCapacity"])
-                ]);
                 $pipe->hmset('hall:' . intval($hallNumber) .':table:'. intval($tables[$i]["tableNumber"]),[
                     'status' =>  '',
                     'orders' =>  '',
                     'order' =>  0,
-
                 ]);
-
             }
         });
         resetOrderRange(intval($hallNumber));
@@ -111,28 +81,24 @@ if (! function_exists('addSetManyTablesInRedis')) {
 if (! function_exists('deleteTableFromRedis')) {
     function deleteTableFromRedis($hallNumber,$tableNumber)
     {
-        Redis::del('hall:' . $hallNumber.':tables:'. $tableNumber);
-        Redis::del('hall:' . $hallNumber .':table:'. $tableNumber.':status:');
-        Redis::del('hall:' . $hallNumber .':table:'. $tableNumber.':orders:');
+        Redis::del('hall:' . $hallNumber .':table:'. $tableNumber);
     }
 }
-if (! function_exists('getHallTablesFromRedis')) {
-    function getHallTablesFromRedis($hallNumber){
-        $tables = [];
-        $keys = Redis::keys('hall:' . $hallNumber.':tables:*');
-        foreach ($keys as $key) {
-            $key=str_replace('laravel_database_','',$key);
-            $tableMainInfo= Redis::hgetall($key);
-            $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $tableMainInfo['tableNumber']);
-            $table=(object)(array_merge($tableMainInfo,$tableStatus));
-            array_push( $tables,$table);
+if (! function_exists('getHallTables')) {
+    function getHallTables($hallNumber){
+        $reslt = [];
+        $tables = Table::where('hallNumber',$hallNumber)->get()->toArray();
+        foreach ($tables as $table) {
+            $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $table['tableNumber']);
+            $table=(object)(array_merge($table,(array)$tableStatus));
+            array_push( $reslt,$table);
         }
         return $tables;
     }
 }
 if (! function_exists('getOrderRange')) {
     function getOrderRange($hallNumber){
-        $count = Redis::keys('hall:' . $hallNumber.':tables:*');
+        $count = Table::where('hallNumber',$hallNumber)->get();
         return pow(10,strlen((count($count))));
     }
 }
@@ -151,14 +117,30 @@ if (! function_exists('setTableOrder')) {
           }
     }
 }
+if (! function_exists('setTableOrderAll')) {
+    function setTableOrderAll($table,$status , $orderRange){
+        switch ($status) {
+            case '':
+              return $orderRange+$table->tableNumber;
+              break;
+            case 'active':
+            return  2*$orderRange+$table->tableNumber;
+              break;
+            case 'taken':
+            return  3*$orderRange+$table->tableNumber;
+              break;
+          }
+    }
+}
 if (! function_exists('resetOrderRange')) {
     function resetOrderRange($hallNumber){
-        $keys =Redis::keys('hall:' . $hallNumber.':tables:*');
-        foreach ($keys as $key) {
-            $key=str_replace('laravel_database_','',$key);
-            $table = Redis::hgetall($key);
-            $tableInfo=Redis::hgetall('hall:' . $hallNumber.':table:'.$table['tableNumber']);
-            $newOrder=setTableOrder((object)$table,$tableInfo['status']);
+        $tables =Table::where('hallNumber' , $hallNumber)->get();
+        $orderRange =  getOrderRange($hallNumber);
+
+        foreach ($tables as $table) {
+            $tableInfo=Redis::hgetall('hall:' . $hallNumber.':table:'.$table->tableNumber);
+            // dd($tableInfo);
+            $newOrder=setTableOrderAll($table,$tableInfo['status'],$orderRange );
             Redis::hmset('hall:' . $hallNumber.':table:'.$table['tableNumber'], "order", $newOrder);
         }
     }

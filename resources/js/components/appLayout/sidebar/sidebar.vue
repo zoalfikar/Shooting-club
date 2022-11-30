@@ -92,10 +92,13 @@
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
                 </div>
                 <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-update-tables-form'">تعديل الطاولات</a></span>
+                </div>
+                <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-hall-form'">صالة جديدة</a></span>
                 </div>
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-update-hall-form'">تعديل الصالات</a></span>h
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-update-hall-form'">تعديل الصالات</a></span>
                 </div>
             </div>
         </div>
@@ -139,6 +142,11 @@ const showItemChildren = (e)=>{
 const toggleMenu = () => {
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
+    if (is_expanded.value === true) {
+        $(".footer").removeClass("footer-expended");
+    } else {
+        $(".footer").addClass("footer-expended");
+    }
     document.dispatchEvent(sidebarStatus);
 }
 export default {
@@ -161,7 +169,7 @@ export default {
 
         });
         var app1 ;
-
+        var currentLink = null;
         var vueMounted = true ;
         var extendedScripts = null ;
         var extendedStyles = null ;
@@ -174,6 +182,11 @@ export default {
         }
         $("aside .menu a").click(function (e)  {
             e.preventDefault();
+            if (currentLink) {
+                $(currentLink).parents(".item-child").toggleClass("item-child-clicked");
+            }
+            currentLink = this;
+            $(this).parents(".item-child").toggleClass("item-child-clicked");
             history.pushState("","",$(this).attr("href"));
             $('.app-container').css("visibility", "hidden");
             vueMounted = false ;
@@ -400,6 +413,13 @@ export default {
     padding-top: 10px;
     font-size: 11px;
     transition: transform 0.2s ease-in-out;
+   }
+   .item-child-clicked .fa-angle-double-left{
+        transform:translateX(-6px);
+        color:chartreuse;
+   }
+   .item-child-clicked a{
+    color:chartreuse;
    }
 
    .logo{

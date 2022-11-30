@@ -1,5 +1,6 @@
 <template>
     <v-card
+      v-if="active"
       @click="toggleBoardModal"
       :ripple="false"
       class="mx-auto"
@@ -25,7 +26,7 @@
         <v-btn
             text
             color="teal accent-4"
-            @click.stop="active"
+            @click.stop="occupied"
         >
             مشغولة
         </v-btn>
@@ -38,6 +39,25 @@
         </v-btn>
         </v-card-actions>
     </v-card>
+    <v-card
+      v-else
+      @click="notActiveAction($event.target)"
+      :ripple="false"
+      class="mx-auto v-card-disabled"
+      dark
+      max-width="400"
+      :color ="'rgba(255, 255, 255,20%)'"
+    >
+        <div class="boardNumber text-h1 font-weight-light">
+            <div class="boardNumber-border">
+                <h1>{{tablenumber}}</h1>
+            </div>
+        </div>
+        <v-card-subtitle><div style="color: hwb(153 7% 76%);">الحالة : للعرض فقط</div></v-card-subtitle>
+        <v-card-actions>
+             <h4 class="notActiveAlert" style="color: hwb(153 7% 76%); text-align: center; width:100%">خارج الخدمة حاليا </h4>
+        </v-card-actions>
+    </v-card>
   </template>
 
 <script>
@@ -46,7 +66,8 @@ import store from "../../../store";
 export default {
     props:{
         'status': String ,
-        'tablenumber' : String,
+        'tablenumber' : Number,
+        'active' : Number,
         },
         // emits:['statusChanged'],
     data () {
@@ -70,13 +91,16 @@ export default {
             // moveitem('1',this.tablenumber)
             store.dispatch("changeBoardState" ,  {"status":'' ,"tableNumber":this.tablenumber} );
         },
-        active: function(){
+        occupied: function(){
             this.status = 'active';
             // moveitem('2',this.tablenumber)
             this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
 
-            // $(".info-modal").css("display", "block");
+            $(".info-modal").css("display", "block");
             store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tablenumber}  );
+        },
+        notActiveAction:function (element) {
+            console.log(element);
         },
         toggleBoardModal : function() {
             store.dispatch("changeCurrentTableNumber" , this.tablenumber);
@@ -110,6 +134,14 @@ export default {
         top: 10px;
         box-shadow:0 0 10px black;
     }
+    .v-card-disabled{
+        top: 0 !important;
+        box-shadow: unset !important;
+    }
+    .v-card-disabled:hover{
+        top: 0 !important;
+        box-shadow: unset !important;
+    }
     .boardNumber{
         padding-top: 35px;
         width: 100%;
@@ -126,5 +158,8 @@ export default {
         align-content: center;
         justify-content: center;
         background-color: hwb(153 7% 76%);
+    }
+    .boardNumber-border h1{
+        margin: auto;
     }
 </style>

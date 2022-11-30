@@ -16,14 +16,26 @@
               <h1>{{currentHallName}}</h1>
           </div>
       </header>
+    <div v-if="noHalls" class="noHalls">
+        <h1>لاتوجد صالات حتى الان</h1>
+        <v-btn dark>أدخل بيانات صالة</v-btn>
+    </div>
     <div v-if="loading" class="flex justify-center">تحميل ...</div>
       <div v-else class="d-flex flex-row flex-wrap justify-content-center">
+        <div v-if="noBoards" class="noHalls">
+            <h1>لاتوجد طاولات في هذه الصالة حتى الان</h1>
+            <v-btn dark> أضف طاولات جديدة</v-btn>
+        </div>
+        <div v-if="!currentHallActive" class="flex justify-center col-lg-12 col-md-12">هذه الصالة للعرض فقط (غير جاهة)</div>
+
           <div  v-for="(board,index) in boards"
               v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
-              :style="`order:${board.order}`"
+              :style=" `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order}`"
               :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
-                  <board :status="board.status"
+                  <board
+                      :active="currentHallActive ? board.active : 0"
+                      :status="board.status"
                       :tablenumber="board.tableNumber"
                       :style="`animation-delay: ${(index) * 0.1}s`"
                       class="animate-fade-in-down"
@@ -55,8 +67,10 @@ import store from '../../../store';
                 halls: ()=> store.state.halls,
                 currentHall: ()=> store.state.currentHall,
                 currentHallName: ()=> store.state.currentHallName,
-
+                currentHallActive: ()=> store.state.currentHallActive,
+                noHalls: ()=> store.state.noHalls,
                 boards: ()=> store.state.boards,
+                noBoards: ()=> store.state.noBoards,
                 loading : ()=>store.state.boardsLoading,
                 header: function () {
                     return this.$el.querySelector(".boards-header")
@@ -254,7 +268,8 @@ import store from '../../../store';
             },
             moveitem: function (data) {
                 var array=[];
-                var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+                // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+                var newOrder = data.order * this.orderHelper + parseInt(data.tableNumber);
                 document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
                 array.push(newOrder)
                 this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
@@ -265,12 +280,6 @@ import store from '../../../store';
             $(document).ready(function () {
 
                 store.dispatch("pringAllHalls")
-                setTimeout(() => {
-                    $( ".naviga-link" ).first().trigger('click');
-                }, 2000);
-
-
-
                 const scrollLef = ()=>{
                 document.querySelector('.navigations-links').scrollBy({
                     left: -200,
@@ -292,9 +301,12 @@ import store from '../../../store';
                 scrollRigh();
 
                 });
-
             });
-
+            // setTimeout(() => {
+            //     if (this.boards == null) {
+            //         $( ".naviga-link" ).first().trigger('click');
+            //     }
+            // }, 2000);
           }
       }
   </script>
@@ -425,6 +437,16 @@ import store from '../../../store';
           flex-grow: 1;
           text-align:center;
           width:20%;
+    }
+    .noHalls{
+        background-color: red;
+        color: white;
+        width: 100%;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
     }
       .d-flex {
           overflow: hidden;

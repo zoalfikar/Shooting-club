@@ -8,9 +8,7 @@
         height: 300px;
         display: flex;
         align-items: center;
-    }
-    .noHalls h1{
-        text-align: center;
+        justify-content: center;
     }
         body::before {
             content: "";
@@ -55,7 +53,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="tables-count">
                  عدد الطاولات
                 </label>
-                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white" id="tables-count" name="tablesCount" type="number" placeholder="ادخل عدد الطاولات" min="1"  value="">
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white" id="tables-count" name="tablesCount" type="number" placeholder="ادخل عدد الطاولات" min="1" max="{{$maxTablesNumbers}}" value="">
                 {{-- @error('tableCount')
                     <p class="text-red-500 text-xl italic">
                         {{str_replace("table count","عدد الطاولات",$message)}}
@@ -183,6 +181,7 @@
                 var ease =Power1.easeInOut;
                 var manyTablesArray = [];
                 var tableNumberInit = $("#table-number").val();
+                var initMaxCapacity = $("#tables-count").attr("max");
                 var tablesAlreadyChanged=[];
                 var first = true;
                 function init() {
@@ -202,8 +201,6 @@
                             tablesAlreadyChanged.push(t)
                         } else {
                             var index2 = tablesAlreadyChanged.findIndex((v) =>  v.tableNumber == t.tableNumber)
-                            console.log(index2);
-                            console.log(tablesAlreadyChanged.length);
                             if (index2>=0 && tablesAlreadyChanged.length>0) {
                                 t.maxCapacity=tablesAlreadyChanged[index2].maxCapacity
                                 t.active=tablesAlreadyChanged[index2].active
@@ -271,6 +268,8 @@
                         success: function (response) {
                             tableNumberInit=response.TableNumber
                             $("#table-number").val(response.TableNumber);
+                            initMaxCapacity = response.maxTablesNumbers;
+                            $("#tables-count").attr("max", response.maxTablesNumbers);
                         }
                     });
                 });
@@ -348,7 +347,7 @@
                                 $("#tables-state").html(null);
                                 $("#tables-count").val(null);
                                 manyTablesArray=[];
-                                $("#table-number").val(response.aviliableTableNumber);
+                                tableNumberInit=response.availableTableNumber;
                             },
                             error:function (response) {
                                 if (response.responseJSON.erroreInTable) {
@@ -402,9 +401,6 @@
                     $(".manyTablesChoice").css("display", "block");
                     TweenLite.fromTo($(".manyTablesChoice"), 0.5 ,{ height:"0px" }, { height:"90.156px" , ease});
                     TweenLite.fromTo($(".manyTablesChoice"), 0.8, { opacity:0 }, { opacity:1  }).delay(0.5);
-                    // TweenLite.fromTo(document.getElementById('tables-count'), 1, { clipPath:"inset(0% 100% 0% 0%)" }, { clipPath:"inset(0% 0% 0% 0%)"  }).delay(1.5);
-                    // TweenLite.fromTo(document.getElementsByClassName('tablesStateGroup'), 1, { clipPath:"inset(0% 100% 0% 0%)" }, { clipPath:"inset(0% 0% 0% 0%)"  }).delay(1.5);
-
                     setTimeout(() => {
                         document.getElementById('tables-count').animate([
                             { clipPath  : "inset(0% 100% 0% 0%)" },
@@ -435,7 +431,6 @@
                     tablesAlreadyChanged=[];
                     manyTables=false;
                     first = true;
-                    console.log(first);
                     $("#table-number").val(tableNumberInit);
                     $("#tables-count").val(null);
                     $("#tables-state").html(null);
@@ -469,6 +464,9 @@
                 });
                 $("#tables-count").change(function (e) {
                     e.preventDefault();
+                    if ($(this).val()> parseInt(initMaxCapacity)) {
+                        $(this).val( parseInt(initMaxCapacity))
+                    }
                     init();
                 });
                 $("#tables-state").change(function (e) {

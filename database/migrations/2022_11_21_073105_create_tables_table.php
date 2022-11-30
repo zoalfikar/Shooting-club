@@ -16,10 +16,11 @@ class CreateTablesTable extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->string('hall-table')->virtualAs('concat(concat(tableNumber,"--"),hallNumber)')->unique();
             $table->unsignedInteger('tableNumber');
-            $table->unsignedInteger('hallNumber')->default(1);
+            $table->unsignedInteger('hallNumber');
             $table->tinyInteger('active')->default(1);
             $table->unsignedInteger('maxCapacity')->default(10);
             $table->timestamps();
+            $table->foreign('hallNumber')->references('hallNumber')->on("halls")->onDelete("cascade")->onUpdate("cascade");
         });
     }
 

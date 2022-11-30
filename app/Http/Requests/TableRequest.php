@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\AvailableTableNumber;
+use App\Rules\MaxHallCapacity;
 use App\Rules\TableHallRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class TableRequest extends FormRequest
     public function rules()
     {
         return [
-            'tableNumber' => ['required','numeric', Rule::unique('tables')->where(fn ($query) => $query->where('hallNumber', $this->hallNumber)), new AvailableTableNumber($this->hallNumber)],
+            'tableNumber' => ['required','numeric', Rule::unique('tables')->where(fn ($query) => $query->where('hallNumber', $this->hallNumber)), new AvailableTableNumber($this->hallNumber),new MaxHallCapacity($this->hallNumber)],
             'hallNumber' => ['required','numeric', new TableHallRule()],
             'maxCapacity' => 'required|numeric|min:1',
             'active'=>'required'

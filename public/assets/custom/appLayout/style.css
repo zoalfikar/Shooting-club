@@ -40,3 +40,17 @@ body {
     justify-content: center;
     width: 100%;
 }
+
+.footer {
+    position: absolute;
+    /* bottom: 0; */
+    left: 0;
+    width: calc(100% - var(--sidebar-width));
+    /* width: calc(100%); */
+    /* z-index: -1; */
+    transition: width 0.3s ease-in-out;
+}
+
+.footer-expended {
+    width: calc(100% - 2rem - 32px) !important;
+}

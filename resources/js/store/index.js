@@ -8,10 +8,13 @@ const store = new vuex.Store({
         halls: [],
         currentHall: '',
         currentHallName: '',
+        currentHallActive: 1,
+        noHalls: false,
         currentTable: '',
         currentTableStatus: '',
         boards: [],
         boardsLoading: false,
+        noBoards: false,
         aviliabeBoards: [],
 
 
@@ -71,19 +74,31 @@ const store = new vuex.Store({
     },
     mutations: {
         setHalls: (state, halls) => {
-            state.halls = halls.sort((a, b) => a.hallNumber - b.hallNumber);
+            if (!halls.length > 0) {
+                state.noHalls = true;
+            } else {
+                state.noHalls = false;
+                state.halls = halls.sort((a, b) => a.hallNumber - b.hallNumber);
+            }
         },
         setCurrentHallNumber: (state, hallNumber) => {
+            var hall;
             state.currentHall = hallNumber;
-            state.currentHallName = state.halls.find((hall) => { return hall.hallNumber == hallNumber }).name;
+            hall = state.halls.find((hall) => { return hall.hallNumber == hallNumber });
+            state.currentHallName = hall.hallName;
+            state.currentHallActive = hall.active;
         },
         setBoardsLoading: (state, loading) => {
             state.boardsLoading = loading;
         },
         setBoards: (state, boards) => {
+            if (!boards.length > 0) {
+                state.noBoards = true;
+            } else {
+                state.noBoards = false;
+            }
+            console.log(boards);
             state.boards = boards.sort((a, b) => a.order - b.order);
-            // console.log(state.boards);
-
         },
         setCurrentTableNumber: (state, tableNumber) => {
             state.currentTable = tableNumber;

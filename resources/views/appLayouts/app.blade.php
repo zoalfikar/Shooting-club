@@ -31,6 +31,9 @@
                 @yield('content')
             </div>
         </div>
+        <div class="footer">
+            <page-footer></page-footer>
+        </div>
     </div>
     <!--bootstrap 5 -->
     <script  src="{{ asset('assets\bootstrap5\js\bootstrap5.js') }}"></script>

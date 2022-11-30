@@ -6,8 +6,8 @@
 
 @endsection
 
-{{-- @section('scripts')
-    <script>
+@section('scripts')
+    {{-- <script>
             var header ;
             var headerIsExpended;
             var group ;
@@ -172,8 +172,8 @@
             });
 
 
-    </script>
-@endsection --}}
+    </script> --}}
+@endsection
 {{-- @section('scripts')
     <script>
             var header = document.querySelector(".boards-header");
