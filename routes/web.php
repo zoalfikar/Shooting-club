@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\Menu;
 use App\Http\Controllers\Resturant;
 use App\Http\Middleware\UnAuth;
 use App\Models\Hall;
@@ -144,6 +145,10 @@ Route::middleware('authenticate')->group(function () {
     Route::get('/get-hall-data/{hallNumber}', [Resturant::class,'getHallData']);
     Route::post('/update-hall', [Resturant::class,'updateHall']);
     Route::post('/delete-hall', [Resturant::class,'deleteHall']);
+    Route::get('/show-new-section-form', [Menu::class,'showFormNewSection']);
+    Route::post('/add-new-menu-section', [Menu::class,'addNewMenuSection']);
+    Route::get('/show-new-item-form', [Menu::class,'showFormNewItem']);
+
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

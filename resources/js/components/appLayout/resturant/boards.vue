@@ -93,6 +93,7 @@ import store from '../../../store';
                         this.showHallName();
                         this.getNewBoards(newQuestion).then((value) => {
                             this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
+                            // this.layoutWorker.postMessage({ cmd: 'doDomStuff', data: this.group.style });
                             this.total= this.nodes.length;
                             this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
                             return this.getNewNods(this.nodes).then((value) => {
@@ -268,9 +269,13 @@ import store from '../../../store';
             },
             moveitem: function (data) {
                 var array=[];
+                var e = document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber);
+                console.log(e.offsetLeft);
                 // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
                 var newOrder = data.order * this.orderHelper + parseInt(data.tableNumber);
-                document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
+                // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
+                e.style.order =  newOrder;
+                console.log(e.offsetLeft);
                 array.push(newOrder)
                 this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
             }
@@ -372,7 +377,6 @@ import store from '../../../store';
           display: flex;
           justify-content: center;
           width:80%;
-
       }
 
       .navigations-links{

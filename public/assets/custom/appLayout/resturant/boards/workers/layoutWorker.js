@@ -1,4 +1,4 @@
 onmessage = function(message) {
     console.log(message.data);
-    postMessage(message.data + "world")
+    // postMessage(message.data + "world")
 }

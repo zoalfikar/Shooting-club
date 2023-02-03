@@ -10,7 +10,7 @@ if (! function_exists('getAjaxResponse')) {
     {
 
         $sections = view($viewName,$vars)->renderSections();
-        return ["extendedScripts"=>$sections["scripts"] , "content"=>$sections["content"] , "extendedStyles"=>$sections["styles"]];
+        return ["extendedScripts"=>array_key_exists("scripts",$sections) ? $sections["scripts"] : null  , "content"=>array_key_exists("content",$sections) ? $sections["content"] : null , "extendedStyles"=>array_key_exists("styles",$sections) ?$sections["styles"] : null];
     }
 }
 if (! function_exists('getAvailableTableNumber')) {

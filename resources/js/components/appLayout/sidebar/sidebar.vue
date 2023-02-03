@@ -66,14 +66,14 @@
                 <div class="item-icon">
                     <i class="fa fa-clipboard" aria-hidden="true"></i>
                 </div>
-                <span class="item-text"> <span>الطلبات</span></span>
+                <span class="item-text"> <span>قائمة الطعام</span></span>
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-section-form'">طاولة جديدة</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-section-form'">إضافة نوع جديد</a></span>
                 </div>
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-item-form'">إضافة مواد جديدة</a></span>
                 </div>
             </div>
         </div>
@@ -142,11 +142,6 @@ const showItemChildren = (e)=>{
 const toggleMenu = () => {
     sessionStorage.expanded = !(sessionStorage.expanded ==='true')
     is_expanded.value = (sessionStorage.expanded ==='true');
-    if (is_expanded.value === true) {
-        $(".footer").removeClass("footer-expended");
-    } else {
-        $(".footer").addClass("footer-expended");
-    }
     document.dispatchEvent(sidebarStatus);
 }
 export default {

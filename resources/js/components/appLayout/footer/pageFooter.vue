@@ -65,7 +65,13 @@
   </template>
 
   <script>
+    // if (is_expanded.value === true) {
+    //     $(".footer").removeClass("footer-expended");
+    // } else {
+    //     $(".footer").addClass("footer-expended");
+    // }
   export default {
+
   data:()=>({
     icons:[
       'mdi-facebook',

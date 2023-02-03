@@ -1,0 +1,190 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <button class="switch" onclick="f()">switch</button>
+        <button class="reset" onclick="fR()">reset</button>
+        <button class="find" onclick="find()">find</button>
+        <div class="box box1" id="1" onmouseover="f1(this)" onmouseleave="f2(this)"></div>
+        <div class="box box2" id="2" onmouseover="f1(this)" onmouseleave="f2(this)"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
+</html>
+<style>
+    .container {
+        /* position: relative; */
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .switch {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        top: 20px;
+        background-color: hsla(40, 67%, 14%, 0.8);
+        color: aliceblue;
+    }
+    
+    .reset {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        top: 50px;
+        background-color: hsla(40, 67%, 14%, 0.8);
+        color: aliceblue;
+    }
+    
+    .find {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        top: 80px;
+        background-color: hsla(40, 67%, 14%, 0.8);
+        color: aliceblue;
+    }
+    
+    .switch:hover {
+        transform: scale(1.2);
+    }
+    
+    .reset:hover {
+        transform: scale(1.2);
+    }
+    
+    .find:hover {
+        transform: scale(1.2);
+    }
+    
+    .box {
+        position: relative;
+        box-sizing: border-box;
+        width: 50px;
+        height: 50px;
+        top: 0;
+        /* transform: translateX(0); */
+        transition: top 0.5s ease-in-out;
+    }
+    
+    .blue-box {
+        background-color: blue !important;
+    }
+    
+    .box1 {
+        order: 1;
+        background-color: red;
+    }
+    
+    .box2 {
+        order: 2;
+        background-color: yellow;
+    }
+</style>
+<script>
+    var box1 = document.getElementById("1");
+    var box2 = document.getElementById("2");
+    var p1 = {};
+    var p2 = {};
+    p1.x = box1.offsetLeft;
+    // p1.y = box1.offsetTop;
+    p2.x = box2.offsetLeft;
+    // p2.y = box2.offsetTop;s
+    box1.style.transform = "translateX(0px)";
+    box2.style.transform = "translateX(0px)";
+
+    function find() {
+        TweenLite.fromTo(box1, 1, {
+            x: 0,
+            y: 0
+        }, {
+            x: 100,
+            y: 200,
+            ease: Power0.easeInOut
+        })
+    }
+
+    function animateB() {
+        var x1 = p1.x - box1.offsetLeft;
+        var x2 = p2.x - box2.offsetLeft;
+        p1.x = box1.offsetLeft;
+        p2.x = box2.offsetLeft;
+        TweenLite.fromTo(box1, 1, {
+            x: x1
+        }, {
+            x: 0,
+            ease: Power0.easeInOut
+        })
+        TweenLite.fromTo(box2, 1, {
+            x: x2
+        }, {
+            x: 0,
+            ease: Power0.easeInOut
+        })
+        console.log(box1.offsetLeft);
+
+        // box1.animate([
+        //     {transform : "translateX("+(-x1)+"px)"},
+        //     { transform : "translateX(0)" }
+        // ],{
+        //     duration :1000
+        // });
+        // box2.animate([
+        //      {transform : "translateX("+(-x2)+"px)"},
+        //      { transform : "translateX(0)" }
+        // ],{
+        //     duration :1000
+        // });
+    }
+
+    function f() {
+        // p1.x = box1.offsetLeft;
+        // p2.x = box2.offsetLeft;
+        // box1.style.transform = "translateX("+(x1)+"px)";
+        // box2.style.transform = "translateX("+(x2)+"px)";
+        console.log(box1.offsetLeft);
+
+        box1.style.order = 2;
+        box2.style.order = 1;
+        console.log(box1.offsetLeft);
+
+        animateB();
+
+    }
+
+    function fR() {
+        box1.style.order = 1;
+        box2.style.order = 2;
+        // var x1 = p1.x - box1.offsetLeft;
+        // var x2 = p2.x - box2.offsetLeft;
+        // console.log(x1);
+        // console.log(x2);
+        // p1.x = box1.offsetLeft;
+        // p2.x = box2.offsetLeft;
+        // box1.style.transform = "translateX(-" + x1 + "px)";
+        // box2.style.transform = "translateX(-" + x2 + "px)";
+        animateB();
+
+    }
+
+    function f1(e) {
+        e.classList.add("blue-box");
+        e.style.top = "12px"
+    }
+
+    function f2(e) {
+        e.classList.remove("blue-box");
+        e.style.top = "0"
+    }
+</script>

@@ -16,10 +16,15 @@ class CreateMenuItemsTable extends Migration
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
-            $table->string('kind');
-            $table->integer('price');
+            $table->unsignedBigInteger('section');
+            $table->string('description')->nullable();
+            $table->tinyInteger('active');
+            $table->float('price');
+            $table->string('unit');
+            $table->tinyInteger('fragmentable');
+            $table->float('pace')->default(1);
             $table->timestamps();
+            $table->foreign("section")->references("id")->on("menu_sections")->onDelete("cascade")->onUpdate("cascade");
         });
     }
 

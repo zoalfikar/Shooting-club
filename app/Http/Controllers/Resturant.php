@@ -43,12 +43,12 @@ class Resturant extends Controller
         DB::beginTransaction();
         try {
             $newTable =Table::create($req->only(['tableNumber','hallNumber','maxCapacity','active']));
+            addSetTableInRedis($newTable->hallNumber,$newTable);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
         }
-        addSetTableInRedis($newTable->hallNumber,$newTable);
         if ($req->ajax()) {
             return response()->json(["success"=>"تم ادخال الطاولة بنجاح","aviliableTableNumber"=>getAvailableTableNumber($req['hallNumber'])]);
         }

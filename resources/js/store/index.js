@@ -97,7 +97,6 @@ const store = new vuex.Store({
             } else {
                 state.noBoards = false;
             }
-            console.log(boards);
             state.boards = boards.sort((a, b) => a.order - b.order);
         },
         setCurrentTableNumber: (state, tableNumber) => {
