@@ -10,18 +10,46 @@
         }
         .beautifull-grid
         {
+            justify-content: center;
+            width: 100%;
             display: grid;
             grid-template-areas: "grid-form" "grid-table";
             grid-template-columns: auto auto ;
-            grid-gap: 40px;
+            grid-gap: 20px;
         }
         .manyItemsChoice{
+            padding-left:5px;
             display: none;
-            width: 0px;
+            width: 0%;
             clip-path  : inset(100% 0% 0% 0%);
+        }
+        table{
+            min-width:500px;
+            max-width:100%;
+        }
+        tr{
+            max-width: 100%;
+        }
+        table , thead , tbody{
+            width:100%;
         }
         td,th{
             text-align: center;
+        }
+        .options{
+            display: flex;
+            gap:15px;
+        }
+        .editItem{
+            background-color: blue;
+        }
+        .deleteItem{
+            background-color: red;
+        }
+        .editItem , .deleteItem {
+             height: 10px;
+             width: 10px;
+             border-radius:4px;
         }
     </style>
 
@@ -52,7 +80,7 @@
                       <div class="relative">
                           <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="section" name="section">
                               @foreach ($sections as $section)
-                                  <option selected value= "{{$section->id}}"  selected>{{$section->name}}</option>
+                                  <option  value= "{{$section->id}}">{{$section->name}}</option>
                               @endforeach
                           </select>
                           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center  text-gray-700">
@@ -91,7 +119,7 @@
                   </div>
                   <div class="w-full md:w-1/5 px-3 mt-2">
                       <div class="form-check">
-                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked>
+                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked value="1"> 
                           <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="active">
                               مفعل
                           </label>
@@ -104,14 +132,14 @@
                   </div>
                   <div class="w-full md:w-3/5 px-3 mt-2">
                       <div class="form-check">
-                          <input class="form-check-input" type="checkbox"  id="fragmentable" name="fragmentable" >
+                          <input class="form-check-input" type="checkbox"  id="fragmentable" name="fragmentable" value="1">
                           <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="fragmentable">
                               الواحدة قابلة للتجزئة مثال (كغ)
                           </label>
                         </div>
                       @error('fragmentable')
                           <p class="text-red-500 text-xl italic">
-                              {{str_replace("active","الجاهزية",$message)}}
+                              {{str_replace("fragmentable","قابل للتجزئة",$message)}}
                           </p>
                       @enderror
                   </div>
@@ -147,10 +175,10 @@
                       {{-- <div id="tablesCountErrore" class="text-red-500 mb-0 text-xl italic errore">
                       </div> --}}
                   </div>
-                  <div class="w-full  md:w-1/1 px-3 m-auto" style="margin-top: 40px !important">
-                      {{-- <button type="submit" class="bg-gray-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+                  <div class="w-full  md:w-1/1 px-3 m-auto options" style="margin-top: 40px !important">
+                      <!-- <button type="submit" class="bg-gray-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                           تم !
-                      </button> --}}
+                      </button>  -->
                         <button id="done" type="button" class="bg-gray-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                             تم !
                         </button>
@@ -168,7 +196,7 @@
         </form>
     </div>
     <div class="grid-table manyItemsChoice" id="manyItemsChoice">
-        <table class="table table-striped">
+        <table class="table table-striped" id='itemsTable' >
             <thead class="table-Primary">
                 <th>
                     المادة
@@ -191,39 +219,28 @@
                 <th>
                      خطوة
                 </th>
+                <th>
+                     تعديل
+                </th>
             </thead>
             <tbody>
-                <tr>
-                    <td>شيش طاووق مشوي</td>
-                    <td>حلويات</td>
-                    <td>1223000</td>
-                    <td>رطل</td>
-                    <td>مفعل غير</td>
-                    <td>مجزئةغير</td>
-                    <td>1203</td>
-                </tr>
-                <tr>
-                    <td>شيش طاووق مشوي</td>
-                    <td>حلويات</td>
-                    <td>1223000</td>
-                    <td>رطل</td>
-                    <td>مفعل غير</td>
-                    <td>مجزئةغير</td>
-                    <td>1203</td>
-                </tr>
+               
             </tbody>
         </table>
     </div>
-
 </div>
 
 @endsection
 
 
 @section('scripts')
-    <script>
+    <script type='module'>
            function init() {
+                const addNewItemButton = document.getElementById('add');
                 var ease =Power1.easeInOut;
+                var items = [];
+                var table = document.getElementById('itemsTable');
+                var manyItemsMode = false;
                 $.ajaxSetup({
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -248,6 +265,7 @@
                     });
                     $("#addManyItems").click(function (e) {
                         e.preventDefault();
+                        manyItemsMode=true;
                         $(".manyItemsChoice").css("display", "block");
                         $(".manyItemsChoice").css("width", "100%");
                         TweenLite.fromTo($(".manyItemsChoice"), 1 ,{ width:"0px" }, {width:getComputedStyle(document.getElementById('manyItemsChoice')).width, ease});
@@ -270,6 +288,7 @@
                     });
                     $("#cancel").click(function (e) {
                         e.preventDefault();
+                        manyItemsMode=false;
                         // $("#addManyItems").css("display", "block");
                         $("#add").css("display", "none");
                         $("#cancel").css("display", "none");
@@ -296,14 +315,19 @@
                     });
                     $("#done").click(function (e) {
                         e.preventDefault();
-                        $.ajax({
+                        if (!manyItemsMode) {
+                            $.ajax({
                             type: "post",
-                            url: "add-new-menu-section",
+                            url: "add-new-menu-item",
                             data: {
-                                "name" : $("#name").val(),
-                                "options" : $("#options").val(),
-                                "active" : $("#active").prop("checked")==true ? 1 :0,
-                                "descriptions" : $("description").val(),
+                                "title" : $("#title").val(),
+                                "section" : $("#section").val(),
+                                "price" : $("#price").val(),
+                                "unit" : $("#unit").val(),
+                                "pace" : $("#pace").val(),
+                                "fragmentable" : $("#fragmentable").prop("checked") == true ? 1 : 0,
+                                "active" : $("#active").prop("checked") == true ? 1 : 0,
+                                "descriptions" : $("#description").val()
                             },
                             success: function (response) {
                                 swal({
@@ -320,7 +344,84 @@
                             }
                         });
 
+                        } else {
+                            $.ajax({
+                            type: "post",
+                            url: "add-new-menu-items",
+                            data: {
+                                "items" : items,
+                            },
+                            success: function (response) {
+                                swal({
+                                    text: response.message,
+                                    icon:"success",
+                                    button: {
+                                        text: "حسنا",
+                                        value: true,
+                                        visible: true,
+                                        className: "",
+                                        closeModal: true,
+                                    },
+                                });
+                            }
+                        }); 
+                        }
+                      
                     });
+                    addNewItemButton.addEventListener('click',(e)=>{
+                        let newItem= {};
+                        newItem.uniqeNumber= npmDependencies.uuidv4();
+                        newItem.title = document.getElementById('title').value;
+                        newItem.section= document.getElementById('section').value;
+                        newItem.sectionName= $("#section option:selected").text();
+                        newItem.unit= document.getElementById('unit').value;
+                        newItem.price= document.getElementById('price').value;
+                        newItem.active= document.getElementById('active').checked  ? 1 : 0;
+                        newItem.fragmentable= document.getElementById('fragmentable').checked ? 1 : 0;
+                        newItem.description= document.getElementById('description').value;
+                        newItem.pace= document.getElementById('pace').value ?document.getElementById('pace').value:1;
+                        //
+                        var tr = document.createElement("tr");
+                        tr.setAttribute('id',`${newItem.uniqeNumber}`);
+                        tr.innerHTML=`<td>${newItem.title}</td><td>${newItem.sectionName}</td><td>${newItem.price}</td><td>${newItem.unit}</td><td>${newItem.active ? 'مغعل':'لا'}</td><td>${newItem.fragmentable ? 'نعم':'لا'}</td><td>${newItem.pace?newItem.pace : 1}</td>
+                        <td class="optionTD">
+                            <button class="editItem" title="تعديل"></button>
+                            <button class="deleteItem" title="حذف"></button>
+                        </td>`
+                        table.lastChild.appendChild(tr);
+                        //
+                        items.push(newItem)
+                        document.querySelectorAll('.editItem').forEach(element => {
+                            element.addEventListener('click', editItem)
+                        }); 
+                        document.querySelectorAll('.deleteItem').forEach(element => {
+                            element.addEventListener('click', deleteItem)
+                        }); 
+                    })
+                    function editItem(e) {
+                       let tr=e.target.parentNode.parentNode;
+                       let item = items.find(element => element.uniqeNumber == tr.id);
+                       table.lastChild.removeChild(tr);
+                       items = items.filter((element)=>{
+                            return element.uniqeNumber != tr.id;
+                       })
+                       document.getElementById('title').value = item.title;
+                        document.getElementById('section').value= item.section
+                        document.getElementById('unit').value= item.unit
+                        document.getElementById('price').value = item.price
+                        document.getElementById('active').checked  = item.active ;
+                        document.getElementById('fragmentable').checked   =  item.fragmentable ;
+                        document.getElementById('description').value = item.description
+                        document.getElementById('pace').value = item.pace;
+                    }
+                    function deleteItem(e) {
+                       let tr=e.target.parentNode.parentNode;
+                       table.lastChild.removeChild(tr);
+                       items = items.filter((element)=>{
+                            return element.uniqeNumber != tr.id;
+                       })
+                    }
+
                 }
             $(document).ready(function() {
                 init()

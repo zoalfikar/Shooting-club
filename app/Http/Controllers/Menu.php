@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuSection;
+use App\Models\MenuItem;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\MenuItemRequest;
 class Menu extends Controller
 {
     public function showFormNewSection(Request $req)
@@ -29,5 +30,20 @@ class Menu extends Controller
             return response( getAjaxResponse('frontend.resturant.menu.menuItems.newMenuItem',["sections"=>$sections]));
         }
         return view('frontend.resturant.menu.menuItems.newMenuItem' , compact("sections"));
+    }
+    public function addNewMenuitem(MenuItemRequest $req)
+    {
+        $vars = [];
+        if ($req->input("pace")) {
+            $vars = $req->only(["title","description","unit","active","section","price","pace","fragmentable"]);
+        }
+        else {
+            $vars = $req->only(["title","description","unit","active","section","price","fragmentable"]);
+        }
+        $newMenuItem = MenuItem::create($vars);
+        if ($req->ajax()) {
+            return response()->json(["message"=>"تم إدخال عنصر جديد الى القائمة بنجاح"]);
+        }
+        redirect()->back()->with("message","تم إدخال عنصر جديد الى القائمة بنجاح");
     }
 }

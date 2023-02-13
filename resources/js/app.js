@@ -3,6 +3,7 @@
 import router from './routes';
 import vuetify from './vuetify';
 import store from './store';
+import { v4 as uuidv4 } from 'uuid';
 // window.$ = jQuery;
 window.Vue = require('vue').default;
 const vueAppOptions = {
@@ -10,8 +11,11 @@ const vueAppOptions = {
     store,
     router,
 }
+const npmDependencies  = {
+    uuidv4
+}
 window.vueAppOptions = vueAppOptions;
-
+window.npmDependencies = npmDependencies;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('navbar', require('./components/appLayout/navbar/navbar.vue').default);

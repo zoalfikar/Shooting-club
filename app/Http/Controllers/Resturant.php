@@ -23,10 +23,10 @@ use function PHPUnit\Framework\throwException;
 
 class Resturant extends Controller
 {
-    public function showFormNewTable($hallNumber = 1 , Request $req)
+    public function showFormNewTable(Request $req)
     {
-        $TableNumber = getAvailableTableNumber($hallNumber);
-        $initMaxCapacity = Hall::where('hallNumber',$hallNumber)->pluck("maxCapacity")->first();
+        $TableNumber = getAvailableTableNumber(1);
+        $initMaxCapacity = Hall::where('hallNumber',1)->pluck("maxCapacity")->first();
         $maxTablesNumbers = $initMaxCapacity - $TableNumber +1;
         $hallNumbers = Hall::all()->pluck('hallNumber')->toArray();
         if (isset($req['hallNumberChanged'])) {
@@ -195,7 +195,7 @@ class Resturant extends Controller
         $tables = Table::where('hallNumber',$hallNumber)->get();
         return response(["tables"=>$tables]);
     }
-    public function showFormNewHall($hallNumber = 1 , Request $req)
+    public function showFormNewHall(Request $req)
     {
         $hallNumber = getAvailableHallNumber();
         if ($req->expectsJson()) {
