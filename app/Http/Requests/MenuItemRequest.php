@@ -15,7 +15,7 @@ class MenuItemRequest extends FormRequest
     {
         return true;
     }
-    public function test()
+    public function update()
     {
        if (!$this->pace) {
          $this->pace = 1;
@@ -35,9 +35,14 @@ class MenuItemRequest extends FormRequest
      */
     public function rules()
     {
-        $this->test();
+        $this->update();
         return [
-            //
+            'title' => ['required'],
+            'section' => ['required','exists:menu_sections,id'],
+            'unit' => ['required'],
+            'price' => 'required|numeric',
+            'fragmentable' => 'required',
+            'active'=>'required'
         ];
     }
 }

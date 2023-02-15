@@ -149,6 +149,7 @@ Route::middleware('authenticate')->group(function () {
     Route::post('/add-new-menu-section', [Menu::class,'addNewMenuSection']);
     Route::get('/show-new-item-form', [Menu::class,'showFormNewItem']);
     Route::post('/add-new-menu-item', [Menu::class,'addNewMenuitem']);
+    Route::post('/add-new-menu-items', [Menu::class,'addNewMenuitems']);
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

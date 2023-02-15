@@ -56673,10 +56673,6 @@ readers do not read off random characters that represent icons */
 
     display: inline-block
 }
-.inline {
-
-    display: inline
-}
 .flex {
 
     display: flex

@@ -6,6 +6,8 @@ use App\Models\MenuSection;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use App\Http\Requests\MenuItemRequest;
+use Illuminate\Support\Facades\Validator;
+
 class Menu extends Controller
 {
     public function showFormNewSection(Request $req)
@@ -42,8 +44,42 @@ class Menu extends Controller
         }
         $newMenuItem = MenuItem::create($vars);
         if ($req->ajax()) {
-            return response()->json(["message"=>"تم إدخال عنصر جديد الى القائمة بنجاح"]);
+            return response()->json(["message"=>"تم إدخال مادة جديدة الى القائمة بنجاح"]);
         }
-        redirect()->back()->with("message","تم إدخال عنصر جديد الى القائمة بنجاح");
+        redirect()->back()->with("message","تم إدخال مادة جديدة الى القائمة بنجاح");
+    }
+
+    public function addNewMenuitems(Request $req)
+    {
+        $allItems = $req->items;
+        $validator = Validator::make($req->only(['items']), [
+            'items' => ['array', 'required'],
+        ]);
+        if($validator->fails()){
+            return response()->json(["errors"=> $validator->messages()], 422);
+        }
+        $rules=[
+                'title' => ['required'],
+                'section' => ['required','exists:menu_sections,id'],
+                'unit' => ['required'],
+                'price' => 'required|numeric',
+                'fragmentable' => 'required',
+                'active'=>'required'
+        ];
+        for ($i=0; $i < count($allItems) ; $i++) {
+            $tempArray = $allItems[$i];
+            $itemValidated = Validator::make($tempArray,$rules );
+            if($itemValidated->fails()){
+                return response()->json(["errors" =>$itemValidated->messages(),"erroreInitem"=>$allItems[$i]["uniqeNumber"]], 422);
+            }
+        }
+        for ($i=0; $i < count($allItems) ; $i++) { 
+            unset($allItems[$i]["uniqeNumber"]);
+            unset($allItems[$i]["sectionName"]);
+        }
+        $newTable =MenuItem::insert($allItems);
+        if ($req->ajax()) {
+            return response()->json(["message"=>"تم إدخال".count($allItems)." مادة جديدة الى القائمة بنجاح"]);
+        }
     }
 }

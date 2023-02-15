@@ -72,6 +72,8 @@
                               {{str_replace("title","اسم المادة",$message)}}
                           </p>
                       @enderror
+                      <div id="titleErrore" class="text-red-500 text-xl italic errore">
+                    </div>
                   </div>
                   <div class="w-full md:w-1/2 px-3">
                       <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="section">
@@ -91,6 +93,8 @@
                                   {{str_replace("section","الصنف",$message)}}
                               </p>
                           @enderror
+                            <div id="sectionErrore" class="text-red-500 text-xl italic errore">
+                            </div>
                       </div>
                   </div>
                   <div class="w-full md:w-1/2 px-3">
@@ -103,6 +107,8 @@
                               {{str_replace("unit"," الواحدة",$message)}}
                           </p>
                       @enderror
+                        <div id="unitErrore" class="text-red-500 text-xl italic errore">
+                        </div>
                   </div>
                   <div class="w-full md:w-1/2 px-3  md:mb-6 ">
                       <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="price">
@@ -114,8 +120,8 @@
                               {{str_replace("price"," السعر",$message)}}
                           </p>
                       @enderror
-                      {{-- <div id="tablesCountErrore" class="text-red-500 mb-0 text-xl italic errore">
-                      </div> --}}
+                        <div id="priceErrore" class="text-red-500 text-xl italic errore">
+                        </div>
                   </div>
                   <div class="w-full md:w-1/5 px-3 mt-2">
                       <div class="form-check">
@@ -129,6 +135,8 @@
                               {{str_replace("active","الجاهزية",$message)}}
                           </p>
                       @enderror
+                        <div id="activeErrore" class="text-red-500 text-xl italic errore">
+                        </div>
                   </div>
                   <div class="w-full md:w-3/5 px-3 mt-2">
                       <div class="form-check">
@@ -142,6 +150,8 @@
                               {{str_replace("fragmentable","قابل للتجزئة",$message)}}
                           </p>
                       @enderror
+                        <div id="fragmentableErrore" class="text-red-500 text-xl italic errore">
+                        </div>
                   </div>
                   <div class="w-full md:w-1/1 px-3 mt-2">
                       <div class="mb-3">
@@ -172,8 +182,8 @@
                               {{str_replace("pace","الخطوة ",$message)}}
                           </p>
                       @enderror
-                      {{-- <div id="tablesCountErrore" class="text-red-500 mb-0 text-xl italic errore">
-                      </div> --}}
+                        <div id="paceErrore" class="text-red-500 text-xl italic errore">
+                        </div>
                   </div>
                   <div class="w-full  md:w-1/1 px-3 m-auto options" style="margin-top: 40px !important">
                       <!-- <button type="submit" class="bg-gray-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
@@ -316,6 +326,8 @@
                     $("#done").click(function (e) {
                         e.preventDefault();
                         if (!manyItemsMode) {
+                            resetErrore();
+
                             $.ajax({
                             type: "post",
                             url: "add-new-menu-item",
@@ -341,7 +353,35 @@
                                         closeModal: true,
                                     },
                                 });
+                                resetInputs();
+                            },
+                            error:function (response) {
+                                if (response.responseJSON.errors) {
+                                    if (response.responseJSON.errors.title) {
+                                        $('#titleErrore').text(String(response.responseJSON.errors.title[0]).replace('title','المادة'));
+                                    }
+                                    if (response.responseJSON.errors.section) {
+                                        $('#sectionErrore').text(String("هذا الصنف غير موجود بالقائمة"));
+                                    }
+                                    if (response.responseJSON.errors.price) {
+                                        $('#priceErrore').text(String(response.responseJSON.errors.price[0]).replace('price',' السعر'));
+                                    }
+                                    if (response.responseJSON.errors.unit) {
+                                        $('#unitErrore').text(String(response.responseJSON.errors.unit[0]).replace('unit',' الواحدة'));
+                                    }
+                                    if (response.responseJSON.errors.pace) {
+                                        $('#paceErrore').text(String(response.responseJSON.errors.pace[0]).replace('pace','الخطوة'));
+                                    }
+                                    if (response.responseJSON.errors.fragmentable) {
+                                        $('#fragmentableErrore').text(String(response.responseJSON.errors.fragmentable[0]).replace('fragmentable',' قابل للتجزئة'));
+                                    }
+                                    if (response.responseJSON.errors.active) {
+                                        $('#activeErrore').text(String(response.responseJSON.errors.active[0]).replace('active','الجاهزية'));
+                                    }
+                                }
+
                             }
+
                         });
 
                         } else {
@@ -363,6 +403,51 @@
                                         closeModal: true,
                                     },
                                 });
+                                resetInputs();
+                            },
+                            error:function (response) {
+                                if (response.responseJSON.errors) {
+                                    if (response.responseJSON.errors.items) {
+                                        swal({
+                                            text:"لم يتم اضافة عناصر جديدة",
+                                            icon:"error",
+                                            button: {
+                                                text: "حسنا",
+                                                value: true,
+                                                visible: true,
+                                                className: "",
+                                                closeModal: true,
+                                            },
+                                        });
+                                    }
+                                    else {
+                                        var repalcedWords = [];
+                                        var resMesage = '';
+                                        repalcedWords['title']='المادة';
+                                        repalcedWords['section']='الواحدة';
+                                        repalcedWords['price']='السعر';
+                                        repalcedWords['active']='الجاهزية';
+                                        repalcedWords['fragmentable']='قابل للتجزئة';
+                                        repalcedWords['unit']='الصنف';
+                                        resMesage = String(Object.values(response.responseJSON.errors)[0])
+                                        for( var index in repalcedWords ) {
+                                            resMesage = resMesage.replace(index,repalcedWords[index]);
+                                        };
+                                        document.getElementById(response.responseJSON.erroreInitem).style.background = 'rgba(255, 0, 0, 0.5)';
+                                        swal({
+                                            text: resMesage ,
+                                            icon:"error",
+                                            button: {
+                                                text: "حسنا",
+                                                value: true,
+                                                visible: true,
+                                                className: "",
+                                                closeModal: true,
+                                            },
+                                        });
+                                    }
+                                }
+
                             }
                         }); 
                         }
@@ -420,6 +505,24 @@
                        items = items.filter((element)=>{
                             return element.uniqeNumber != tr.id;
                        })
+                    }
+                    function resetInputs() {
+                        $("#title").val(null);
+                        $("#section").val(null);
+                        $("#price").val(null);
+                        $("#unit").val(null);
+                        $("#pace").val(null);
+                        // $("#fragmentable").setAttribute('cheked',true);
+                        // $("#active").setAttribute('cheked',true);
+                        $("#description").val(null);
+                        table.lastChild.innerHTML=null;
+                        resetErrore();
+                    }
+                    function resetErrore() {
+                        $('.errore').each((index,el)=>{
+                            $(el).html(null);
+                        })
+                        items=[];
                     }
 
                 }
