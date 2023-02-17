@@ -25,6 +25,38 @@ class Menu extends Controller
         }
         redirect()->back()->with("message","تم إدخال نوع جديد بنجاح");
     }
+    public function showFormEditSections(Request $req)
+    {
+        $sections = MenuSection::all();
+        if ($req->ajax()) {
+            return response( getAjaxResponse('frontend.resturant.menu.menuSections.EditMenuSections',["sections"=>$sections]));
+        }
+        return view('frontend.resturant.menu.menuSections.EditMenuSections',compact('sections'));
+    }
+    public function getMenuSection(Request $req)
+    {
+        $section = MenuSection::where('id',$req->id)->first();
+        if ($req->ajax()) {
+            return response()->json(['section'=>$section]);
+        }
+    }
+    public function updateMenuSection(Request $req)
+    {
+        $section = MenuSection::find($req->id);
+        $section->name = $req->name;
+        $section->options = $req->options;
+        $section->active = $req->active;
+        $section->description = $req->description;
+        $section->update();
+        return response()->json(['message'=>"تم التعديل بنجاح"]);
+    }
+    public function deleteMenuSection(Request $req)
+    {
+        $section = MenuSection::find($req->id);
+        $section->delete();
+        return response()->json(['message'=>"تم الحذف بنجاح"]);
+
+    }
     public function showFormNewItem(Request $req)
     {
         $sections = MenuSection::all();
@@ -81,5 +113,19 @@ class Menu extends Controller
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال".count($allItems)." مادة جديدة الى القائمة بنجاح"]);
         }
+    }
+    public function showFormEditItems(Request $req)
+    {
+        $sections = MenuSection::all();
+        if ($req->ajax()) {
+            return response( getAjaxResponse('frontend.resturant.menu.menuItems.EditMenuItems',["sections"=>$sections]));
+        }
+        return view('frontend.resturant.menu.menuItems.EditMenuItems',compact('sections'));
+    }
+    public function getMenuItems()
+    {
+        $sections = MenuSection::with('items')->get();
+        // dd($sections[0]->items());
+        return response()->json(['sections'=>$sections]);
     }
 }

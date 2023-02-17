@@ -285,6 +285,7 @@ import store from '../../../store';
             $(document).ready(function () {
 
                 store.dispatch("pringAllHalls")
+                store.dispatch("bringAllMenuItems")
                 const scrollLef = ()=>{
                 document.querySelector('.navigations-links').scrollBy({
                     left: -200,

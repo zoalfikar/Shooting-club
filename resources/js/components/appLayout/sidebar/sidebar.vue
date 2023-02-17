@@ -73,7 +73,13 @@
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-section-form'">إضافة نوع جديد</a></span>
                 </div>
                 <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-edit-sections-form'">تعديل الانواع في القائمة </a></span>
+                </div>
+                <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-item-form'">إضافة مواد جديدة</a></span>
+                </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-edit-items-form'">تعديل  قائمة الطعام</a></span>
                 </div>
             </div>
         </div>

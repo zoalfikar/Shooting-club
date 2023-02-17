@@ -2369,35 +2369,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// if (is_expanded.value === true) {
-//     $(".footer").removeClass("footer-expended");
-// } else {
-//     $(".footer").addClass("footer-expended");
-// }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {
-      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram']
-    };
+    return {};
+  },
+  mounted: function mounted() {
+    switch (sessionStorage.expanded === 'true') {
+      case true:
+        document.querySelector('.footer').classList.remove('footer-expended');
+        break;
+
+      case false:
+        document.querySelector('.footer').classList.add('footer-expended');
+        break;
+    }
+
+    document.addEventListener('sidebarStatusChanged', function (e) {
+      switch (sessionStorage.expanded === 'true') {
+        case true:
+          document.querySelector('.footer').classList.remove('footer-expended');
+          break;
+
+        case false:
+          document.querySelector('.footer').classList.add('footer-expended');
+          break;
+      }
+    });
   }
 });
 
@@ -3268,6 +3265,7 @@ __webpack_require__.r(__webpack_exports__);
     });
     $(document).ready(function () {
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllHalls");
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("bringAllMenuItems");
 
       var scrollLef = function scrollLef() {
         document.querySelector('.navigations-links').scrollBy({
@@ -3604,727 +3602,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {};
   },
   computed: {
+    menuItems: function menuItems() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.menuItems;
+    },
     currentTable: function currentTable() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.currentTable;
     }
@@ -4352,16 +3638,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   mounted: function mounted() {
-    var currentOrders = _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters.currentOrder;
-    $(".menu-section-list-item").each(function (index) {
-      for (var i = 0; i < currentOrders.length; i++) {
-        if ($(this).children(".resturant-m-item").text() == currentOrders[i].orderName) {
-          $(this).children(".resturant-m-item-checkBox").prop("checked", true);
-          $(this).children(".resturant-m-item-quantity").find(".qty-input").val(currentOrders[i].quantity);
-          $(this).children(".resturant-m-item-quantity").css("visibility", "visible");
-        }
-      }
-    });
+    // var currentOrders = store.getters.currentOrder;
+    // $( ".menu-section-list-item" ).each(function( index ) {
+    //         for (let i = 0; i < currentOrders.length; i++) {
+    //             if ($(this).children(".resturant-m-item").text()==currentOrders[i].orderName) {
+    //                 $(this).children(".resturant-m-item-checkBox" ).prop("checked",true)
+    //                 $(this).children(".resturant-m-item-quantity").find(".qty-input").val(currentOrders[i].quantity);
+    //                 $(this).children(".resturant-m-item-quantity").css("visibility","visible")
+    //             }
+    //         }
+    //     });
     $('.display-all-section').css("margin-top", '-4px');
     var RWMenu = document.querySelector(".menu-wraper");
     var oldRWMenuDisplay = getComputedStyle(RWMenu).display;
@@ -4524,6 +3810,12 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4938,17 +4230,22 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
+    // halls
     halls: [],
     currentHall: '',
     currentHallName: '',
     currentHallActive: 1,
     noHalls: false,
+    // tables
     currentTable: '',
     currentTableStatus: '',
     boards: [],
     boardsLoading: false,
     noBoards: false,
-    aviliabeBoards: []
+    aviliabeBoards: [],
+    // menu
+    menuItems: [] // orders
+
   },
   getters: {
     currentOrder: function currentOrder(state) {
@@ -4965,12 +4262,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         commit("setHalls", response.data.halls);
       });
     },
-    changeCurrentHallNumber: function changeCurrentHallNumber(_ref2, hallNumber) {
+    bringAllMenuItems: function bringAllMenuItems(_ref2) {
       var commit = _ref2.commit;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("/get-menu-items").then(function (response) {
+        commit("setMenuItems", response.data.sections);
+      });
+    },
+    changeCurrentHallNumber: function changeCurrentHallNumber(_ref3, hallNumber) {
+      var commit = _ref3.commit;
       commit('setCurrentHallNumber', hallNumber);
     },
-    pringAllBoardsInThisHall: function pringAllBoardsInThisHall(_ref3, hallNumber) {
-      var commit = _ref3.commit;
+    pringAllBoardsInThisHall: function pringAllBoardsInThisHall(_ref4, hallNumber) {
+      var commit = _ref4.commit;
       // commit("setBoards", [])
       commit('setBoardsLoading', true);
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/boards/".concat(hallNumber)).then(function (response) {
@@ -4978,23 +4281,23 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         commit("setBoards", response.data.tables);
       });
     },
-    changeCurrentTableNumber: function changeCurrentTableNumber(_ref4, tableNumber) {
-      var commit = _ref4.commit;
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref5, tableNumber) {
+      var commit = _ref5.commit;
       commit('setCurrentTableNumber', tableNumber);
     },
-    changeCurrentTableStatus: function changeCurrentTableStatus(_ref5, status) {
-      var commit = _ref5.commit;
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref6, status) {
+      var commit = _ref6.commit;
       commit('setCurrentTableStatus', status);
     },
-    getAviliableBoards: function getAviliableBoards(_ref6) {
-      var commit = _ref6.commit;
+    getAviliableBoards: function getAviliableBoards(_ref7) {
+      var commit = _ref7.commit;
       var aviliableBoards = this.state.boards.filter(function (b) {
         return b.status == '';
       });
       commit('setAviliableBoards', aviliableBoards);
     },
-    changeBoardState: function changeBoardState(_ref7, payload) {
-      var commit = _ref7.commit;
+    changeBoardState: function changeBoardState(_ref8, payload) {
+      var commit = _ref8.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -5005,8 +4308,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       commit('setBoardState', data);
       this.dispatch("getAviliableBoards");
     },
-    saveOrders: function saveOrders(_ref8, payload) {
-      var commit = _ref8.commit;
+    saveOrders: function saveOrders(_ref9, payload) {
+      var commit = _ref9.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -5026,6 +4329,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         state.halls = halls.sort(function (a, b) {
           return a.hallNumber - b.hallNumber;
         });
+      }
+    },
+    setMenuItems: function setMenuItems(state, sections) {
+      if (!sections.length > 0) {// state.noHalls = true;
+      } else {
+        // state.noHalls = false;
+        state.menuItems = sections;
+        console.log(state.menuItems[0].items);
       }
     },
     setCurrentHallNumber: function setCurrentHallNumber(state, hallNumber) {
@@ -5247,7 +4558,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8418,111 +7729,50 @@ var render = function () {
         staticClass:
           "resturant-menu d-flex flex-row flex-wrap justify-content-center",
       },
-      [
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("مقبلات")])]),
-              _vm._v(" "),
-              _vm._m(1),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("غداء")])]),
-              _vm._v(" "),
-              _vm._m(2),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
-              _vm._v(" "),
-              _vm._m(3),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
-              _vm._v(" "),
-              _vm._m(4),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("غداء")])]),
-              _vm._v(" "),
-              _vm._m(5),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("غداء")])]),
-              _vm._v(" "),
-              _vm._m(6),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
-              _vm._v(" "),
-              _vm._m(7),
-            ],
-            1
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "div",
-            { staticClass: "menu-section" },
-            [
-              _c("center", [_c("h1", [_vm._v("مشروبات")])]),
-              _vm._v(" "),
-              _vm._m(8),
-            ],
-            1
-          ),
-        ]),
-      ]
+      _vm._l(_vm.menuItems, function (section, index) {
+        return _c(
+          "div",
+          { key: section.id, staticClass: "col", attrs: { id: section.id } },
+          [
+            _c(
+              "div",
+              { staticClass: "menu-section" },
+              [
+                _c("center", [_c("h1", [_vm._v(_vm._s(section.name))])]),
+                _vm._v(" "),
+                _vm._l(section.items, function (item, index) {
+                  return _c(
+                    "div",
+                    { key: item.id, staticClass: "menu-section-list" },
+                    [
+                      _c("div", { staticClass: "menu-section-list-item" }, [
+                        _c("input", {
+                          staticClass:
+                            "form-check-input resturant-m-item-checkBox",
+                          attrs: { type: "checkbox", name: "" },
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "resturant-m-item",
+                            attrs: { for: "" },
+                          },
+                          [_vm._v(_vm._s(item.title))]
+                        ),
+                        _vm._v(" "),
+                        _vm._m(1, true),
+                      ]),
+                    ]
+                  )
+                }),
+              ],
+              2
+            ),
+          ]
+        )
+      }),
+      0
     ),
   ])
 }
@@ -8543,1948 +7793,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بطاطا بطاط بطاطا بطاطا بطاطا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
+    return _c("div", { staticClass: "resturant-m-item-quantity" }, [
+      _c("button", { staticClass: "decrement-btn" }, [
+        _c("i", { staticClass: "fa-solid fa-minus" }),
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("طرطور"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("حمص ناعم"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("متبل"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فتوش"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سلطة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("تبولة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فروج"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شيش"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كباب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سودي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كبة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سمك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شوربة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كولا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سلس"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شاي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("قهوة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فانتا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كلاسيك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كوكتيل فواكه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كابيتشينو"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("نسكافيه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("حليب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كولا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سلس"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شاي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("قهوة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فانتا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كلاسيك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كوكتيل فواكه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كابيتشينو"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("نسكافيه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("حليب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فروج"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شيش"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كباب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سودي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كبة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سمك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شوربة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فروج"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شيش"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كباب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سودي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كبة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سمك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شوربة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كولا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سلس"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شاي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("قهوة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فانتا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كلاسيك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كوكتيل فواكه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كابيتشينو"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("نسكافيه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("حليب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu-section-list" }, [
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("بيبسي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كولا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("سلس"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("شاي"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("قهوة"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("فانتا"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كلاسيك"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كوكتيل فواكه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("كابيتشينو"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("نسكافيه"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
-      ]),
+      _c("input", {
+        staticClass: "qty-input text-center",
+        attrs: { type: "text", name: "quantity" },
+      }),
       _vm._v(" "),
-      _c("div", { staticClass: "menu-section-list-item" }, [
-        _c("input", {
-          staticClass: "form-check-input resturant-m-item-checkBox",
-          attrs: { type: "checkbox", name: "" },
-        }),
-        _c("div", { staticClass: "resturant-m-item", attrs: { for: "" } }, [
-          _vm._v("حليب"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resturant-m-item-quantity" }, [
-          _c("button", { staticClass: "decrement-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-minus" }),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "qty-input text-center",
-            attrs: { type: "text", name: "quantity" },
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "increment-btn" }, [
-            _c("i", { staticClass: "fa-solid fa-plus" }),
-          ]),
-        ]),
+      _c("button", { staticClass: "increment-btn" }, [
+        _c("i", { staticClass: "fa-solid fa-plus" }),
       ]),
     ])
   },
@@ -10638,8 +7958,32 @@ var render = function () {
             _c("span", [
               _c(
                 "a",
+                { attrs: { href: "" + _vm.url + "/show-edit-sections-form" } },
+                [_vm._v("تعديل الانواع في القائمة ")]
+              ),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(17),
+            _vm._v("   "),
+            _c("span", [
+              _c(
+                "a",
                 { attrs: { href: "" + _vm.url + "/show-new-item-form" } },
                 [_vm._v("إضافة مواد جديدة")]
+              ),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(18),
+            _vm._v("   "),
+            _c("span", [
+              _c(
+                "a",
+                { attrs: { href: "" + _vm.url + "/show-edit-items-form" } },
+                [_vm._v("تعديل  قائمة الطعام")]
               ),
             ]),
           ]),
@@ -10657,12 +8001,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(17), _vm._v(" "), _vm._m(18)]
+          [_vm._m(19), _vm._v(" "), _vm._m(20)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(19),
+            _vm._m(21),
             _vm._v("   "),
             _c("span", [
               _c("a", { attrs: { href: "" + _vm.url + "/dev" } }, [
@@ -10672,7 +8016,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(20),
+            _vm._m(22),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10684,7 +8028,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(21),
+            _vm._m(23),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10696,7 +8040,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(22),
+            _vm._m(24),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10708,7 +8052,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(23),
+            _vm._m(25),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10926,6 +8270,28 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "item-text" }, [
       _c("span", [_vm._v("قائمة الطعام")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
     ])
   },
   function () {

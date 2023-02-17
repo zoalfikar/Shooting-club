@@ -147,9 +147,15 @@ Route::middleware('authenticate')->group(function () {
     Route::post('/delete-hall', [Resturant::class,'deleteHall']);
     Route::get('/show-new-section-form', [Menu::class,'showFormNewSection']);
     Route::post('/add-new-menu-section', [Menu::class,'addNewMenuSection']);
+    Route::get('/show-edit-sections-form', [Menu::class,'showFormEditSections']);
+    Route::get('/get-menu-section', [Menu::class,'getMenuSection']);
+    Route::post('/update-menu-section', [Menu::class,'updateMenuSection']);
+    Route::post('/delete-menu-section', [Menu::class,'deleteMenuSection']);
     Route::get('/show-new-item-form', [Menu::class,'showFormNewItem']);
     Route::post('/add-new-menu-item', [Menu::class,'addNewMenuitem']);
     Route::post('/add-new-menu-items', [Menu::class,'addNewMenuitems']);
+    Route::get('/show-edit-items-form', [Menu::class,'showFormEditItems']);
+    Route::get('/get-menu-items', [Menu::class,'getMenuItems']);
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

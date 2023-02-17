@@ -21,7 +21,7 @@
             padding-left:5px;
             display: none;
             width: 0%;
-            clip-path  : inset(100% 0% 0% 0%);
+            clip-path  : inset(0% 100% 0% 0%);
         }
         table{
             min-width:500px;
@@ -245,7 +245,9 @@
 
 @section('scripts')
     <script type='module'>
+
            function init() {
+            
                 const addNewItemButton = document.getElementById('add');
                 var ease =Power1.easeInOut;
                 var items = [];
@@ -255,8 +257,6 @@
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                     });
-
-
                     $("#unit").change(function (e) {
                         e.preventDefault();
                         $(".unit").text($(this).val());
@@ -288,7 +288,7 @@
                             {
                                 duration: 1000,
                                 fill: 'forwards'
-                        })
+                            })
                         }, 1000);
                         setTimeout(() => {
                             $("#addManyItems").css("display", "none");
@@ -299,29 +299,22 @@
                     $("#cancel").click(function (e) {
                         e.preventDefault();
                         manyItemsMode=false;
-                        // $("#addManyItems").css("display", "block");
                         $("#add").css("display", "none");
                         $("#cancel").css("display", "none");
                         TweenLite.fromTo($(".manyItemsChoice"), 1 ,{width:getComputedStyle(document.getElementById('manyItemsChoice')).width}, {width:"0px", ease});
                         setTimeout(() => {
-                            // $("#manyItemsChoice").css("clipPath", "inset(0% 100% 0% 0%)");
-
-                        //     document.getElementById('manyItemsChoice').animate([
-                        //         { clipPath  : "inset(0% 0% 0% 0%)" },
-                        //         { clipPath  : "inset(0% 100% 0% 0%)" }
-                        //     ],
-                        //     {
-                        //         duration: 1000,
-                        //         fill: 'forwards'
-                        // })
-                        $("#manyItemsChoice").css("display", "none");
-                        $("#addManyItems").css("display", "block");
-
-                        }, 1000);
-                        // setTimeout(() => {
-                        //     $("#addManyItems").css("display", "block");
-                        // }, 2000);
-
+                            document.getElementById('manyItemsChoice').animate([
+                                { clipPath  : "inset(0% 0% 0% 0%)" },
+                                { clipPath  : "inset(0% 100% 0% 0%)" }
+                            ],
+                            {
+                                duration: 0,
+                                fill: 'forwards'
+                            })
+                                $(".manyItemsChoice").css("clipPath", "inset(0% 100% 0% 0%)");
+                                $(".manyItemsChoice").css("display", "none");
+                                $("#addManyItems").css("display", "block");
+                            }, 1000);
                     });
                     $("#done").click(function (e) {
                         e.preventDefault();
@@ -528,6 +521,7 @@
                 }
             $(document).ready(function() {
                 init()
+
             });
     </script>
 @endsection

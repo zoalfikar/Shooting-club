@@ -40,46 +40,41 @@
             Careers
             </v-card-text> -->
           </v-col>
-
-          <!-- <v-col cols="12" sm="4">
-            <v-card-text class="pt-0">
-              <v-btn v-for="icon in icons" :key="icon" class="mx-1 white--text" icon>
-                <v-icon size="24px">
-                  {{icon}}
-                </v-icon>
-              </v-btn>
-            </v-card-text>
-            <v-card-text class="grey--text mt-14">
-              Payment Methods:
-
-            </v-card-text>
-            <v-toolbar color="transparent" flat >
-              <v-spacer></v-spacer>
-              <v-icon large>fab fa-cc-visa</v-icon>
-              <v-icon class="mx-2" large>fab fa-cc-paypal</v-icon>
-            </v-toolbar>
-          </v-col> -->
         </v-row>
       </v-card>
     </v-footer>
   </template>
 
   <script>
-    // if (is_expanded.value === true) {
-    //     $(".footer").removeClass("footer-expended");
-    // } else {
-    //     $(".footer").addClass("footer-expended");
-    // }
+  
+ 
   export default {
 
   data:()=>({
-    icons:[
-      'mdi-facebook',
-      'mdi-twitter',
-      'mdi-linkedin',
-      'mdi-instagram'
-    ]
-  })
+
+  }),
+  mounted : function(){
+      switch (sessionStorage.expanded ==='true') {
+          case true:
+            document.querySelector('.footer').classList.remove('footer-expended');
+            break;
+            
+            case false:
+            document.querySelector('.footer').classList.add('footer-expended');
+            break;
+        }
+      document.addEventListener('sidebarStatusChanged',(e)=>{
+        switch (sessionStorage.expanded ==='true') {
+          case true:
+            document.querySelector('.footer').classList.remove('footer-expended');
+            break;
+            
+            case false:
+            document.querySelector('.footer').classList.add('footer-expended');
+            break;
+        }
+      })
+    }
   }
   </script>
 

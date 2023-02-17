@@ -56573,18 +56573,6 @@ readers do not read off random characters that represent icons */
 
     margin: auto
 }
-.mx-1 {
-
-    margin-left: 0.25rem;
-
-    margin-right: 0.25rem
-}
-.mx-2 {
-
-    margin-left: 0.5rem;
-
-    margin-right: 0.5rem
-}
 .mx-auto {
 
     margin-left: auto;
@@ -56612,10 +56600,6 @@ readers do not read off random characters that represent icons */
 .ml-4 {
 
     margin-left: 1rem
-}
-.mt-14 {
-
-    margin-top: 3.5rem
 }
 .mb-6 {
 
@@ -56891,6 +56875,24 @@ readers do not read off random characters that represent icons */
 
     background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
+.bg-gray-300 {
+
+    --tw-bg-opacity: 1;
+
+    background-color: rgb(209 213 219 / var(--tw-bg-opacity))
+}
+.bg-gray-900 {
+
+    --tw-bg-opacity: 1;
+
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity))
+}
+.bg-gray-800 {
+
+    --tw-bg-opacity: 1;
+
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity))
+}
 .bg-clip-padding {
 
     background-clip: padding-box
@@ -57022,6 +57024,12 @@ readers do not read off random characters that represent icons */
     --tw-text-opacity: 1;
 
     color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+.text-gray-900 {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(17 24 39 / var(--tw-text-opacity))
 }
 .underline {
 

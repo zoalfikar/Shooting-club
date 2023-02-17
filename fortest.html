@@ -3,28 +3,19 @@
 
 <head>
     <style>
-        body {
-            /* background: linear-gradient(180DEG, #2e00fd, #ffffff, #2e00fd, #2e00fd, #2e00fd, #2e00fd); */
-            /* background-size: 400%; */
-            /* background-clip: text; */
-            /* -webkit-text-fill-color: transparent; */
-            /* background-position-y: 200px */
-            /* background-repeat: no-repeat; */
+        .div1 {
+            background-color: red;
+            width: 500px;
+            position: relative;
+            height: 400px;
         }
         
-        #test {
-            top: 100px;
-            margin: auto;
-            padding: 10px;
-            width: 300px;
-            height: 300px;
-            /* position: relative; */
-            border: 5px solid black;
+        .div2 {
+            width: 500px;
+            height: 400px;
             background-color: blue;
-        }
-        
-        #test:hover {
-            transform: translateY(70px);
+            position: absolute;
+            inset: auto auto auto auto;
         }
     </style>
 </head>
@@ -32,6 +23,31 @@
 <body>
     <h1>test git ignore</h1>
 
+    <div class="div1">
+        <p>dsd</p>
+        <!-- <h6>test git ignore</h6> -->
+
+        <div class="div2">
+            <p>dlckdlkcldkclskdlckdlscvklsdkvldvdfjjkfjdfjbjdfbjdfvzdfkvklczv ckxjvkxcjvkzj xcxvxc xcvxcvxc
+            </p>
+        </div>
+    </div>
+
+
+
+    <script>
+        var df = document.getElementById("dddd")
+        df.addEventListener('click', function(param) {
+            alert('dd')
+        })
+
+        function test() {
+            console.log(df);
+            var evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+            df.dispatchEvent(evt)
+        }
+    </script>
 </body>
 
 </html>
