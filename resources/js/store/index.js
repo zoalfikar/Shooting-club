@@ -5,19 +5,22 @@ Vue.use(vuex);
 
 const store = new vuex.Store({
     state: {
+        // halls
         halls: [],
         currentHall: '',
         currentHallName: '',
         currentHallActive: 1,
         noHalls: false,
+        // tables
         currentTable: '',
         currentTableStatus: '',
         boards: [],
         boardsLoading: false,
         noBoards: false,
         aviliabeBoards: [],
-
-
+        // menu
+        menuItems: [],
+        // orders
     },
     getters: {
         currentOrder(state) {
@@ -30,6 +33,12 @@ const store = new vuex.Store({
             axios.get(`/halls/`)
                 .then((response) => {
                     commit("setHalls", response.data.halls)
+                })
+        },
+        bringAllMenuItems({ commit }) {
+            axios.get(`/get-menu-items`)
+                .then((response) => {
+                    commit("setMenuItems", response.data.sections)
                 })
         },
         changeCurrentHallNumber({ commit }, hallNumber) {
@@ -79,6 +88,15 @@ const store = new vuex.Store({
             } else {
                 state.noHalls = false;
                 state.halls = halls.sort((a, b) => a.hallNumber - b.hallNumber);
+            }
+        },
+        setMenuItems: (state, sections) => {
+            if (!sections.length > 0) {
+                // state.noHalls = true;
+            } else {
+                // state.noHalls = false;
+                state.menuItems = sections;
+                console.log(state.menuItems[0].items);
             }
         },
         setCurrentHallNumber: (state, hallNumber) => {
