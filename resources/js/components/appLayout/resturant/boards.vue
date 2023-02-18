@@ -27,7 +27,6 @@
             <v-btn dark> أضف طاولات جديدة</v-btn>
         </div>
         <div v-if="!currentHallActive" class="flex justify-center col-lg-12 col-md-12">هذه الصالة للعرض فقط (غير جاهة)</div>
-
           <div  v-for="(board,index) in boards"
               v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
@@ -103,6 +102,7 @@ import store from '../../../store';
                 },
             },
           methods:{
+
             getNewBoards:function(boards){
                 return new Promise((resolve, reject) => {
                     resolve(boards);
@@ -147,7 +147,7 @@ import store from '../../../store';
                 })
             },
 
-              numberOfElementsInRows: function () {
+            numberOfElementsInRows: function () {
                   if (this.total == 0) throw new Error("no elements"); ;
                   var count = 1;
 

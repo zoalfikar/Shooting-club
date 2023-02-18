@@ -79,7 +79,7 @@ const store = new vuex.Store({
             })
             var data = { "index": index, "orders": payload.orders }
             commit('setoOrders', data)
-        }
+        },
     },
     mutations: {
         setHalls: (state, halls) => {
@@ -116,6 +116,7 @@ const store = new vuex.Store({
                 state.noBoards = false;
             }
             state.boards = boards.sort((a, b) => a.order - b.order);
+            console.log(state.boards);
         },
         setCurrentTableNumber: (state, tableNumber) => {
             state.currentTable = tableNumber;

@@ -2949,7 +2949,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['statusChanged'],
@@ -3519,6 +3518,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['infoDone'],
+  data: function data() {
+    return {
+      info: {
+        customerId: '',
+        customerName: '',
+        extraInfo: ''
+      }
+    };
+  },
   computed: {
     aviliableBoards: function aviliableBoards() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.aviliabeBoards;
@@ -3530,10 +3538,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    var _this = this;
+
     _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("getAviliableBoards");
+    this.showOtherTable();
     $('.saveInfo').click(function (e) {
       e.preventDefault();
       $(".info-modal").css("display", "none");
+      $('input').val("");
+      $('textarea').html("");
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('setTableInfo', _this.info);
     });
   }
 });
@@ -4361,6 +4375,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.boards = boards.sort(function (a, b) {
         return a.order - b.order;
       });
+      console.log(state.boards);
     },
     setCurrentTableNumber: function setCurrentTableNumber(state, tableNumber) {
       state.currentTable = tableNumber;
@@ -7546,11 +7561,94 @@ var render = function () {
         },
         [
           _c("div", { staticClass: "row" }, [
-            _vm._m(0),
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c("label", { attrs: { for: "name" } }, [_vm._v("اسم الزبون")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.info.customerName,
+                    expression: "info.customerName",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "name",
+                  placeholder: " (اختياري)",
+                },
+                domProps: { value: _vm.info.customerName },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.info, "customerName", $event.target.value)
+                  },
+                },
+              }),
+            ]),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c("label", { attrs: { for: "slug" } }, [_vm._v("معرف خاص")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.info.customerId,
+                    expression: "info.customerId",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "slug",
+                  placeholder: "(اجباري)ادخل معرف خاص في حال تشابه الاسماء",
+                },
+                domProps: { value: _vm.info.customerId },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.info, "customerId", $event.target.value)
+                  },
+                },
+              }),
+            ]),
             _vm._v(" "),
-            _vm._m(2),
+            _c("div", { staticClass: "col-md-12 mb-3" }, [
+              _c("label", { attrs: { for: "description" } }, [
+                _vm._v("معلومات اضافية"),
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.info.extraInfo,
+                    expression: "info.extraInfo",
+                  },
+                ],
+                staticClass: "form-control",
+                staticStyle: { resize: "none" },
+                attrs: { name: "description", placeholder: "(اختياري)" },
+                domProps: { value: _vm.info.extraInfo },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.info, "extraInfo", $event.target.value)
+                  },
+                },
+              }),
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -7616,54 +7714,7 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6 mb-3" }, [
-      _c("label", { attrs: { for: "name" } }, [_vm._v("اسم الزبون")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "text", name: "name", placeholder: " (اختياري)" },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6 mb-3" }, [
-      _c("label", { attrs: { for: "slug" } }, [_vm._v("معرف خاص")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          name: "slug",
-          placeholder: "(اجباري)ادخل معرف خاص في حال تشابه الاسماء",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-12 mb-3" }, [
-      _c("label", { attrs: { for: "description" } }, [
-        _vm._v("معلومات اضافية"),
-      ]),
-      _vm._v(" "),
-      _c("textarea", {
-        staticClass: "form-control",
-        staticStyle: { resize: "none" },
-        attrs: { name: "description", placeholder: "(اختياري)" },
-      }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

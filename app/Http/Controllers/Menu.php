@@ -35,7 +35,7 @@ class Menu extends Controller
     }
     public function getMenuSection(Request $req)
     {
-        $section = MenuSection::where('id',$req->id)->first();
+        $section = MenuSection::where('id',$req->id)->with('items')->first();
         if ($req->ajax()) {
             return response()->json(['section'=>$section]);
         }
@@ -127,5 +127,25 @@ class Menu extends Controller
         $sections = MenuSection::with('items')->get();
         // dd($sections[0]->items());
         return response()->json(['sections'=>$sections]);
+    }
+    public function updateMenuItem(Request $req)
+    {
+        $item = MenuItem::find($req->id);
+        $item->title = $req->title;
+        $item->price = $req->price;
+        $item->unit = $req->unit;
+        $item->pace = $req->pace;
+        $item->fragmentable = $req->fragmentable;
+        $item->active = $req->active;
+        $item->description = $req->description;
+        $item->update();
+        return response()->json(["message"=>"تم التعديل بنجاح"]);
+
+    }
+    public function deleteMenuItem(Request $req)
+    {
+        $item = MenuItem::find($req->id);
+        $item->delete();
+        return response()->json(["message"=>"تم الحذف بنجاح"]);
     }
 }

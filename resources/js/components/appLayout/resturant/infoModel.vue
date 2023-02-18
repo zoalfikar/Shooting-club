@@ -5,15 +5,15 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">اسم الزبون</label>
-                        <input type="text" class="form-control" name="name" placeholder=" (اختياري)">
+                        <input v-model="info.customerName" type="text" class="form-control" name="name" placeholder=" (اختياري)">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="slug">معرف خاص</label>
-                        <input type="text" class="form-control" name="slug" placeholder="(اجباري)ادخل معرف خاص في حال تشابه الاسماء">
+                        <input v-model="info.customerId" type="text" class="form-control" name="slug" placeholder="(اجباري)ادخل معرف خاص في حال تشابه الاسماء">
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="description">معلومات اضافية</label>
-                        <textarea name="description"  class="form-control"  style="resize: none;" placeholder="(اختياري)"></textarea>
+                        <textarea v-model="info.extraInfo" name="description"  class="form-control"  style="resize: none;" placeholder="(اختياري)"></textarea>
                     </div>
                     <div class="col-md-12 mb-3">
                         <v-btn dark block @click="showOtherTable">اضافة طاولات اخرى</v-btn>
@@ -38,7 +38,15 @@ import store from '../../../store';
 
 export default {
     emits: ['infoDone'],
-
+    data() {
+        return {
+            info : {
+                customerId: '',
+                customerName: '',
+                extraInfo: '',
+            }
+        }
+    },
     computed: {
         aviliableBoards: ()=> store.state.aviliabeBoards,
         },
@@ -49,13 +57,15 @@ export default {
     },
     mounted:function () {
         store.dispatch("getAviliableBoards");
-        $('.saveInfo').click(function (e) {
+        this.showOtherTable();
+        $('.saveInfo').click((e) => {
             e.preventDefault();
             $(".info-modal").css("display", "none");
+            $('input').val("");
+            $('textarea').html("");
+            store.dispatch('setTableInfo' , this.info);
         });
-
     }
-
 }
 </script>
 

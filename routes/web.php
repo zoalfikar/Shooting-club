@@ -97,13 +97,6 @@ Route::get('/test', function () {
 
 });
 
-// Route::get('/show-new-section-form', function ($hallNumber)
-// {
-//     $tables = getHallTablesFromRedis($hallNumber);
-//     return response()->json([
-//         'tables' => $tables
-//     ]);
-// });
 Route::get('boards/{hallNumber}', function ($hallNumber)
 {
     $tables = getHallTables($hallNumber);
@@ -156,6 +149,8 @@ Route::middleware('authenticate')->group(function () {
     Route::post('/add-new-menu-items', [Menu::class,'addNewMenuitems']);
     Route::get('/show-edit-items-form', [Menu::class,'showFormEditItems']);
     Route::get('/get-menu-items', [Menu::class,'getMenuItems']);
+    Route::post('/update-menu-item', [Menu::class,'updateMenuItem']);
+    Route::post('/delete-menu-item', [Menu::class,'deleteMenuItem']);
 });
 Route::middleware('unauthenticate')->group(function () {
     Route::get('/show-registeration', [AuthController::class,'showRegister']);

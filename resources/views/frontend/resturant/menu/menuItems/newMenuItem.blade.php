@@ -267,11 +267,10 @@
                             $("#pace").attr("disabled", false);
                             $(".unit").css("visibility", "visible");
                         } else {
+                            $("#pace").val(1);
                             $("#pace").attr("disabled", true);
                             $(".unit").css("visibility", "hidden");
-
                         }
-
                     });
                     $("#addManyItems").click(function (e) {
                         e.preventDefault();

@@ -50,6 +50,7 @@ if (! function_exists('addSetTableInRedis')) {
         {
                 $order=setTableOrder($table,'');
                 $pipe->hmset('hall:' . $hallNumber .':table:'. $table->tableNumber,[
+                    'customerInfo'=> '',
                     'status' =>  '',
                     'orders' =>  '',
                     'order' =>  $order,
@@ -69,6 +70,7 @@ if (! function_exists('addSetManyTablesInRedis')) {
         Redis::pipeline(function ($pipe) use ($hallNumber ,$tables) {
             for ($i=0; $i < count($tables) ; $i++) {
                 $pipe->hmset('hall:' . intval($hallNumber) .':table:'. intval($tables[$i]["tableNumber"]),[
+                    'customerInfo'=> '',
                     'status' =>  '',
                     'orders' =>  '',
                     'order' =>  0,
@@ -93,7 +95,7 @@ if (! function_exists('getHallTables')) {
             $table=(object)(array_merge($table,(array)$tableStatus));
             array_push( $reslt,$table);
         }
-        return $tables;
+        return $reslt;
     }
 }
 if (! function_exists('getOrderRange')) {
