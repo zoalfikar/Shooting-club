@@ -25,7 +25,7 @@
                             </v-chip-group>
                         </div>
                     </div>
-                    <input @click="$emit('infoDone')"  value="حفظ" class="btn btn-primry saveInfo">
+                    <input type="submit" @click="$emit('infoDone')"  value="حفظ" class="btn btn-primry saveInfo">
                 </div>
 
                 </form>
@@ -63,7 +63,8 @@ export default {
             $(".info-modal").css("display", "none");
             $('input').val("");
             $('textarea').html("");
-            store.dispatch('setTableInfo' , this.info);
+            store.dispatch('setTableInfo' , {"info":this.info});
+            this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
         });
     }
 }
