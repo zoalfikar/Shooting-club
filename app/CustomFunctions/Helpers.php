@@ -50,7 +50,7 @@ if (! function_exists('addSetTableInRedis')) {
         {
                 $order=setTableOrder($table,'');
                 $pipe->hmset('hall:' . $hallNumber .':table:'. $table->tableNumber,[
-                    'customerInfo'=> '',
+                    'customerInfo'=>'',
                     'status' =>  '',
                     'orders' =>  '',
                     'order' =>  $order,
@@ -70,7 +70,7 @@ if (! function_exists('addSetManyTablesInRedis')) {
         Redis::pipeline(function ($pipe) use ($hallNumber ,$tables) {
             for ($i=0; $i < count($tables) ; $i++) {
                 $pipe->hmset('hall:' . intval($hallNumber) .':table:'. intval($tables[$i]["tableNumber"]),[
-                    'customerInfo'=> '',
+                    'customerInfo'=>'',
                     'status' =>  '',
                     'orders' =>  '',
                     'order' =>  0,
@@ -92,6 +92,8 @@ if (! function_exists('getHallTables')) {
         $tables = Table::where('hallNumber',$hallNumber)->get()->toArray();
         foreach ($tables as $table) {
             $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $table['tableNumber']);
+            $tableStatus['orders'] = unserialize($tableStatus['orders']);
+            $tableStatus['customerInfo'] = unserialize($tableStatus['customerInfo']);
             $table=(object)(array_merge($table,(array)$tableStatus));
             array_push( $reslt,$table);
         }
@@ -147,4 +149,57 @@ if (! function_exists('resetOrderRange')) {
         }
     }
 }
-
+if (! function_exists('setTableInfo')) {
+    function setTableInfo($hallNumber, $table , $info){
+        $info=serialize($info);
+        Redis::hmset('hall:' . $hallNumber.':table:'.$table, "customerInfo", $info);
+    }
+}
+if (! function_exists('getTableInfo')) {
+    function getTableInfo($hallNumber, $table){
+        $info= Redis::hget('hall:' . $hallNumber.':table:'.$table, "customerInfo");
+        return $info=unserialize($info);
+    }
+}
+if (! function_exists('setTableOrders')) {
+    function setTableOrders($hallNumber, $table , $orders){
+        $orders=serialize($orders);
+        Redis::hmset('hall:' . $hallNumber.':table:'.$table, "orders", $orders);
+    }
+}
+if (! function_exists('getTableOrders')) {
+    function getTableOrders($hallNumber, $table){
+        $orders= Redis::hget('hall:' . $hallNumber.':table:'.$table, "orders");
+        return $orders=unserialize($orders);
+    }
+}
+if (! function_exists('setTableStatus')) {
+    function setTableStatus($hallNumber, $table , $status){
+        Redis::hmset('hall:' . $hallNumber.':table:'.$table, "status", $status);
+    }
+}
+if (! function_exists('getTableStatus')) {
+    function getTableStatus($hallNumber, $table){
+        $status= Redis::hget('hall:' . $hallNumber.':table:'.$table, "status");
+        return $status;
+    }
+}
+if (! function_exists('changeTableOrder')) {
+    function changeTableOrder($hallNumber, $table , $order){
+        Redis::hmset('hall:' . $hallNumber.':table:'.$table, "order", $order);
+    }
+}
+if (! function_exists('changeTableStatus')) {
+    function changeTableStatus($hallNumber, $table , $status){
+        setTableStatus($hallNumber , $table , $status);
+        $tableHall = Table::where('hallNumber' , $hallNumber)->where('tableNumber',$table)->first();
+        $order=setTableOrder($tableHall, $status);
+        changeTableOrder($hallNumber , $table , $order);
+        return true;
+    }
+}
+if (! function_exists('setTableOrderNoStatusRelative')) {
+    function setTableOrderNoStatusRelative($hallNumber, $table , $order){
+        changeTableOrder($hallNumber , $table , $order);
+    }
+}

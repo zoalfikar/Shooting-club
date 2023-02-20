@@ -33,6 +33,7 @@
               :style=" `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order}`"
               :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
                   <board
+                        :index="index"
                       :active="currentHallActive ? board.active : 0"
                       :status="board.status"
                       :tablenumber="board.tableNumber"
@@ -43,7 +44,7 @@
           </div>
       </div>
       <board-modal></board-modal>
-      <info-modal></info-modal>
+      <info-modal  @statusChanged="(data)=>moveitem(data)"></info-modal>
   </div>
   </template>
 
@@ -87,20 +88,22 @@ import store from '../../../store';
                 ease: ()=> Power1.easeInOut ,
 
           },
-            watch: {
-                    boards(newQuestion, oldQuestion) {
-                        this.showHallName();
-                        this.getNewBoards(newQuestion).then((value) => {
-                            this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
-                            // this.layoutWorker.postMessage({ cmd: 'doDomStuff', data: this.group.style });
-                            this.total= this.nodes.length;
-                            this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
-                            return this.getNewNods(this.nodes).then((value) => {
-                                this.initBoardsPositions ();
-                            });
-                        });
-                },
+        watch: {
+            boards(newVal, oldVal) {
+                this.showHallName();
+                this.getNewBoards(newVal).then((value) => {
+
+                    
+                    this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
+                    // this.layoutWorker.postMessage({ cmd: 'doDomStuff', data: this.group.style });
+                    this.total= this.nodes.length;
+                    this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
+                    return this.getNewNods(this.nodes).then((value) => {
+                        this.initBoardsPositions ();
+                    });
+                });
             },
+        },
           methods:{
 
             getNewBoards:function(boards){
@@ -270,12 +273,10 @@ import store from '../../../store';
             moveitem: function (data) {
                 var array=[];
                 var e = document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber);
-                console.log(e.offsetLeft);
                 // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
                 var newOrder = data.order * this.orderHelper + parseInt(data.tableNumber);
                 // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
                 e.style.order =  newOrder;
-                console.log(e.offsetLeft);
                 array.push(newOrder)
                 this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
             }

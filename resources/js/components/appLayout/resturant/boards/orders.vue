@@ -3,14 +3,14 @@
               <div class="optionplusTotal">
                   <div class="options">
                       <v-btn rounded color="primary" dark @click="toggleMenu">أضف طلب</v-btn>
-                      <v-btn v-if ="editMode" rounded color="primary" dark  @click="saveOrder">حفظ</v-btn>
+                      <!-- <v-btn v-if ="editMode" rounded color="primary" dark  @click="saveOrder">حفظ</v-btn>
                       <v-btn v-else rounded color="primary" dark  @click="updateOrder">تعديل طلب</v-btn>
-                      <v-btn rounded color="primary" dark> إسال الطلب</v-btn>
+                      <v-btn rounded color="primary" dark> إسال الطلب</v-btn> -->
 
                   </div>
-                  <div class="total">9.000.000.000 ل.س</div>
+                  <!-- <div class="total">9.000.000.000 ل.س</div> -->
               </div>
-                  <div class="display-content">
+                  <!-- <div class="display-content">
                       <table class="table table-dark table-striped">
                           <thead>
                               <tr>
@@ -29,7 +29,7 @@
                               </tr>
                           </tbody>
                       </table>
-                  </div>
+                  </div> -->
               <resturant-menu></resturant-menu>
               </div>
   </template>
@@ -46,68 +46,68 @@
           }
       },
       methods:{
-          increseQ:function (id) {
-              this.currentTable.orders.map((element) => {
-                  if (element.id == id) {
-                      element.quantity++;
-                  }
-              })
-          },
-          decreseQ:function (id) {
-              this.currentTable.orders.map((element) => {
-                  if (element.id == id && element.quantity > 0) {
-                      element.quantity--;
-                  }
-              })
-          },
-          deleteOrder:function (id) {
-              var index = this.currentTable.orders.findIndex(function (o)
-              {
-                  return o.id == id;
-              });
-              this.currentTable.orders.splice(index,1);
-          },
+        //   increseQ:function (id) {
+        //       this.currentTable.orders.map((element) => {
+        //           if (element.id == id) {
+        //               element.quantity++;
+        //           }
+        //       })
+        //   },
+        //   decreseQ:function (id) {
+        //       this.currentTable.orders.map((element) => {
+        //           if (element.id == id && element.quantity > 0) {
+        //               element.quantity--;
+        //           }
+        //       })
+        //   },
+        //   deleteOrder:function (id) {
+        //       var index = this.currentTable.orders.findIndex(function (o)
+        //       {
+        //           return o.id == id;
+        //       });
+        //       this.currentTable.orders.splice(index,1);
+        //   },
           toggleMenu: function () {
               document.querySelector(".menu-wraper").style.display = "block";
           },
-          updateOrder: function (e) {
-            this.editMode = 1 ;
-                  $('.fa-remove').css('display', "block");
-                  $('.fa-plus').css('display', "block");
-                  $('.fa-minus').css('display', "block");
-          },
+        //   updateOrder: function (e) {
+        //     this.editMode = 1 ;
+        //           $('.fa-remove').css('display', "block");
+        //           $('.fa-plus').css('display', "block");
+        //           $('.fa-minus').css('display', "block");
+        //   },
           saveOrder:function (e) {
-            this.editMode = 0 ;
-            $('.fa-remove').css('display', "none");
-            $('.fa-plus').css('display', "none");
-            $('.fa-minus').css('display', "none");
-              var itemsToDelete = [];
-              var newOrders = this.currentTable.orders;
-              for (let i = 0; i < this.currentTable.orders.length; i++) {
-                  if (this.currentTable.orders[i].quantity === 0) {
-                      itemsToDelete.push(i)
-                  }
-              }
-              for (let i = 0; i < itemsToDelete.length; i++) {
-                  this.currentTable.orders.splice(i,1)
-              }
-              for (let i = 0; i < newOrders.length; i++) {
-                  delete  newOrders[i].id;
-              }
+            // this.editMode = 0 ;
+            // $('.fa-remove').css('display', "none");
+            // $('.fa-plus').css('display', "none");
+            // $('.fa-minus').css('display', "none");
+            //   var itemsToDelete = [];
+            //   var newOrders = this.currentTable.orders;
+            //   for (let i = 0; i < this.currentTable.orders.length; i++) {
+            //       if (this.currentTable.orders[i].quantity === 0) {
+            //           itemsToDelete.push(i)
+            //       }
+            //   }
+            //   for (let i = 0; i < itemsToDelete.length; i++) {
+            //       this.currentTable.orders.splice(i,1)
+            //   }
+            //   for (let i = 0; i < newOrders.length; i++) {
+            //       delete  newOrders[i].id;
+            //   }
 
-              store.dispatch("saveOrders",{"tableNumber": this.currentTable.tableNumber ,"orders":newOrders })
+            //   store.dispatch("saveOrders",{"tableNumber": this.currentTable.tableNumber ,"orders":newOrders })
           }
 
 
       },
       mounted:function () {
-          var value =  store.state.boards.filter((b)=>{
-              return b.tableNumber == router.currentRoute.params.tableNumber
-          });
-          for (let i = 0; i < value[0].orders.length; i++) {
-              value[0].orders[i].id = i;
-          }
-          this.currentTable=value[0];
+        //   var value =  store.state.boards.filter((b)=>{
+        //       return b.tableNumber == router.currentRoute.params.tableNumber
+        //   });
+        //   for (let i = 0; i < value[0].orders.length; i++) {
+        //       value[0].orders[i].id = i;
+        //   }
+        //   this.currentTable=value[0];
 
           $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
 

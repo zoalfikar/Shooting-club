@@ -5,15 +5,15 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">اسم الزبون</label>
-                        <input v-model="info.customerName" type="text" class="form-control" name="name" placeholder=" (اختياري)">
+                        <input  id="name" type="text" class="form-control" name="name" placeholder=" (اختياري)">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="slug">معرف خاص</label>
-                        <input v-model="info.customerId" type="text" class="form-control" name="slug" placeholder="(اجباري)ادخل معرف خاص في حال تشابه الاسماء">
+                        <input  id="id" type="text" class="form-control" name="slug" placeholder="(اجباري)ادخل معرف خاص في حال تشابه الاسماء">
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="description">معلومات اضافية</label>
-                        <textarea v-model="info.extraInfo" name="description"  class="form-control"  style="resize: none;" placeholder="(اختياري)"></textarea>
+                        <textarea id="des"   name="description"  class="form-control"  style="resize: none;" placeholder="(اختياري)"></textarea>
                     </div>
                     <div class="col-md-12 mb-3">
                         <v-btn dark block @click="showOtherTable">اضافة طاولات اخرى</v-btn>
@@ -25,7 +25,7 @@
                             </v-chip-group>
                         </div>
                     </div>
-                    <input type="submit" @click="$emit('infoDone')"  value="حفظ" class="btn btn-primry saveInfo">
+                    <input type="submit" @click="$emit('infoDone')"  :value="`حفظ`" class="btn btn-primry saveInfo">
                 </div>
 
                 </form>
@@ -40,16 +40,14 @@ export default {
     emits: ['infoDone'],
     data() {
         return {
-            info : {
-                customerId: '',
-                customerName: '',
-                extraInfo: '',
-            }
+
         }
     },
     computed: {
         aviliableBoards: ()=> store.state.aviliabeBoards,
+        tableNumber:()=> store.state.currentTable,
         },
+        
     methods:{
         showOtherTable:()=>{
             $('.other-boards').toggle("other-boards-hide");
@@ -61,11 +59,19 @@ export default {
         $('.saveInfo').click((e) => {
             e.preventDefault();
             $(".info-modal").css("display", "none");
+            var info = {
+                customerId: $('#id').val(),
+                customerName: $('#name').val(),
+                extraInfo: $('#des').val(),
+            };
+            store.dispatch('setTableInfo' , {"info":info});
+            this.$emit('statusChanged' , {order:2,"tableNumber":this.tableNumber });
             $('input').val("");
             $('textarea').html("");
-            store.dispatch('setTableInfo' , {"info":this.info});
-            this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
         });
+
+
+
     }
 }
 </script>

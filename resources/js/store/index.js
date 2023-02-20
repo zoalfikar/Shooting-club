@@ -26,7 +26,7 @@ const store = new vuex.Store({
         currentOrder(state) {
             var board = state.boards.find(board => board.tableNumber === state.currentTable);
             return board.orders;
-        }
+        },
     },
     actions: {
         pringAllHalls({ commit }) {
@@ -35,6 +35,7 @@ const store = new vuex.Store({
                     commit("setHalls", response.data.halls)
                 })
         },
+
         bringAllMenuItems({ commit }) {
             axios.get(`/get-menu-items`)
                 .then((response) => {
@@ -53,12 +54,6 @@ const store = new vuex.Store({
                     commit("setBoards", response.data.tables)
                 })
         },
-        changeCurrentTableNumber({ commit }, tableNumber) {
-            commit('setCurrentTableNumber', tableNumber)
-        },
-        changeCurrentTableStatus({ commit }, status) {
-            commit('setCurrentTableStatus', status);
-        },
         getAviliableBoards({ commit }) {
             var aviliableBoards = this.state.boards.filter((b) => {
                 return b.status == '';
@@ -70,6 +65,7 @@ const store = new vuex.Store({
                 return b.tableNumber == payload.tableNumber;
             })
             var data = { "index": index, "status": payload.status }
+            axios.post(`set-table-status/${this.state.currentHall}/${payload.tableNumber}`, { "status": payload.status })
             commit('setBoardState', data)
             this.dispatch("getAviliableBoards");
         },
@@ -79,6 +75,32 @@ const store = new vuex.Store({
             })
             var data = { "index": index, "orders": payload.orders }
             commit('setoOrders', data)
+        },
+        setTableInfo({ commit }, info) {
+            var hall = this.state.currentHall;
+            var table = this.state.currentTable;
+            var index = -1;
+
+            this.dispatch("findBoardIndex", table).then(function(data) {
+                index = data;
+                axios.post(`/set-table-info/${hall}/${table}`, info)
+                    .then((response) => {
+                        commit('setTableInfoState', { "index": index, "info": info.info });
+                    })
+            });
+
+
+        },
+        // helpers 
+        findBoardIndex({ commit }, tableNumber) {
+            var index = this.state.boards.findIndex((board) => { return board.tableNumber === tableNumber });
+            return index;
+        },
+        changeCurrentTableNumber({ commit }, tableNumber) {
+            commit('setCurrentTableNumber', tableNumber)
+        },
+        changeCurrentTableStatus({ commit }, status) {
+            commit('setCurrentTableStatus', status);
         },
     },
     mutations: {
@@ -96,7 +118,6 @@ const store = new vuex.Store({
             } else {
                 // state.noHalls = false;
                 state.menuItems = sections;
-                console.log(state.menuItems[0].items);
             }
         },
         setCurrentHallNumber: (state, hallNumber) => {
@@ -116,7 +137,6 @@ const store = new vuex.Store({
                 state.noBoards = false;
             }
             state.boards = boards.sort((a, b) => a.order - b.order);
-            console.log(state.boards);
         },
         setCurrentTableNumber: (state, tableNumber) => {
             state.currentTable = tableNumber;
@@ -133,6 +153,11 @@ const store = new vuex.Store({
         },
         setoOrders: (state, data) => {
             state.boards[data.index].orders = data.orders;
+        },
+        setTableInfoState: (state, data) => {
+
+            state.boards[data.index].customerInfo = data.info;
+
         },
     },
     modules: {}

@@ -12,9 +12,9 @@
             <div class="boardNumber-border">
                 <h1>{{tablenumber}}</h1>
             </div>
+            
         </div>
-
-        <v-card-subtitle>الحالة : مشغولة / محجوزة / متوفرة</v-card-subtitle>
+        <v-card-subtitle> {{ String(borad.customerInfo.customerName)  !== "null" ? "اسم الزبون : " + borad.customerInfo.customerName   : 'الحالة : متوفرة ' }}</v-card-subtitle>
         <v-card-actions>
         <v-btn
             text
@@ -68,6 +68,7 @@ export default {
         'status': String ,
         'tablenumber' : Number,
         'active' : Number,
+        'index' : Number,
         },
         // emits:['statusChanged'],
     data () {
@@ -75,8 +76,11 @@ export default {
         }
     },
     computed: {
-            // test: ()=> store.state.test,
-        },
+        borad:function( )  {
+            console.log(store.state.boards[this.index]);
+            return store.state.boards[this.index]
+        }
+    },
     methods : {
         reservation: function(){
             this.status = 'taken';
@@ -93,8 +97,9 @@ export default {
         },
         occupied: function(){
             this.status = 'active';
+            store.dispatch("changeCurrentTableNumber" , this.tablenumber  );
             // moveitem('2',this.tablenumber)
-            this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
+            // this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
 
             $(".info-modal").css("display", "block");
             store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tablenumber}  );

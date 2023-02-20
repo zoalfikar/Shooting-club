@@ -2533,13 +2533,18 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     'status': String,
     'tablenumber': Number,
-    'active': Number
+    'active': Number,
+    'index': Number
   },
   // emits:['statusChanged'],
   data: function data() {
     return {};
   },
-  computed: {// test: ()=> store.state.test,
+  computed: {
+    borad: function borad() {
+      console.log(_store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards[this.index]);
+      return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards[this.index];
+    }
   },
   methods: {
     reservation: function reservation() {
@@ -2567,12 +2572,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     occupied: function occupied() {
-      this.status = 'active'; // moveitem('2',this.tablenumber)
+      this.status = 'active';
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeCurrentTableNumber", this.tablenumber); // moveitem('2',this.tablenumber)
+      // this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
 
-      this.$emit('statusChanged', {
-        order: 2,
-        tableNumber: this.tablenumber
-      });
       $(".info-modal").css("display", "block");
       _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("changeBoardState", {
         "status": 'active',
@@ -2949,6 +2952,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['statusChanged'],
@@ -3009,11 +3013,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   watch: {
-    boards: function boards(newQuestion, oldQuestion) {
+    boards: function boards(newVal, oldVal) {
       var _this = this;
 
       this.showHallName();
-      this.getNewBoards(newQuestion).then(function (value) {
+      this.getNewBoards(newVal).then(function (value) {
         _this.nodes = _this.group.querySelectorAll(".h" + _this.currentHall); // this.layoutWorker.postMessage({ cmd: 'doDomStuff', data: this.group.style });
 
         _this.total = _this.nodes.length;
@@ -3243,13 +3247,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var array = [];
-      var e = document.getElementById('h:' + this.currentHall + 't:' + data.tableNumber);
-      console.log(e.offsetLeft); // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
+      var e = document.getElementById('h:' + this.currentHall + 't:' + data.tableNumber); // var newOrder = data.order * Math.pow (10 , parseInt( String(this.total).length)) + parseInt(data.tableNumber);
 
       var newOrder = data.order * this.orderHelper + parseInt(data.tableNumber); // document.getElementById('h:'+this.currentHall+'t:'+data.tableNumber).style.order =  newOrder;
 
       e.style.order = newOrder;
-      console.log(e.offsetLeft);
       array.push(newOrder);
       this.layout(array).then(function () {
         _this2.removeTemporaryAlternatives();
@@ -3376,73 +3378,64 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    increseQ: function increseQ(id) {
-      this.currentTable.orders.map(function (element) {
-        if (element.id == id) {
-          element.quantity++;
-        }
-      });
-    },
-    decreseQ: function decreseQ(id) {
-      this.currentTable.orders.map(function (element) {
-        if (element.id == id && element.quantity > 0) {
-          element.quantity--;
-        }
-      });
-    },
-    deleteOrder: function deleteOrder(id) {
-      var index = this.currentTable.orders.findIndex(function (o) {
-        return o.id == id;
-      });
-      this.currentTable.orders.splice(index, 1);
-    },
+    //   increseQ:function (id) {
+    //       this.currentTable.orders.map((element) => {
+    //           if (element.id == id) {
+    //               element.quantity++;
+    //           }
+    //       })
+    //   },
+    //   decreseQ:function (id) {
+    //       this.currentTable.orders.map((element) => {
+    //           if (element.id == id && element.quantity > 0) {
+    //               element.quantity--;
+    //           }
+    //       })
+    //   },
+    //   deleteOrder:function (id) {
+    //       var index = this.currentTable.orders.findIndex(function (o)
+    //       {
+    //           return o.id == id;
+    //       });
+    //       this.currentTable.orders.splice(index,1);
+    //   },
     toggleMenu: function toggleMenu() {
       document.querySelector(".menu-wraper").style.display = "block";
     },
-    updateOrder: function updateOrder(e) {
-      this.editMode = 1;
-      $('.fa-remove').css('display', "block");
-      $('.fa-plus').css('display', "block");
-      $('.fa-minus').css('display', "block");
-    },
-    saveOrder: function saveOrder(e) {
-      this.editMode = 0;
-      $('.fa-remove').css('display', "none");
-      $('.fa-plus').css('display', "none");
-      $('.fa-minus').css('display', "none");
-      var itemsToDelete = [];
-      var newOrders = this.currentTable.orders;
-
-      for (var i = 0; i < this.currentTable.orders.length; i++) {
-        if (this.currentTable.orders[i].quantity === 0) {
-          itemsToDelete.push(i);
-        }
-      }
-
-      for (var _i = 0; _i < itemsToDelete.length; _i++) {
-        this.currentTable.orders.splice(_i, 1);
-      }
-
-      for (var _i2 = 0; _i2 < newOrders.length; _i2++) {
-        delete newOrders[_i2].id;
-      }
-
-      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("saveOrders", {
-        "tableNumber": this.currentTable.tableNumber,
-        "orders": newOrders
-      });
+    //   updateOrder: function (e) {
+    //     this.editMode = 1 ;
+    //           $('.fa-remove').css('display', "block");
+    //           $('.fa-plus').css('display', "block");
+    //           $('.fa-minus').css('display', "block");
+    //   },
+    saveOrder: function saveOrder(e) {// this.editMode = 0 ;
+      // $('.fa-remove').css('display', "none");
+      // $('.fa-plus').css('display', "none");
+      // $('.fa-minus').css('display', "none");
+      //   var itemsToDelete = [];
+      //   var newOrders = this.currentTable.orders;
+      //   for (let i = 0; i < this.currentTable.orders.length; i++) {
+      //       if (this.currentTable.orders[i].quantity === 0) {
+      //           itemsToDelete.push(i)
+      //       }
+      //   }
+      //   for (let i = 0; i < itemsToDelete.length; i++) {
+      //       this.currentTable.orders.splice(i,1)
+      //   }
+      //   for (let i = 0; i < newOrders.length; i++) {
+      //       delete  newOrders[i].id;
+      //   }
+      //   store.dispatch("saveOrders",{"tableNumber": this.currentTable.tableNumber ,"orders":newOrders })
     }
   },
   mounted: function mounted() {
-    var value = _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards.filter(function (b) {
-      return b.tableNumber == _routes__WEBPACK_IMPORTED_MODULE_0__["default"].currentRoute.params.tableNumber;
-    });
-
-    for (var i = 0; i < value[0].orders.length; i++) {
-      value[0].orders[i].id = i;
-    }
-
-    this.currentTable = value[0];
+    //   var value =  store.state.boards.filter((b)=>{
+    //       return b.tableNumber == router.currentRoute.params.tableNumber
+    //   });
+    //   for (let i = 0; i < value[0].orders.length; i++) {
+    //       value[0].orders[i].id = i;
+    //   }
+    //   this.currentTable=value[0];
     $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
   }
 });
@@ -3519,17 +3512,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['infoDone'],
   data: function data() {
-    return {
-      info: {
-        customerId: '',
-        customerName: '',
-        extraInfo: ''
-      }
-    };
+    return {};
   },
   computed: {
     aviliableBoards: function aviliableBoards() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.aviliabeBoards;
+    },
+    tableNumber: function tableNumber() {
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.currentTable;
     }
   },
   methods: {
@@ -3545,9 +3535,22 @@ __webpack_require__.r(__webpack_exports__);
     $('.saveInfo').click(function (e) {
       e.preventDefault();
       $(".info-modal").css("display", "none");
+      var info = {
+        customerId: $('#id').val(),
+        customerName: $('#name').val(),
+        extraInfo: $('#des').val()
+      };
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('setTableInfo', {
+        "info": info
+      });
+
+      _this.$emit('statusChanged', {
+        order: 2,
+        "tableNumber": _this.tableNumber
+      });
+
       $('input').val("");
       $('textarea').html("");
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('setTableInfo', _this.info);
     });
   }
 });
@@ -3616,6 +3619,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -3641,7 +3664,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           var order = {};
           order.orderName = $(this).children(".resturant-m-item").text();
           order.quantity = $(this).children(".resturant-m-item-quantity").find(".qty-input").val();
-          order.price = 100;
           newOrders.push(order);
         }
       });
@@ -3651,17 +3673,51 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     }
   },
+  watch: {
+    menuItems: {
+      handler: function handler(newVal, oldVal) {
+        Promise.resolve(newVal).then(function (value) {
+          $(".resturant-m-item").click(function (e) {
+            e.preventDefault();
+            $(this).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
+          });
+          $(".resturant-m-item-checkBox").on("click", function (e) {
+            if ($(this).prop("checked")) {
+              $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'visible');
+              $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val(1); // momento.push(e)
+            } else {
+              $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'hidden');
+              $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val('');
+            }
+          });
+          $(".increment-btn").click(function () {
+            var inc_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
+            var pace = $(this).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
+            var value = parseInt(inc_value, 10);
+            value = isNaN(value) ? 0 : value;
+
+            if (true) {
+              value += parseInt(pace, 10);
+              $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+            }
+          });
+          $(".decrement-btn").click(function () {
+            var dec_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
+            var pace = $(this).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
+            var value = parseInt(dec_value, 10);
+            value = isNaN(value) ? 0 : value;
+
+            if (value > 0) {
+              value -= parseInt(pace, 10);
+              $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+            }
+          });
+        });
+      },
+      deep: true
+    }
+  },
   mounted: function mounted() {
-    // var currentOrders = store.getters.currentOrder;
-    // $( ".menu-section-list-item" ).each(function( index ) {
-    //         for (let i = 0; i < currentOrders.length; i++) {
-    //             if ($(this).children(".resturant-m-item").text()==currentOrders[i].orderName) {
-    //                 $(this).children(".resturant-m-item-checkBox" ).prop("checked",true)
-    //                 $(this).children(".resturant-m-item-quantity").find(".qty-input").val(currentOrders[i].quantity);
-    //                 $(this).children(".resturant-m-item-quantity").css("visibility","visible")
-    //             }
-    //         }
-    //     });
     $('.display-all-section').css("margin-top", '-4px');
     var RWMenu = document.querySelector(".menu-wraper");
     var oldRWMenuDisplay = getComputedStyle(RWMenu).display;
@@ -3730,40 +3786,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, 700);
     }
 
-    $(".resturant-m-item").click(function (e) {
-      e.preventDefault();
-      $(this).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
-    });
-    $(".resturant-m-item-checkBox").on("click", function (e) {
-      if ($(this).prop("checked")) {
-        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'visible');
-        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val(1);
-        momento.push(e);
-      } else {
-        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility', 'hidden');
-        $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val('');
-      }
-    });
-    $(".increment-btn").click(function () {
-      var inc_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
-      var value = parseInt(inc_value, 10);
-      value = isNaN(value) ? 0 : value;
-
-      if (true) {
-        value++;
-        $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
-      }
-    });
-    $(".decrement-btn").click(function () {
-      var dec_value = $(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
-      var value = parseInt(dec_value, 10);
-      value = isNaN(value) ? 0 : value;
-
-      if (value > 0) {
-        value--;
-        $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
-      }
-    });
     $(".orderDone").click(function (e) {
       closeRMenu();
     });
@@ -4295,23 +4317,15 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         commit("setBoards", response.data.tables);
       });
     },
-    changeCurrentTableNumber: function changeCurrentTableNumber(_ref5, tableNumber) {
+    getAviliableBoards: function getAviliableBoards(_ref5) {
       var commit = _ref5.commit;
-      commit('setCurrentTableNumber', tableNumber);
-    },
-    changeCurrentTableStatus: function changeCurrentTableStatus(_ref6, status) {
-      var commit = _ref6.commit;
-      commit('setCurrentTableStatus', status);
-    },
-    getAviliableBoards: function getAviliableBoards(_ref7) {
-      var commit = _ref7.commit;
       var aviliableBoards = this.state.boards.filter(function (b) {
         return b.status == '';
       });
       commit('setAviliableBoards', aviliableBoards);
     },
-    changeBoardState: function changeBoardState(_ref8, payload) {
-      var commit = _ref8.commit;
+    changeBoardState: function changeBoardState(_ref6, payload) {
+      var commit = _ref6.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -4319,11 +4333,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         "index": index,
         "status": payload.status
       };
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("set-table-status/".concat(this.state.currentHall, "/").concat(payload.tableNumber), {
+        "status": payload.status
+      });
       commit('setBoardState', data);
       this.dispatch("getAviliableBoards");
     },
-    saveOrders: function saveOrders(_ref9, payload) {
-      var commit = _ref9.commit;
+    saveOrders: function saveOrders(_ref7, payload) {
+      var commit = _ref7.commit;
       var index = this.state.boards.findIndex(function (b) {
         return b.tableNumber == payload.tableNumber;
       });
@@ -4332,6 +4349,37 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         "orders": payload.orders
       };
       commit('setoOrders', data);
+    },
+    setTableInfo: function setTableInfo(_ref8, info) {
+      var commit = _ref8.commit;
+      var hall = this.state.currentHall;
+      var table = this.state.currentTable;
+      var index = -1;
+      this.dispatch("findBoardIndex", table).then(function (data) {
+        index = data;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post("/set-table-info/".concat(hall, "/").concat(table), info).then(function (response) {
+          commit('setTableInfoState', {
+            "index": index,
+            "info": info.info
+          });
+        });
+      });
+    },
+    // helpers 
+    findBoardIndex: function findBoardIndex(_ref9, tableNumber) {
+      var commit = _ref9.commit;
+      var index = this.state.boards.findIndex(function (board) {
+        return board.tableNumber === tableNumber;
+      });
+      return index;
+    },
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref10, tableNumber) {
+      var commit = _ref10.commit;
+      commit('setCurrentTableNumber', tableNumber);
+    },
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref11, status) {
+      var commit = _ref11.commit;
+      commit('setCurrentTableStatus', status);
     }
   },
   mutations: {
@@ -4350,7 +4398,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       } else {
         // state.noHalls = false;
         state.menuItems = sections;
-        console.log(state.menuItems[0].items);
       }
     },
     setCurrentHallNumber: function setCurrentHallNumber(state, hallNumber) {
@@ -4375,7 +4422,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.boards = boards.sort(function (a, b) {
         return a.order - b.order;
       });
-      console.log(state.boards);
     },
     setCurrentTableNumber: function setCurrentTableNumber(state, tableNumber) {
       state.currentTable = tableNumber;
@@ -4391,6 +4437,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     },
     setoOrders: function setoOrders(state, data) {
       state.boards[data.index].orders = data.orders;
+    },
+    setTableInfoState: function setTableInfoState(state, data) {
+      state.boards[data.index].customerInfo = data.info;
     }
   },
   modules: {}
@@ -4573,7 +4622,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4645,7 +4694,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n@keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n.button-float{\r\n    -webkit-animation:button-float 2s ease-in-out infinite;\r\n            animation:button-float 2s ease-in-out infinite;\r\n    -webkit-animation-play-state: running;\r\n            animation-play-state: running;\n}\n@-webkit-keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n@keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n.show-order-done-buttun{\r\n    -webkit-animation-name: show-order-done-buttun  ;\r\n            animation-name: show-order-done-buttun  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n@keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n.hide-order-done-buttun{\r\n    -webkit-animation-name: hide-order-done-buttun  ;\r\n            animation-name: hide-order-done-buttun  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-play-state: running !important;\r\n            animation-play-state: running !important;\n}\n.orderDone{\r\n    position: fixed;\r\n    border-radius: 100%;\r\n    top:10px;\r\n    right: 23px;\r\n    width: 150px;\r\n    height: 150px;\r\n    background-color: rgb(75, 75, 41);\r\n    z-index:10000;\r\n    font-size: 40px;\n}\n.orderDone:hover{\r\n    -webkit-animation-play-state: paused;\r\n            animation-play-state: paused;\r\n    background-color: rgb(75, 75, 41,70%);\n}\n.orderDone:active{\r\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.RMioptions{\r\n    position: fixed;\r\n    background-color: rgb(0, 0, 0 ,0%);\r\n    left: 23px;\r\n    top:10px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\r\n    align-content: center;\r\n    gap: 20px;\r\n    z-index:10000;\r\n    height: -webkit-max-content;\r\n    height: -moz-max-content;\r\n    height: max-content;\r\n    width: -webkit-max-content;\r\n    width: -moz-max-content;\r\n    width: max-content;\n}\n@-webkit-keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@-webkit-keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n@keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n.show-RMOptions-buttun{\r\n    -webkit-animation-name: show-RMOptions-buttun ;\r\n            animation-name: show-RMOptions-buttun ;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n.hide-RMOptions-buttun{\r\n    -webkit-animation-name: hide-RMOptions-buttun ;\r\n            animation-name: hide-RMOptions-buttun ;\r\n    -webkit-animation-duration: 0.7s !important;\r\n            animation-duration: 0.7s !important;\n}\n.resetOrder,.rollbackLastOrder,.cancelOrder{\r\n    border-radius: 5%;\r\n    width: 150px;\r\n    height: 50px;\r\n    font-size: 30px;\r\n    background-color: rgb(75, 75, 41);\n}\n.resetOrder{\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\n}\n.rollbackLastOrder{\r\n    -webkit-animation-duration: 1s;\r\n            animation-duration: 1s;\n}\n.cancelOrder{\r\n    -webkit-animation-duration: 1.3s;\r\n            animation-duration: 1.3s;\n}\n.resetOrder:hover,.rollbackLastOrder:hover,.cancelOrder:hover{\r\n    background-color: rgb(75, 75, 41,70%);\n}\n.resetOrder:active,.rollbackLastOrder:active,.cancelOrder:active{\r\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.menu-wraper{\r\n    display: none;\r\n    position: fixed;\r\n    background-color: rgba(0, 0, 0, 10%);\r\n    width: 100vw;\r\n    height: 100vh;\r\n    top: 0px;\r\n    left: 0px;\r\n    z-index: 9999;\n}\n@-webkit-keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n@keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n.r-menu-navigation{\r\n    padding-top: 10px;\r\n    padding-bottom: 10px;\r\n    display: flex;\r\n    flex-grow :1;\r\n    background-color: rgb(75, 75, 41);\r\n    position: relative;\r\n    width: 1100px;\r\n    border: 2px outset white;\r\n    margin: auto;\r\n    gap: 2px;\n}\n.r-menu-navigation .v-btn{\r\n    color: white !important;\r\n    background-color: rgb(109, 109, 55) !important;\n}\n.resturant-menu-show{\r\n    -webkit-animation-name:  resturant-menu-show  ;\r\n            animation-name:  resturant-menu-show  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n@keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n.resturant-menu-hide{\r\n    -webkit-animation-name:  resturant-menu-hide  ;\r\n            animation-name:  resturant-menu-hide  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\n}\n.resturant-menu{\r\n    background-color: rgb(75, 75, 41);\r\n    position: relative;\r\n    overflow-y: auto !important;\r\n    width: 1100px;\r\n    height: 100vh;\r\n    border: 2px outset white;\r\n    margin: auto;\n}\n::-webkit-scrollbar {\r\n        width: 10px;\r\n        border-radius: 10px;\n}\n::-webkit-scrollbar-track {\r\n    background: rgb(75, 75, 41 / 90%);\r\n    border-radius: 10px;\n}\n::-webkit-scrollbar-thumb {\r\n    size: 10px;\r\n    border-radius: 10px;\r\n    background-color: #ad8181;\n}\n::-webkit-scrollbar-thumb:hover {\r\n    background:  rgb(204, 204, 204);\n}\n.menu-section{\r\n    border: 2px outset rgb(139, 139, 139);\r\n    /* padding: 20px; */\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\r\n\r\n    min-height: 500px;\n}\n.menu-section-list{\r\n    display: block;\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\n}\n.menu-section .menu-section-list-item{\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\r\n    display :flex;\r\n    flex-direction: row;\r\n    margin: 1rem;\r\n    border-bottom: 2px groove rgb(139, 139, 139);\r\n    padding-bottom: 1rem;\n}\n.resturant-m-item-checkBox , .resturant-m-item ,.resturant-m-item-quantity{\r\n    margin-right: 10px;\r\n    align-self: center !important;\r\n    cursor: pointer;\n}\n.resturant-m-item{\r\n\r\n    width: 120px !important;\r\n    overflow-x: auto;\r\n    font-size: large;\n}\n.resturant-m-item-quantity{\r\n    display: flex;\r\n    visibility: hidden;\r\n    float: left;\n}\n.resturant-m-item-quantity input[type=text]{\r\n    width:40px;\r\n    height:40px;\r\n    background-color: rgb(224, 224, 224);\n}\n.resturant-m-item-quantity button{\r\n    background-color: rgb(124, 80, 80);\r\n    width:40px ;\r\n    height:40px ;\r\n    font-size: 10px;\n}\n.resturant-m-item-quantity button:first-child{\r\n    border-radius: 0 100% 100% 0;\n}\n.resturant-m-item-quantity button:last-child{\r\n    /* float: left; */\r\n    border-radius: 100% 0 0 100%  ;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n@keyframes button-float {\n0%{transform:translateY(3px)\n}\n50%{transform:translateY(-2px)\n}\n100%{transform:translateY(3px)\n}\n}\n.button-float{\r\n    -webkit-animation:button-float 2s ease-in-out infinite;\r\n            animation:button-float 2s ease-in-out infinite;\r\n    -webkit-animation-play-state: running;\r\n            animation-play-state: running;\n}\n@-webkit-keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n@keyframes show-order-done-buttun {\n0%{transform:translateX(100%)\n}\n100%{transform:translateX(0); transform:translateY(3px)}\n}\n.show-order-done-buttun{\r\n    -webkit-animation-name: show-order-done-buttun  ;\r\n            animation-name: show-order-done-buttun  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n@keyframes hide-order-done-buttun {\n0%{transform:translateX(0)\n}\n100%{transform:translateX(-100vw)}\n}\n.hide-order-done-buttun{\r\n    -webkit-animation-name: hide-order-done-buttun  ;\r\n            animation-name: hide-order-done-buttun  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-play-state: running !important;\r\n            animation-play-state: running !important;\n}\n.orderDone{\r\n    position: fixed;\r\n    border-radius: 100%;\r\n    top:10px;\r\n    right: 23px;\r\n    width: 150px;\r\n    height: 150px;\r\n    background-color: rgb(75, 75, 41);\r\n    z-index:10000;\r\n    font-size: 40px;\n}\n.orderDone:hover{\r\n    -webkit-animation-play-state: paused;\r\n            animation-play-state: paused;\r\n    background-color: rgb(75, 75, 41,70%);\n}\n.orderDone:active{\r\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.RMioptions{\r\n    position: fixed;\r\n    background-color: rgb(0, 0, 0 ,0%);\r\n    left: 23px;\r\n    top:10px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\r\n    align-content: center;\r\n    gap: 20px;\r\n    z-index:10000;\r\n    height: -webkit-max-content;\r\n    height: -moz-max-content;\r\n    height: max-content;\r\n    width: -webkit-max-content;\r\n    width: -moz-max-content;\r\n    width: max-content;\n}\n@-webkit-keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@keyframes show-RMOptions-buttun {\n0%{transform:translateY(100vh);\n}\n100%{transform:translateY(0);}\n}\n@-webkit-keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n@keyframes hide-RMOptions-buttun {\n0%{transform:translateY(0);\n}\n100%{transform:translateY(-100vh);}\n}\n.show-RMOptions-buttun{\r\n    -webkit-animation-name: show-RMOptions-buttun ;\r\n            animation-name: show-RMOptions-buttun ;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n.hide-RMOptions-buttun{\r\n    -webkit-animation-name: hide-RMOptions-buttun ;\r\n            animation-name: hide-RMOptions-buttun ;\r\n    -webkit-animation-duration: 0.7s !important;\r\n            animation-duration: 0.7s !important;\n}\n.resetOrder,.rollbackLastOrder,.cancelOrder{\r\n    border-radius: 5%;\r\n    width: 150px;\r\n    height: 50px;\r\n    font-size: 30px;\r\n    background-color: rgb(75, 75, 41);\n}\n.resetOrder{\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\n}\n.rollbackLastOrder{\r\n    -webkit-animation-duration: 1s;\r\n            animation-duration: 1s;\n}\n.cancelOrder{\r\n    -webkit-animation-duration: 1.3s;\r\n            animation-duration: 1.3s;\n}\n.resetOrder:hover,.rollbackLastOrder:hover,.cancelOrder:hover{\r\n    background-color: rgb(75, 75, 41,70%);\n}\n.resetOrder:active,.rollbackLastOrder:active,.cancelOrder:active{\r\n    background-color: rgba(228, 228, 82, 0.7);\n}\n.menu-wraper{\r\n    display: block;\r\n    position: fixed;\r\n    background-color: rgba(0, 0, 0, 10%);\r\n    width: 100vw;\r\n    height: 100vh;\r\n    top: 0px;\r\n    left: 0px;\r\n    z-index: 9999;\n}\n@-webkit-keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n@keyframes resturant-menu-show {\nfrom{transform: translateY(-100vh);}\nto{transform: translateY(0);}\n}\n.r-menu-navigation{\r\n    padding-top: 10px;\r\n    padding-bottom: 10px;\r\n    display: flex;\r\n    flex-grow :1;\r\n    background-color: rgb(75, 75, 41);\r\n    position: relative;\r\n    width: 1100px;\r\n    border: 2px outset white;\r\n    margin: auto;\r\n    gap: 2px;\n}\n.r-menu-navigation .v-btn{\r\n    color: white !important;\r\n    background-color: rgb(109, 109, 55) !important;\n}\n.resturant-menu-show{\r\n    -webkit-animation-name:  resturant-menu-show  ;\r\n            animation-name:  resturant-menu-show  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\r\n    -webkit-animation-fill-mode: forwards;\r\n            animation-fill-mode: forwards;\n}\n@-webkit-keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n@keyframes resturant-menu-hide {\nfrom{transform: translateY(0);}\nto{transform: translateY(100vh);}\n}\n.resturant-menu-hide{\r\n    -webkit-animation-name:  resturant-menu-hide  ;\r\n            animation-name:  resturant-menu-hide  ;\r\n    -webkit-animation-duration: 0.7s;\r\n            animation-duration: 0.7s;\n}\n.resturant-menu{\r\n    background-color: rgb(75, 75, 41);\r\n    position: relative;\r\n    overflow-y: auto !important;\r\n    width: 1100px;\r\n    height: 100vh;\r\n    border: 2px outset white;\r\n    margin: auto;\n}\n::-webkit-scrollbar {\r\n        width: 10px;\r\n        border-radius: 10px;\n}\n::-webkit-scrollbar-track {\r\n    background: rgb(75, 75, 41 / 90%);\r\n    border-radius: 10px;\n}\n::-webkit-scrollbar-thumb {\r\n    size: 10px;\r\n    border-radius: 10px;\r\n    background-color: #ad8181;\n}\n::-webkit-scrollbar-thumb:hover {\r\n    background:  rgb(204, 204, 204);\n}\n.menu-section{\r\n    border: 2px outset rgb(139, 139, 139);\r\n    /* padding: 20px; */\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\r\n\r\n    min-height: 500px;\n}\n.menu-section-list{\r\n    display: block;\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\n}\n.menu-section .menu-section-list-item{\r\n    position: relative;\r\n    width:-webkit-max-content;\r\n    width:-moz-max-content;\r\n    width:max-content;\r\n    display :flex;\r\n    flex-direction: row;\r\n    margin: 1rem;\r\n    border-bottom: 2px groove rgb(139, 139, 139);\r\n    padding-bottom: 1rem;\n}\n.resturant-m-item-checkBox , .resturant-m-item ,.resturant-m-item-quantity{\r\n    margin-right: 10px;\r\n    align-self: center !important;\r\n    cursor: pointer;\n}\n.resturant-m-item{\r\n\r\n    width: 120px !important;\r\n    overflow-x: auto;\r\n    font-size: large;\n}\n.resturant-m-item-quantity{\r\n    display: flex;\r\n    visibility: hidden;\r\n    float: left;\n}\n.resturant-m-item-info{\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\n}\n.resturant-m-item-info p{\r\n    display: block;\n}\n.resturant-m-item-quantity input[type=text]{\r\n    width:40px;\r\n    height:40px;\r\n    background-color: rgb(224, 224, 224);\n}\n.resturant-m-item-quantity input[type=number]{\r\n    width:40px;\r\n    height:40px;\r\n    background-color: rgb(224, 224, 224);\n}\n.resturant-m-item-quantity input[type=number]::-webkit-inner-spin-button,\r\n.resturant-m-item-quantity input[type=number]::-webkit-inner-spin-button\r\n{\r\n-webkit-appearance: none;\r\n        appearance: none;\n}\n.resturant-m-item-quantity button{\r\n    background-color: rgb(124, 80, 80);\r\n    width:40px ;\r\n    height:40px ;\r\n    font-size: 10px;\n}\n.resturant-m-item-quantity button:first-child{\r\n    border-radius: 0 100% 100% 0;\n}\n.resturant-m-item-quantity button:last-child{\r\n    /* float: left; */\r\n    border-radius: 100% 0 0 100%  ;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6878,7 +6927,16 @@ var render = function () {
             ]),
           ]),
           _vm._v(" "),
-          _c("v-card-subtitle", [_vm._v("الحالة : مشغولة / محجوزة / متوفرة")]),
+          _c("v-card-subtitle", [
+            _vm._v(
+              " " +
+                _vm._s(
+                  String(_vm.borad.customerInfo.customerName) !== "null"
+                    ? "اسم الزبون : " + _vm.borad.customerInfo.customerName
+                    : "الحالة : متوفرة "
+                )
+            ),
+          ]),
           _vm._v(" "),
           _c(
             "v-card-actions",
@@ -7259,6 +7317,7 @@ var render = function () {
                       staticClass: "animate-fade-in-down",
                       style: "animation-delay: " + index * 0.1 + "s",
                       attrs: {
+                        index: index,
                         active: _vm.currentHallActive ? board.active : 0,
                         status: board.status,
                         tablenumber: board.tableNumber,
@@ -7279,7 +7338,13 @@ var render = function () {
       _vm._v(" "),
       _c("board-modal"),
       _vm._v(" "),
-      _c("info-modal"),
+      _c("info-modal", {
+        on: {
+          statusChanged: function (data) {
+            return _vm.moveitem(data)
+          },
+        },
+      }),
     ],
     1
   )
@@ -7394,87 +7459,9 @@ var render = function () {
               },
               [_vm._v("أضف طلب")]
             ),
-            _vm._v(" "),
-            _vm.editMode
-              ? _c(
-                  "v-btn",
-                  {
-                    attrs: { rounded: "", color: "primary", dark: "" },
-                    on: { click: _vm.saveOrder },
-                  },
-                  [_vm._v("حفظ")]
-                )
-              : _c(
-                  "v-btn",
-                  {
-                    attrs: { rounded: "", color: "primary", dark: "" },
-                    on: { click: _vm.updateOrder },
-                  },
-                  [_vm._v("تعديل طلب")]
-                ),
-            _vm._v(" "),
-            _c(
-              "v-btn",
-              { attrs: { rounded: "", color: "primary", dark: "" } },
-              [_vm._v(" إسال الطلب")]
-            ),
           ],
           1
         ),
-        _vm._v(" "),
-        _c("div", { staticClass: "total" }, [_vm._v("9.000.000.000 ل.س")]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "display-content" }, [
-        _c("table", { staticClass: "table table-dark table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.currentTable.orders, function (order) {
-              return _c("tr", { key: order.id }, [
-                _c("td", [
-                  _vm._v(_vm._s(order.orderName) + " "),
-                  _c("i", {
-                    staticClass: "fa fa-remove",
-                    on: {
-                      click: function ($event) {
-                        return _vm.deleteOrder(order.id)
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.price) + "  ل.س")]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("i", {
-                    staticClass: "fa fa-plus",
-                    on: {
-                      click: function ($event) {
-                        return _vm.increseQ(order.id)
-                      },
-                    },
-                  }),
-                  _vm._v(_vm._s(order.quantity)),
-                  _c("i", {
-                    staticClass: "fa fa-minus",
-                    on: {
-                      click: function ($event) {
-                        return _vm.decreseQ(order.id)
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(order.quantity * order.price) + " ل.س"),
-                ]),
-              ])
-            }),
-            0
-          ),
-        ]),
       ]),
       _vm._v(" "),
       _c("resturant-menu"),
@@ -7482,24 +7469,7 @@ var render = function () {
     1
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("اسم الطلب")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("السعر")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("الكمية")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("المجموع")]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -7561,94 +7531,11 @@ var render = function () {
         },
         [
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-6 mb-3" }, [
-              _c("label", { attrs: { for: "name" } }, [_vm._v("اسم الزبون")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.info.customerName,
-                    expression: "info.customerName",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  name: "name",
-                  placeholder: " (اختياري)",
-                },
-                domProps: { value: _vm.info.customerName },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.info, "customerName", $event.target.value)
-                  },
-                },
-              }),
-            ]),
+            _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6 mb-3" }, [
-              _c("label", { attrs: { for: "slug" } }, [_vm._v("معرف خاص")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.info.customerId,
-                    expression: "info.customerId",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  name: "slug",
-                  placeholder: "(اجباري)ادخل معرف خاص في حال تشابه الاسماء",
-                },
-                domProps: { value: _vm.info.customerId },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.info, "customerId", $event.target.value)
-                  },
-                },
-              }),
-            ]),
+            _vm._m(1),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-12 mb-3" }, [
-              _c("label", { attrs: { for: "description" } }, [
-                _vm._v("معلومات اضافية"),
-              ]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.info.extraInfo,
-                    expression: "info.extraInfo",
-                  },
-                ],
-                staticClass: "form-control",
-                staticStyle: { resize: "none" },
-                attrs: { name: "description", placeholder: "(اختياري)" },
-                domProps: { value: _vm.info.extraInfo },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.info, "extraInfo", $event.target.value)
-                  },
-                },
-              }),
-            ]),
+            _vm._m(2),
             _vm._v(" "),
             _c(
               "div",
@@ -7701,7 +7588,8 @@ var render = function () {
             _vm._v(" "),
             _c("input", {
               staticClass: "btn btn-primry saveInfo",
-              attrs: { value: "حفظ" },
+              attrs: { type: "submit" },
+              domProps: { value: "حفظ" },
               on: {
                 click: function ($event) {
                   return _vm.$emit("infoDone")
@@ -7714,7 +7602,60 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6 mb-3" }, [
+      _c("label", { attrs: { for: "name" } }, [_vm._v("اسم الزبون")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          id: "name",
+          type: "text",
+          name: "name",
+          placeholder: " (اختياري)",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6 mb-3" }, [
+      _c("label", { attrs: { for: "slug" } }, [_vm._v("معرف خاص")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          id: "id",
+          type: "text",
+          name: "slug",
+          placeholder: "(اجباري)ادخل معرف خاص في حال تشابه الاسماء",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12 mb-3" }, [
+      _c("label", { attrs: { for: "description" } }, [
+        _vm._v("معلومات اضافية"),
+      ]),
+      _vm._v(" "),
+      _c("textarea", {
+        staticClass: "form-control",
+        staticStyle: { resize: "none" },
+        attrs: { id: "des", name: "description", placeholder: "(اختياري)" },
+      }),
+    ])
+  },
+]
 render._withStripped = true
 
 
@@ -7791,6 +7732,63 @@ var render = function () {
               [
                 _c("center", [_c("h1", [_vm._v(_vm._s(section.name))])]),
                 _vm._v(" "),
+                !section.items.length
+                  ? _c("div", { staticClass: "menu-section-list" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "menu-section-list-item",
+                          staticStyle: { position: "relative" },
+                        },
+                        [
+                          _c("input", { attrs: { type: "hidden" } }),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass:
+                              "form-check-input resturant-m-item-checkBox",
+                            staticStyle: { visibility: "hidden !important" },
+                            attrs: {
+                              disabled: "",
+                              type: "checkbox",
+                              name: "chosen",
+                            },
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              class: "resturant-m-item",
+                              staticStyle: {
+                                position: "absolute",
+                                inset: "0 auto 0",
+                                width: "100% !important",
+                                "text-align": "center",
+                              },
+                              attrs: { for: "" },
+                            },
+                            [_vm._v("لاتوجد عناصر في هذه القائمة ")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              class: "resturant-m-item-info",
+                              staticStyle: { visibility: "hidden" },
+                            },
+                            [
+                              _vm._v(
+                                "\r\n                           السعر ل.س    /     "
+                              ),
+                              _c("i", [_vm._v("الواحدة ")]),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm._m(1, true),
+                        ]
+                      ),
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _vm._l(section.items, function (item, index) {
                   return _c(
                     "div",
@@ -7798,21 +7796,50 @@ var render = function () {
                     [
                       _c("div", { staticClass: "menu-section-list-item" }, [
                         _c("input", {
+                          attrs: { type: "hidden" },
+                          domProps: { value: item.id },
+                        }),
+                        _vm._v(" "),
+                        _c("input", {
                           staticClass:
                             "form-check-input resturant-m-item-checkBox",
-                          attrs: { type: "checkbox", name: "" },
+                          attrs: { type: "checkbox", name: "chosen" },
                         }),
                         _vm._v(" "),
                         _c(
                           "div",
-                          {
-                            staticClass: "resturant-m-item",
-                            attrs: { for: "" },
-                          },
+                          { class: "resturant-m-item", attrs: { for: "" } },
                           [_vm._v(_vm._s(item.title))]
                         ),
                         _vm._v(" "),
-                        _vm._m(1, true),
+                        _c("div", { class: "resturant-m-item-info" }, [
+                          _vm._v(
+                            "\r\n                            " +
+                              _vm._s(item.price) +
+                              " ل.س    /     "
+                          ),
+                          _c("i", [_vm._v(_vm._s(item.unit) + " ")]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "resturant-m-item-quantity" },
+                          [
+                            _vm._m(2, true),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "qty-input text-center",
+                              attrs: {
+                                type: "number",
+                                name: "quantity",
+                                min: "0",
+                                step: item.pace,
+                              },
+                            }),
+                            _vm._v(" "),
+                            _vm._m(3, true),
+                          ]
+                        ),
                       ]),
                     ]
                   )
@@ -7844,19 +7871,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "resturant-m-item-quantity" }, [
-      _c("button", { staticClass: "decrement-btn" }, [
-        _c("i", { staticClass: "fa-solid fa-minus" }),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "qty-input text-center",
-        attrs: { type: "text", name: "quantity" },
-      }),
-      _vm._v(" "),
-      _c("button", { staticClass: "increment-btn" }, [
-        _c("i", { staticClass: "fa-solid fa-plus" }),
-      ]),
+    return _c(
+      "div",
+      {
+        staticClass: "resturant-m-item-quantity",
+        staticStyle: { visibility: "hidden !important" },
+      },
+      [
+        _c("button", { staticClass: "decrement-btn" }, [
+          _c("i", { staticClass: "fa-solid fa-minus" }),
+        ]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "qty-input text-center",
+          attrs: { type: "number", name: "quantity", min: "0" },
+        }),
+        _vm._v(" "),
+        _c("button", { staticClass: "increment-btn" }, [
+          _c("i", { staticClass: "fa-solid fa-plus" }),
+        ]),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "decrement-btn" }, [
+      _c("i", { staticClass: "fa-solid fa-minus" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "increment-btn" }, [
+      _c("i", { staticClass: "fa-solid fa-plus" }),
     ])
   },
 ]

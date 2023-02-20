@@ -29,71 +29,9 @@ Route::get('/vue/{vue_capture?}', function () {
    })->where('vue_capture', '[\/\w\.-]*');
 
 Route::get('/test', function () {
-    // $value =55;
-    // dd($value <= Hall::where('hallNumber', 1)->pluck('maxCapacity')->first());
-    // return $value == Hall::where('hallNumber', 1)->pluck('maxCapacity')->first();
-    // $object = (object) [
-    //     'tableNumber' => 10,
-    //     'hallNumber' => 1,
-    //     'active' => 1,
-    //     'maxCapacity' => 50,
-    //   ];
-    session("s",'s');
-    return "ok";
-    //   $tableInfo=Redis::hgetall('hall:' . 1 .':table:'. 2);
-    //   dd($tableInfo);
-    //  dd(getHallsFromRedis());
-    // Redis::hmset('hall:1' . ':tables:1', [
-    //     'tableNumber' =>  999,
-    //     'hallNumber' =>  1,
-    //     'active' =>  1,
-    //     'maxCapacity' => 1
-    // ]);
-// dd(Redis::hgetall('hall:1'.':table:1'));
 
-
-    // addSetTableInRedis(1,$object);
-    // dd(getOrderRange(1));
-// dd(Redis::hgetall('hall:1'.':table:4'));
-// setTableOrder($object,'');
-// setTableOrder($object,'',"ddddd");
-// deleteTableFromRedis(2,2);
-    //   addSetHallInRedis($object);
-    // deleteHallInRedis($object->hallNumber);
-    //   dd(Redis::hgetall('hall:' . 1 .':table:'. 1));
-    //   dd((getHallTablesFromRedis(3))[0]->active);
-    // Redis::hmset('client:' . 1, [
-    //     'id' => 1,
-    //     'name' => 'zoalfikar alsaad',
-    //     'email' => 'zzzzz',
-    //     'address' => 'salhab'
-    //     ]);
-    //     Redis::hmset('client:' . 2, [
-    //         'id' => 2,
-    //         'name' => 'zzzzz',
-    //         'email' => 'zzzzz',
-    //         'address' => 'salhab'
-    //         ]);
-    //         $keys = Redis::keys('client:*');
-    //         // dd(  Redis::hgetall("client:2"));
-
-    //         // dd( $keys['1']);
-    //         foreach ($keys as $key) {
-    //             $key=str_replace('laravel_database_','',$key);
-    //             // dd(  Redis::hgetall($key));
-    //             $stored = Redis::hgetall($key);
-    //             // $serialized = serialize($stored);
-    //             // $myNewArray = unserialize($serialized);
-    //             //  $stored =json_encode($stored);
-    //             ($stored["id"]);
-    //             // $stored =json_decode($stored);
-    //             //  echo $stored->id;
-    //             //  echo $stored->name;
-    //             //  echo $stored->email;
-    //             // echo $stored['name'];
-    //         }
-// Redis::hmset('hall:1'.':table:1', "order", 66);
-
+    
+    dd(getTableInfo(1,1));
 
 });
 
@@ -126,6 +64,7 @@ Route::middleware('authenticate')->group(function () {
         return view('appLayouts.app');
 
     });
+    // tables
     Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
     Route::get('/show-update-tables-form', [Resturant::class,'showFormUpdateTables']);
     Route::post('/add-new-table', [Resturant::class,'addNewTable']);
@@ -138,6 +77,9 @@ Route::middleware('authenticate')->group(function () {
     Route::get('/get-hall-data/{hallNumber}', [Resturant::class,'getHallData']);
     Route::post('/update-hall', [Resturant::class,'updateHall']);
     Route::post('/delete-hall', [Resturant::class,'deleteHall']);
+    Route::post('/set-table-info/{hall}/{table}', [Resturant::class,'setInfo']);
+    Route::post('/set-table-status/{hall}/{table}', [Resturant::class,'setStatus']);
+    ///// sections
     Route::get('/show-new-section-form', [Menu::class,'showFormNewSection']);
     Route::post('/add-new-menu-section', [Menu::class,'addNewMenuSection']);
     Route::get('/show-edit-sections-form', [Menu::class,'showFormEditSections']);
