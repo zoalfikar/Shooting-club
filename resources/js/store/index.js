@@ -13,6 +13,7 @@ const store = new vuex.Store({
         noHalls: false,
         // tables
         currentTable: '',
+        currentTableIndex: -1,
         currentTableStatus: '',
         boards: [],
         boardsLoading: false,
@@ -77,8 +78,7 @@ const store = new vuex.Store({
             })
             axios.post(`/set-table-orders/${this.state.currentHall}/${this.state.currentTable}`, { "orders": payload.orders })
                 .then((res) => {
-                    console.log(res);
-                    var data = { "index": index, "orders": payload.orders }
+                    var data = { "index": index, "orders": res.data.orders }
                     commit('setoOrders', data)
                 })
         },
@@ -103,13 +103,18 @@ const store = new vuex.Store({
             return index;
         },
         changeCurrentTableNumber({ commit }, tableNumber) {
-            commit('setCurrentTableNumber', tableNumber)
+            var index = store.dispatch("findBoardIndex", tableNumber).then((index) => {
+                commit('setCurrentTableIndex', index)
+                commit('setCurrentTableNumber', tableNumber)
+            })
         },
         changeCurrentTableStatus({ commit }, status) {
             commit('setCurrentTableStatus', status);
         },
-        setCurrentTableData({ commit }, tableNumber) {
-            // commit('setCurrentTableStatus', status);
+        changeCurrentTableData({ commit }, tableNumber) {
+            this.dispatch("findBoardIndex", tableNumber).then((index) => {
+                commit("setCurrentTableData", index);
+            })
         },
     },
     mutations: {
@@ -153,6 +158,9 @@ const store = new vuex.Store({
         setCurrentTableStatus: (state, status) => {
             state.currentTableStatus = status;
         },
+        setCurrentTableIndex: (state, index) => {
+            state.currentTableIndex = index;
+        },
         setAviliableBoards: (state, aviliableBoards) => {
 
             state.aviliabeBoards = aviliableBoards;
@@ -162,11 +170,18 @@ const store = new vuex.Store({
         },
         setoOrders: (state, data) => {
             state.boards[data.index].orders = data.orders;
+            console.log(state.boards[data.index].orders);
         },
         setTableInfoState: (state, data) => {
 
             state.boards[data.index].customerInfo = data.info;
 
+        },
+        setCurrentTableData: (state, index) => {
+            state.currentTable = state.boards[index].tableNumber
+            state.currentOrders = state.boards[index].orders
+            state.currentTable = state.boards[index].tableNumber
+            state.currentTableStatus = state.boards[index].status
         },
     },
     modules: {}

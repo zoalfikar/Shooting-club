@@ -18,13 +18,13 @@
       </header>
     <div v-if="noHalls" class="noHalls">
         <h1>لاتوجد صالات حتى الان</h1>
-        <v-btn dark>أدخل بيانات صالة</v-btn>
+        <v-btn onClick="navigatTo(event,this)" href="show-new-hall-form" dark>أدخل بيانات صالة</v-btn>
     </div>
     <div v-if="loading" class="flex justify-center">تحميل ...</div>
       <div v-else class="d-flex flex-row flex-wrap justify-content-center">
         <div v-if="noBoards" class="noHalls">
             <h1>لاتوجد طاولات في هذه الصالة حتى الان</h1>
-            <v-btn dark> أضف طاولات جديدة</v-btn>
+            <v-btn dark onClick="navigatTo(event,this)" href="show-new-table-form" >أضف طاولات جديدة</v-btn>
         </div>
         <div v-if="!currentHallActive" class="flex justify-center col-lg-12 col-md-12">هذه الصالة للعرض فقط (غير جاهة)</div>
           <div  v-for="(board,index) in boards"
@@ -48,7 +48,7 @@
   </div>
   </template>
 
-  <script>
+<script>
 import store from '../../../store';
       export default {
           emits:['statusChanged'],

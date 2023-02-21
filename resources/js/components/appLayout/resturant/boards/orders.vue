@@ -7,27 +7,28 @@
                       <v-btn v-else rounded color="primary" dark  @click="updateOrder">تعديل طلب</v-btn>
                       <v-btn rounded color="primary" dark> إسال الطلب</v-btn>
                   </div>
-                  <div class="total">9.000.000.000 ل.س</div>
+                  <div class="total">{{total}} ل.س</div>
               </div>
                   <div class="display-content">
                       <table class="table table-dark table-striped">
                           <thead>
                               <tr>
-                              <th scope="col">اسم الطلب</th>
-                              <th scope="col">السعر</th>
-                              <th scope="col">الكمية</th>
-                              <th scope="col">المجموع</th>
+                                <th scope="col">اسم الطلب</th>
+                                <th scope="col">السعر الإفرادي</th>
+                                <th scope="col">الكمية</th>
+                                <th scope="col">المجموع</th>
                               </tr>
                           </thead>
-                          <tbody>
-                              <tr v-for="order in currentTable.orders" :key="order.id">
-                                  <td>{{order.orderName}} <i @click="deleteOrder(order.id)" class="fa fa-remove" ></i></td>
+                          <tbody v-if="orders">
+                              <tr v-for="order in orders" :key="order.id">
+                                  <td>{{order.title}} <i @click="deleteOrder(order.id)" class="fa fa-remove" ></i></td>
                                   <td>{{order.price}}  ل.س</td>
                                   <td><i @click="increseQ(order.id)" class="fa fa-plus" ></i>{{order.quantity}}<i @click="decreseQ(order.id)"  class="fa fa-minus" ></i></td>
                                   <td>{{order.quantity * order.price}} ل.س</td>
                               </tr>
                           </tbody>
-                      </table>
+                        </table>
+                        <div v-if="!orders" class="empty-orders">لاتوجد طلبات حتى الان</div>
                   </div>
               <resturant-menu></resturant-menu>
               </div>
@@ -43,6 +44,33 @@
               currentTable:{},
               editMode:0,
           }
+      },
+      computed:{
+        currentTableTable:()=>store.state.currentTable,
+        currentTableIndex:()=>store.state.currentTableIndex,
+        orders:function(){
+            if (store.state.boards) {
+                return store.state.boards[this.currentTableIndex].orders
+            }
+            else{
+                return []
+            }
+        },
+        total:{
+            get(){
+                var total = 0;
+                if (this.orders) {
+                    console.log(this.orders);
+                    this.orders.forEach(order => {
+                        total += order.price * order.quantity
+                    });
+                }
+                return total
+            },
+        },
+    },
+    watch:{
+
       },
       methods:{
           increseQ:function (id) {
@@ -209,6 +237,14 @@
 
       .fa-plus:active , .fa-minus:active{
           transform: scale(1.1);
+      }
+      .empty-orders{
+        font-size: large;
+        color: rgb(172, 174, 175);
+        padding-top: 20px;
+        width: 100%;
+        height: 50px;
+        text-align: center;
       }
 
   </style>

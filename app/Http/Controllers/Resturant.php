@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\HallRequest;
 use App\Http\Requests\TableRequest;
 use App\Models\Hall;
+use App\Models\MenuItem;
 use App\Models\Table;
 use App\Rules\AvailableHallNumber;
 use App\Rules\AvailableTableNumber;
@@ -12,6 +13,7 @@ use App\Rules\MaxHallCapacity;
 use App\Rules\TableHallRule;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +21,7 @@ use Illuminate\Validation\Rule ;
 use PhpParser\Node\Stmt\TryCatch;
 use Throwable;
 
+use function PHPUnit\Framework\isNull;
 use function PHPUnit\Framework\throwException;
 
 class Resturant extends Controller
@@ -194,6 +197,76 @@ class Resturant extends Controller
     {
         setTableInfo($hall , $table , $req->info);
         return response()->json(["message"=>"تم الحفظ"]);
+    }
+    public function setOrders($hall,$table, Request $req)
+    {
+        $ordersRecived = $req->orders ;
+        $ids = [];
+        // dd($ordersRecived);
+        foreach ($ordersRecived as  $order) {
+            array_push($ids , $order["id"]);
+        }
+        $items = MenuItem::whereIn("id" , $ids)->get();
+        $oldOrders = getTableOrders($hall,$table);
+        if(!$oldOrders)
+        {
+            $NewOrders =[]; 
+            // dd("newItems");
+
+            foreach ($items as  $item) {
+                $quantity = array_values(array_filter($ordersRecived,function ($val) use ($item)
+                {
+                    return $val["id"] == $item->id;
+                }))[0]["quantity"] ;
+                $order = (object)["id"=>$item->id , "section"=>$item->section , "title" =>$item->title , "price" =>$item->price , "quantity"=>intval($quantity)];
+                array_push($NewOrders , $order);
+            }
+            usort($NewOrders,function ($a , $b)
+            {
+                return $a->section >= $b->section;
+            });
+            setTableOrders($hall,$table,$NewOrders);
+        }
+        else {
+            $newIds=$items->pluck("id")->toArray();
+            $existsIds = Arr::pluck($oldOrders ,'id');
+            $itemsToAdd = array_diff($newIds,$existsIds);
+            $itemsTtoUpdate = array_intersect($existsIds,$newIds);
+            $newItems = $items->whereIn('id' , $itemsToAdd);
+            $oldItems = $items->whereIn('id' , $itemsTtoUpdate);
+            if ($newItems) {
+                foreach ($newItems as  $item) {
+                    $quantity = array_values(array_filter($ordersRecived,function ($val) use ($item)
+                    {
+                        return $val["id"] == $item->id;
+                    }))[0]["quantity"] ;
+                    $order = (object)["id"=>$item->id , "section"=>$item->section , "title" =>$item->title , "price" =>$item->price , "quantity"=> intval($quantity)];
+                    array_push($oldOrders , $order);
+                }
+            }
+           if ($oldItems) {
+                foreach ($oldItems as $key => $item) {
+                    $quantity = array_values(array_filter($ordersRecived,function ($val) use ($item)
+                    {
+                        return $val["id"] == $item->id;
+                    }))[0]["quantity"] ;
+                    $oldOrders = array_map(function($ord) use ($item , $quantity)
+                    {
+                        if ($ord->id==$item->id) {
+                            $ord->quantity=$ord->quantity+ intval($quantity);
+                        }
+                        return $ord ;
+                    } ,$oldOrders);
+                }
+           }
+            usort($oldOrders,function ($a , $b)
+            {
+                return $a->section >= $b->section;
+            });
+            setTableOrders($hall,$table,$oldOrders);
+
+        }
+        return response()->json(["orders"=>getTableOrders($hall,$table)]);
     }
 
     public function setStatus($hall,$table, Request $req)

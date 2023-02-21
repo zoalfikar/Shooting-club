@@ -92,9 +92,6 @@
             </div>
             <div class="item-children ">
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/dev'">عرض</a></span>
-                </div>
-                <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-table-form'">طاولة جديدة</a></span>
                 </div>
                 <div class="item-child">

@@ -170,7 +170,11 @@ if (! function_exists('setTableOrders')) {
 if (! function_exists('getTableOrders')) {
     function getTableOrders($hallNumber, $table){
         $orders= Redis::hget('hall:' . $hallNumber.':table:'.$table, "orders");
-        return $orders=unserialize($orders);
+        $orders=unserialize($orders);
+        if (!$orders) {
+            return $orders=[];
+        }
+        return $orders;
     }
 }
 if (! function_exists('setTableStatus')) {

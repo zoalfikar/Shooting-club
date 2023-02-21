@@ -19,15 +19,16 @@
          class="col">
             <div class="menu-section">
                 <center><h1>{{section.name}}</h1></center>
-                <div v-if="!section.items.length" class="menu-section-list"> 
-                    <div class="menu-section-list-item" style="position: relative;">
-                        <input type="hidden"  >
-                        <input disabled type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="chosen" style="visibility: hidden !important;">
-                        <div for="" :class="'resturant-m-item'" style="position: absolute; inset: 0 auto 0  ; width: 100% !important; text-align: center;">لاتوجد عناصر في هذه القائمة </div>
+                <div v-if="!section.items.length" style="text-align: center;">لاتوجد عناصر في هذه القائمة</div>
+                <div v-if="!section.items.length" class="menu-section-list" style="visibility: hidden !important;"> 
+                    <div class="menu-section-list-item" >
+                        <input type="hidden" value="-1" >
+                        <input disabled type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="chosen">
+                        <div for="" :class="'resturant-m-item'">اسم العنصر</div>
                         <div :class="'resturant-m-item-info'" style="visibility: hidden;">
                            السعر&nbsp;ل.س &nbsp;&nbsp; / &nbsp;&nbsp;  <i>الواحدة&nbsp;</i> 
                         </div> 
-                        <div class="resturant-m-item-quantity" style="visibility: hidden !important; ">
+                        <div class="resturant-m-item-quantity">
                             <button  class="  decrement-btn  "><i class='fa-solid fa-minus'></i></button>
                             <input type="number" name="quantity"  class=" qty-input text-center" min="0" >
                             <button  class=" increment-btn  "><i class='fa-solid fa-plus'></i></button>
@@ -39,16 +40,16 @@
                 v-bind:key="item.id"
                 class="menu-section-list">
                     <div class="menu-section-list-item">
-                        <input type="hidden" :value="item.id" >
-                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="chosen" >
-                        <div for="" :class="'resturant-m-item'">{{item.title}}</div>
+                        <input id="id" type="hidden" :value="item.id" >
+                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="chosen" @click="checkBoxClicked">
+                        <div for="" :class="'resturant-m-item'" @click="itemClicked">{{item.title}}</div>
                         <div :class="'resturant-m-item-info'">
                             {{item.price}}&nbsp;ل.س &nbsp;&nbsp; / &nbsp;&nbsp;  <i>{{item.unit}}&nbsp;</i> 
                         </div> 
                         <div class="resturant-m-item-quantity">
-                            <button  class="  decrement-btn  "><i class='fa-solid fa-minus'></i></button>
+                            <button  class="  decrement-btn  " @click="decrementBtnClicked"><i class='fa-solid fa-minus'></i></button>
                             <input type="number" name="quantity"  class=" qty-input text-center" min="0" :step="item.pace">
-                            <button  class=" increment-btn  "><i class='fa-solid fa-plus'></i></button>
+                            <button  class=" increment-btn  " @click="incrementBtnClicked"><i class='fa-solid fa-plus'></i></button>
                         </div>
                     </div>
                 </div>
@@ -62,33 +63,63 @@
 </template>
 
 <script>
-import { set } from 'vue';
 import store from '../../../store';
 
     export default {
         data (){
             return {
+                momento:[]
             }
         },
         computed:{
             menuItems:()=> store.state.menuItems,
-            currentTable:()=> store.state.currentTable
+            currentTable:()=> store.state.currentTable,
+            now() {
+                return Date.now()
+            }
         },
         methods:{
-            // addOrder:function () {
+            itemClicked:function (e) {
+                $(e.target).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
+            },
+            checkBoxClicked:function (e) {
+                if($(e.target).prop("checked")) {
+                    $(e.target).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility','visible');
+                    $(e.target).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val(1);
+                   this.momento.push(e)
+                } else {
+                    $(e.target).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility','hidden');
+                    $(e.target).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val('');
+                }
+            },
+            incrementBtnClicked:function (e) {
+                var inc_value=$(e.target).closest('.resturant-m-item-quantity').find('.qty-input').val();
+                var pace = $(e.target).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
+                var value=parseInt(inc_value,10);
+                value= isNaN(value) ? 0 : value ;
+                value+=parseInt(pace,10);
+                value= value < 0 ? 0 : value ;
+                $(e.target).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+            },
+            decrementBtnClicked:function (e) {
+                var dec_value=$(e.target).closest('.resturant-m-item-quantity').find('.qty-input').val();
+                var pace = $(e.target).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
+                var value=parseInt(dec_value,10);
+                value= isNaN(value) ? 0 : value ;
 
-            // },
-            // removOrder:function () {
-
-            // },
+                value-=parseInt(pace,10);
+                value= value < 0 ? 0 : value ;
+                $(e.target).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
+            },
             takeOrder:function () {
                 var newOrders = []
                 $( ".menu-section-list-item" ).each(function( index ) {
                     if ($(this).children(".resturant-m-item-checkBox" ).prop("checked")==true) {
                         var order = {}
-                        order.orderName = $(this).children(".resturant-m-item").text();
+                        order.id = $(this).children("#id").val();
                         order.quantity = $(this).children(".resturant-m-item-quantity").find(".qty-input").val();
                         newOrders.push(order)
+                        
                     }
                 });
                 store.dispatch("saveOrders",{"tableNumber": this.currentTable ,"orders":newOrders })
@@ -97,53 +128,10 @@ import store from '../../../store';
         watch: {
             menuItems:{
                 handler:function (newVal, oldVal) {
-                    Promise.resolve(newVal).then((value)=>{
-                        $(".resturant-m-item").click(function (e) {
-                        e.preventDefault();
-                            $(this).closest('.menu-section-list-item').find('.resturant-m-item-checkBox').click();
-                        });
-                        $(".resturant-m-item-checkBox").on("click", function(e){
-                            if($(this).prop("checked")) {
-                                $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility','visible');
-                                $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val(1);
-                                // momento.push(e)
-                            } else {
-                                $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity').css('visibility','hidden');
-                                $(this).closest('.menu-section-list-item').find('.resturant-m-item-quantity .qty-input').val('');
-                            }
-                        });
-                        $(".increment-btn").click(function(){
-                            var inc_value=$(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
-                            var pace = $(this).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
-                            var value=parseInt(inc_value,10);
-                            value= isNaN(value) ? 0 : value ;
-                            if (true)
-                            {
-                                value+=parseInt(pace,10);
-                                $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
-
-                            }
-                        });
-                        $(".decrement-btn").click(function(){
-                            var dec_value=$(this).closest('.resturant-m-item-quantity').find('.qty-input').val();
-                            var pace = $(this).closest('.resturant-m-item-quantity').find('.qty-input').attr("step");
-                            var value=parseInt(dec_value,10);
-                            value= isNaN(value) ? 0 : value ;
-                            if (value>0)
-                            {
-                                value-=parseInt(pace,10);
-                                $(this).closest('.resturant-m-item-quantity').find('.qty-input').val(value);
-                            }
-                        });
-                    })
-
-                }
-                ,
+                },
                 deep:true
             }
-          
-
-            },
+        },
         mounted : function()
         {
             $('.display-all-section').css("margin-top",'-4px');
@@ -339,7 +327,7 @@ import store from '../../../store';
 }
 
 .menu-wraper{
-    display: block;
+    display: none;
     position: fixed;
     background-color: rgba(0, 0, 0, 10%);
     width: 100vw;

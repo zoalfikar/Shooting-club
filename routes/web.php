@@ -31,7 +31,12 @@ Route::get('/vue/{vue_capture?}', function () {
 Route::get('/test', function () {
 
     
-    dd(getTableInfo(1,1));
+    setTableOrders(1,1,'');
+    setTableOrders(1,2,'');
+    setTableOrders(1,3,'');
+    setTableOrders(1,5,'');
+    setTableOrders(1,4,'');
+    setTableOrders(1,6,'');
 
 });
 
@@ -49,7 +54,7 @@ Route::get('halls', function ()
         'halls' => $halls
     ]);
 });
-Route::get('/dev', function (Request $req) {
+Route::get('/resturant', function (Request $req) {
     if ($req->ajax()) {
         return response( getAjaxResponse('boards',[]));
     }
@@ -79,6 +84,7 @@ Route::middleware('authenticate')->group(function () {
     Route::post('/delete-hall', [Resturant::class,'deleteHall']);
     Route::post('/set-table-info/{hall}/{table}', [Resturant::class,'setInfo']);
     Route::post('/set-table-status/{hall}/{table}', [Resturant::class,'setStatus']);
+    Route::post('/set-table-orders/{hall}/{table}', [Resturant::class,'setOrders']);
     ///// sections
     Route::get('/show-new-section-form', [Menu::class,'showFormNewSection']);
     Route::post('/add-new-menu-section', [Menu::class,'addNewMenuSection']);

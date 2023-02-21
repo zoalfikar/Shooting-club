@@ -1,12 +1,11 @@
 <template>
     <v-app-bar app color="#2F4F4F" dark>
         <div class="links-bar">
-                مطعم
+                <span class="nav-bar-button" onClick="navigatTo(event,this)" href="/resturant">مطعم</span> 
                 <div class="links-divider"><v-divider vertical></v-divider></div>
-                نقطة مبيع
+                <span>نقطة مبيع</span>
                 <div class="links-divider"><v-divider vertical></v-divider></div>
                 <div>حول البرنامج &nbsp; <i class="fa fa-circle-question"></i></div>
-
         </div>
         <h1> نادي الرماية </h1>
         <v-btn icon id="setting-menu-toggle" data-bs-toggle="collapse" data-bs-target="#setting-menu">
@@ -45,6 +44,12 @@
         align-items: center;
         height: 80%;
         gap: 1.5rem;
+    }
+    .links-bar .nav-bar-button{
+
+    }
+    .links-bar .nav-bar-button:hover{
+        background-color :blue;
     }
     .links-divider{
         height: 40%;

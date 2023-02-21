@@ -77,7 +77,6 @@ export default {
     },
     computed: {
         borad:function( )  {
-            console.log(store.state.boards[this.index]);
             return store.state.boards[this.index]
         }
     },
@@ -110,6 +109,7 @@ export default {
         toggleBoardModal : function() {
             store.dispatch("changeCurrentTableNumber" , this.tablenumber);
             store.dispatch("changeCurrentTableStatus" , this.status);
+            // store.dispatch("changeCurrentTableData",this.tablenumber);
             var clearShowModel = ()=>{
                 document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
                 document.querySelector(".board-modal-content").removeEventListener('animationend',clearShowModel);
