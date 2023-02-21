@@ -3,14 +3,13 @@
               <div class="optionplusTotal">
                   <div class="options">
                       <v-btn rounded color="primary" dark @click="toggleMenu">أضف طلب</v-btn>
-                      <!-- <v-btn v-if ="editMode" rounded color="primary" dark  @click="saveOrder">حفظ</v-btn>
+                      <v-btn v-if ="editMode" rounded color="primary" dark  @click="saveOrder">حفظ</v-btn>
                       <v-btn v-else rounded color="primary" dark  @click="updateOrder">تعديل طلب</v-btn>
-                      <v-btn rounded color="primary" dark> إسال الطلب</v-btn> -->
-
+                      <v-btn rounded color="primary" dark> إسال الطلب</v-btn>
                   </div>
-                  <!-- <div class="total">9.000.000.000 ل.س</div> -->
+                  <div class="total">9.000.000.000 ل.س</div>
               </div>
-                  <!-- <div class="display-content">
+                  <div class="display-content">
                       <table class="table table-dark table-striped">
                           <thead>
                               <tr>
@@ -29,7 +28,7 @@
                               </tr>
                           </tbody>
                       </table>
-                  </div> -->
+                  </div>
               <resturant-menu></resturant-menu>
               </div>
   </template>
@@ -46,36 +45,36 @@
           }
       },
       methods:{
-        //   increseQ:function (id) {
-        //       this.currentTable.orders.map((element) => {
-        //           if (element.id == id) {
-        //               element.quantity++;
-        //           }
-        //       })
-        //   },
-        //   decreseQ:function (id) {
-        //       this.currentTable.orders.map((element) => {
-        //           if (element.id == id && element.quantity > 0) {
-        //               element.quantity--;
-        //           }
-        //       })
-        //   },
-        //   deleteOrder:function (id) {
-        //       var index = this.currentTable.orders.findIndex(function (o)
-        //       {
-        //           return o.id == id;
-        //       });
-        //       this.currentTable.orders.splice(index,1);
-        //   },
+          increseQ:function (id) {
+              this.currentTable.orders.map((element) => {
+                  if (element.id == id) {
+                      element.quantity++;
+                  }
+              })
+          },
+          decreseQ:function (id) {
+              this.currentTable.orders.map((element) => {
+                  if (element.id == id && element.quantity > 0) {
+                      element.quantity--;
+                  }
+              })
+          },
+          deleteOrder:function (id) {
+              var index = this.currentTable.orders.findIndex(function (o)
+              {
+                  return o.id == id;
+              });
+              this.currentTable.orders.splice(index,1);
+          },
           toggleMenu: function () {
               document.querySelector(".menu-wraper").style.display = "block";
           },
-        //   updateOrder: function (e) {
-        //     this.editMode = 1 ;
-        //           $('.fa-remove').css('display', "block");
-        //           $('.fa-plus').css('display', "block");
-        //           $('.fa-minus').css('display', "block");
-        //   },
+          updateOrder: function (e) {
+            this.editMode = 1 ;
+                  $('.fa-remove').css('display', "block");
+                  $('.fa-plus').css('display', "block");
+                  $('.fa-minus').css('display', "block");
+          },
           saveOrder:function (e) {
             // this.editMode = 0 ;
             // $('.fa-remove').css('display', "none");

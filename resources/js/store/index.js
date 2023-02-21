@@ -21,6 +21,8 @@ const store = new vuex.Store({
         // menu
         menuItems: [],
         // orders
+        currentOrders: [],
+        // customer info
     },
     getters: {
         currentOrder(state) {
@@ -73,8 +75,12 @@ const store = new vuex.Store({
             var index = this.state.boards.findIndex((b) => {
                 return b.tableNumber == payload.tableNumber;
             })
-            var data = { "index": index, "orders": payload.orders }
-            commit('setoOrders', data)
+            axios.post(`/set-table-orders/${this.state.currentHall}/${this.state.currentTable}`, { "orders": payload.orders })
+                .then((res) => {
+                    console.log(res);
+                    var data = { "index": index, "orders": payload.orders }
+                    commit('setoOrders', data)
+                })
         },
         setTableInfo({ commit }, info) {
             var hall = this.state.currentHall;
@@ -101,6 +107,9 @@ const store = new vuex.Store({
         },
         changeCurrentTableStatus({ commit }, status) {
             commit('setCurrentTableStatus', status);
+        },
+        setCurrentTableData({ commit }, tableNumber) {
+            // commit('setCurrentTableStatus', status);
         },
     },
     mutations: {
