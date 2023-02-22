@@ -201,6 +201,10 @@ class Resturant extends Controller
     public function setOrders($hall,$table, Request $req)
     {
         $ordersRecived = $req->orders ;
+        $reInitAllOrders = false;
+        if (isset($req->updateMode)) {
+            $reInitAllOrders = $req->updateMode;
+        }
         $ids = [];
         // dd($ordersRecived);
         foreach ($ordersRecived as  $order) {
@@ -231,6 +235,7 @@ class Resturant extends Controller
             $newIds=$items->pluck("id")->toArray();
             $existsIds = Arr::pluck($oldOrders ,'id');
             $itemsToAdd = array_diff($newIds,$existsIds);
+            $itemsToDelete = array_diff($existsIds,$newIds);
             $itemsTtoUpdate = array_intersect($existsIds,$newIds);
             $newItems = $items->whereIn('id' , $itemsToAdd);
             $oldItems = $items->whereIn('id' , $itemsTtoUpdate);
@@ -250,13 +255,26 @@ class Resturant extends Controller
                     {
                         return $val["id"] == $item->id;
                     }))[0]["quantity"] ;
-                    $oldOrders = array_map(function($ord) use ($item , $quantity)
+                    $oldOrders = array_map(function($ord) use ($item , $quantity ,$reInitAllOrders)
                     {
                         if ($ord->id==$item->id) {
-                            $ord->quantity=$ord->quantity+ intval($quantity);
+                            if ($reInitAllOrders) {
+                                $ord->quantity= intval($quantity);
+                            } else {
+                                $ord->quantity=$ord->quantity+ intval($quantity);
+                            }
                         }
                         return $ord ;
                     } ,$oldOrders);
+                }
+           }
+           if ($reInitAllOrders) {
+                if ($itemsToDelete) {
+                    foreach ($oldOrders as $key =>  $order) {
+                        if (in_array($order->id,$itemsToDelete) ) {
+                            unset($oldOrders[$key]);
+                        }
+                    }
                 }
            }
             usort($oldOrders,function ($a , $b)

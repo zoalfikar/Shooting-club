@@ -4,7 +4,8 @@
                   <div class="options">
                       <v-btn rounded color="primary" dark @click="toggleMenu">أضف طلب</v-btn>
                       <v-btn v-if ="editMode" rounded color="primary" dark  @click="saveOrder">حفظ</v-btn>
-                      <v-btn v-else rounded color="primary" dark  @click="updateOrder">تعديل طلب</v-btn>
+                      <v-btn v-if ="editMode" rounded color="primary" dark  @click="cancelEditMdde">إلغاء</v-btn>
+                      <v-btn v-if ="!editMode" rounded color="primary" dark  @click="updateOrder">تعديل طلب</v-btn>
                       <v-btn rounded color="primary" dark> إسال الطلب</v-btn>
                   </div>
                   <div class="total">{{total}} ل.س</div>
@@ -20,7 +21,7 @@
                               </tr>
                           </thead>
                           <tbody v-if="orders">
-                              <tr v-for="order in orders" :key="order.id">
+                              <tr v-for="order in (editMode  ? temporeryOrders : orders) " :key="order.id">
                                   <td>{{order.title}} <i @click="deleteOrder(order.id)" class="fa fa-remove" ></i></td>
                                   <td>{{order.price}}  ل.س</td>
                                   <td><i @click="increseQ(order.id)" class="fa fa-plus" ></i>{{order.quantity}}<i @click="decreseQ(order.id)"  class="fa fa-minus" ></i></td>
@@ -39,18 +40,23 @@
   import store from '../../../../store';
 
   export default {
-      data () {
-          return {
-              currentTable:{},
-              editMode:0,
-          }
-      },
-      computed:{
-        currentTableTable:()=>store.state.currentTable,
+        data () {
+        return {
+            temporeryOrders:[{
+                id:3,
+                quantity:3,
+                price:23,
+
+            }],
+            editMode:false,
+        }
+        },
+        computed:{
+        currentTableNumber:()=>store.state.currentTable,
         currentTableIndex:()=>store.state.currentTableIndex,
-        orders:function(){
-            if (store.state.boards) {
-                return store.state.boards[this.currentTableIndex].orders
+        orders: function(){
+            if (store.state.boards[this.currentTableIndex]) {
+                return  store.state.boards[this.currentTableIndex].orders
             }
             else{
                 return []
@@ -60,7 +66,6 @@
             get(){
                 var total = 0;
                 if (this.orders) {
-                    console.log(this.orders);
                     this.orders.forEach(order => {
                         total += order.price * order.quantity
                     });
@@ -68,79 +73,69 @@
                 return total
             },
         },
+
     },
     watch:{
-
-      },
-      methods:{
-          increseQ:function (id) {
-              this.currentTable.orders.map((element) => {
-                  if (element.id == id) {
-                      element.quantity++;
-                  }
-              })
-          },
-          decreseQ:function (id) {
-              this.currentTable.orders.map((element) => {
-                  if (element.id == id && element.quantity > 0) {
-                      element.quantity--;
-                  }
-              })
-          },
-          deleteOrder:function (id) {
-              var index = this.currentTable.orders.findIndex(function (o)
-              {
-                  return o.id == id;
-              });
-              this.currentTable.orders.splice(index,1);
-          },
-          toggleMenu: function () {
-              document.querySelector(".menu-wraper").style.display = "block";
-          },
-          updateOrder: function (e) {
-            this.editMode = 1 ;
-                  $('.fa-remove').css('display', "block");
-                  $('.fa-plus').css('display', "block");
-                  $('.fa-minus').css('display', "block");
-          },
-          saveOrder:function (e) {
-            // this.editMode = 0 ;
-            // $('.fa-remove').css('display', "none");
-            // $('.fa-plus').css('display', "none");
-            // $('.fa-minus').css('display', "none");
-            //   var itemsToDelete = [];
-            //   var newOrders = this.currentTable.orders;
-            //   for (let i = 0; i < this.currentTable.orders.length; i++) {
-            //       if (this.currentTable.orders[i].quantity === 0) {
-            //           itemsToDelete.push(i)
-            //       }
-            //   }
-            //   for (let i = 0; i < itemsToDelete.length; i++) {
-            //       this.currentTable.orders.splice(i,1)
-            //   }
-            //   for (let i = 0; i < newOrders.length; i++) {
-            //       delete  newOrders[i].id;
-            //   }
-
-            //   store.dispatch("saveOrders",{"tableNumber": this.currentTable.tableNumber ,"orders":newOrders })
-          }
-
-
-      },
-      mounted:function () {
-        //   var value =  store.state.boards.filter((b)=>{
-        //       return b.tableNumber == router.currentRoute.params.tableNumber
-        //   });
-        //   for (let i = 0; i < value[0].orders.length; i++) {
-        //       value[0].orders[i].id = i;
-        //   }
-        //   this.currentTable=value[0];
-
-          $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
-
-      }
-
-  }
+        orders:{
+            handler(newVal,oldVal){
+                this.temporeryOrders = [...this.orders];
+            },
+            deep:true,
+            immediate: true
+        }
+    },
+        methods:{
+            increseQ:function (id) {
+                this.temporeryOrders.map((o) => {
+                    if (o.id == id) {
+                        o.quantity++;
+                    }
+                })
+            },
+            decreseQ:function (id) {
+                this.temporeryOrders.map((o) => {
+                    if (o.id == id && o.quantity > 0) {
+                        o.quantity--;
+                    }
+                })
+            },
+            deleteOrder:function (id) {
+                var index = this.temporeryOrders.findIndex(function (o)
+                {
+                    return o.id == id;
+                });
+                this.temporeryOrders.splice(index,1);
+            },
+            toggleMenu: function () {
+                document.querySelector(".menu-wraper").style.display = "block";
+            },
+            updateOrder: function (e) {
+                this.editMode = true ;
+                this.temporeryOrders = [...this.orders]
+                $('.fa-remove').css('display', "block");
+                $('.fa-plus').css('display', "block");
+                $('.fa-minus').css('display', "block");
+            },
+            cancelEditMdde:function (e){
+                this.editMode = false ;
+                this.temporeryOrders = [];
+                console.log(this.orders)
+                $('.fa-remove').css('display', "none");
+                $('.fa-plus').css('display', "none");
+                $('.fa-minus').css('display', "none");
+            },
+            saveOrder:function (e) {
+                this.editMode = false ;
+                $('.fa-remove').css('display', "none");
+                $('.fa-plus').css('display', "none");
+                $('.fa-minus').css('display', "none");
+                store.dispatch("saveOrders",{"tableNumber": this.currentTableNumber ,"orders":this.temporeryOrders ,"updateMode":true })
+            }
+        },
+        mounted:function () {
+            $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
+        }
+    }
   </script>
 
   <style scoped>

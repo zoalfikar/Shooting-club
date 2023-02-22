@@ -21,7 +21,7 @@
 <body>
     <div id="app" v-cloak>
         <div class="navbar">
-            <navbar></navbar>
+            <navbar url={{ url('/') }}></navbar >
         </div>
         <div class="app-grid">
             <div id="sidebar" class="sidebar">

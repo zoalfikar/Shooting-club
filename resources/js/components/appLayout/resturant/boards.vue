@@ -1,20 +1,26 @@
 <template>
     <div class="container">
       <header class="boards-header">
-          <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
-          <div class="hall-navigation">
-              <div class="navigations-title">
-                  <h4>الصالة :</h4>
-              </div>
-              <button value="" class="naviga-link-start"><span href=""><i class="fa fa-angle-right"></i></span></button>
-              <div class="navigations-links">
-                  <button @click="(event)=>{bringHalls(event)}" v-for="hall in halls" :key="hall.hallNumber" :value="hall.hallNumber" class="naviga-link"  :style=" `background-color:${ hall.hallNumber == currentButtun ? 'rgb(199, 176, 146)':'rgb(90, 117, 65)'} `"><span>{{hall.hallNumber}}</span></button>
-              </div>
-              <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
-          </div>
-          <div  class="current-nav-val">
-              <h1>{{currentHallName}}</h1>
-          </div>
+            <div class="filter">
+                <div @click="showAll" title="عرض الكل" class="showAll"></div>
+                <div @click="showEmpty" title="عرض الطاولات المتاحة" class="empty"></div>
+                <div  @click="showActive" title="عرض الطاولات المشغولة" class="active"></div>
+                <div  @click="showReserved" title="عرض الطاولات المحجوزة" class="reserved"></div>
+            </div>
+            <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
+            <div class="hall-navigation">
+                <div class="navigations-title">
+                    <h4>الصالة :</h4>
+                </div>
+                <button value="" class="naviga-link-start"><span href=""><i class="fa fa-angle-right"></i></span></button>
+                <div class="navigations-links">
+                    <button @click="(event)=>{bringHalls(event)}" v-for="hall in halls" :key="hall.hallNumber" :value="hall.hallNumber" class="naviga-link"  :style=" `background-color:${ hall.hallNumber == currentButtun ? 'rgb(199, 176, 146)':'rgb(90, 117, 65)'} `"><span>{{hall.hallNumber}}</span></button>
+                </div>
+                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
+            </div>
+            <div  class="current-nav-val">
+                <h1>{{currentHallName}}</h1>
+            </div>
       </header>
     <div v-if="noHalls" class="noHalls">
         <h1>لاتوجد صالات حتى الان</h1>
@@ -30,7 +36,10 @@
           <div  v-for="(board,index) in boards"
               v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
-              :style=" `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order}`"
+              :style=" 
+              `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
+              display:${currentFilterVal == 'all' || currentFilterVal == board.status ? 'block' : 'none'};`
+              "
               :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
                   <board
                         :index="index"
@@ -59,6 +68,7 @@ import store from '../../../store';
                 nodes:'',
                 total:0,
                 orderHelper:0,
+                currentFilterVal:"all",
               }
           },
 
@@ -115,6 +125,19 @@ import store from '../../../store';
                 return new Promise((resolve, reject) => {
                     resolve(nodes);
                 });
+            },
+            showAll:function(){
+                this.currentFilterVal='all'
+            },
+            showEmpty:function(){
+                this.currentFilterVal=''
+            },
+            showActive:function(){
+                this.currentFilterVal='active'
+
+            },
+            showReserved:function(){
+                this.currentFilterVal='taken'
             },
             bringHalls:function (event) {
                     event.preventDefault();
@@ -454,8 +477,54 @@ import store from '../../../store';
         justify-content: center;
         gap: 20px;
     }
-      .d-flex {
-          overflow: hidden;
-          clip-path: inset(0 0 0 0);
-      }
+    .d-flex {
+        overflow: hidden;
+        clip-path: inset(0 0 0 0);
+    }
+    .filter{
+        display:flex;
+        position:absolute;
+        width:125px;
+        height:30px;
+        justify-content: space-between;
+        align-items:top;
+        inset:auto 50px 0px auto ;
+    }
+    .reserved ,.active  ,.empty , .showAll{
+        width:20px;
+        height:20px;
+        border-radius:3px;
+        box-shadow: 0px 1px  2px black;
+    }
+    .reserved:hover ,.active:hover  ,.empty:hover ,.showAll:hover{
+        transform:scale(1.3);
+        outline-style:solid ;
+        outline-offset: 2px;
+        outline-color: rgb(100, 100, 70);
+        outline-width: 1px;
+    }
+    .showAll{
+        background-color: rgb(2150, 172, 102)
+    }
+    .showAll:hover{
+        background-color: rgb(200, 150, 90)
+    }
+    .active {
+        background-color: rgb(119, 82, 82)
+    }
+    .active:hover {
+        background-color: rgb(110, 70, 70)
+    }
+    .reserved {
+        background-color: rgb(66, 21, 21)
+    }
+    .reserved:hover {
+        background-color: rgb(50, 10, 10)
+    }
+    .empty{
+        background-color:  rgb(151, 130, 151)
+    }
+    .empty:hover{
+        background-color:  rgb(131, 120, 140)
+    }
   </style>

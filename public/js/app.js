@@ -2437,6 +2437,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['url'],
   mounted: function mounted() {
     document.addEventListener('click', function (event) {
       var settingMenu = document.getElementById('setting-menu');
@@ -2675,7 +2676,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       document.querySelector(".board-modal-content").classList.add('animat-hide-modal');
       document.querySelector(".board-modal-content").addEventListener("animationend", clearHideModal);
       _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-        path: "/dev"
+        path: "/resturant"
       });
     },
     getOrders: function getOrders() {
@@ -2951,6 +2952,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['statusChanged'],
@@ -2960,7 +2970,8 @@ __webpack_require__.r(__webpack_exports__);
       boxes: [],
       nodes: '',
       total: 0,
-      orderHelper: 0
+      orderHelper: 0,
+      currentFilterVal: "all"
     };
   },
   computed: {
@@ -3036,6 +3047,18 @@ __webpack_require__.r(__webpack_exports__);
       return new Promise(function (resolve, reject) {
         resolve(nodes);
       });
+    },
+    showAll: function showAll() {
+      this.currentFilterVal = 'all';
+    },
+    showEmpty: function showEmpty() {
+      this.currentFilterVal = '';
+    },
+    showActive: function showActive() {
+      this.currentFilterVal = 'active';
+    },
+    showReserved: function showReserved() {
+      this.currentFilterVal = 'taken';
     },
     bringHalls: function bringHalls(event) {
       event.preventDefault();
@@ -3330,6 +3353,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../routes */ "./resources/js/routes/index.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../store */ "./resources/js/store/index.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
 //
 //
 //
@@ -3371,19 +3407,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      currentTable: {},
-      editMode: 0
+      temporeryOrders: [{
+        id: 3,
+        quantity: 3,
+        price: 23
+      }],
+      editMode: false
     };
   },
   computed: {
-    currentTableTable: function currentTableTable() {
+    currentTableNumber: function currentTableNumber() {
       return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.currentTable;
     },
     currentTableIndex: function currentTableIndex() {
       return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.currentTableIndex;
     },
     orders: function orders() {
-      if (_store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards) {
+      if (_store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards[this.currentTableIndex]) {
         return _store__WEBPACK_IMPORTED_MODULE_1__["default"].state.boards[this.currentTableIndex].orders;
       } else {
         return [];
@@ -3394,7 +3434,6 @@ __webpack_require__.r(__webpack_exports__);
         var total = 0;
 
         if (this.orders) {
-          console.log(this.orders);
           this.orders.forEach(function (order) {
             total += order.price * order.quantity;
           });
@@ -3404,65 +3443,67 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  watch: {},
+  watch: {
+    orders: {
+      handler: function handler(newVal, oldVal) {
+        this.temporeryOrders = _toConsumableArray(this.orders);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     increseQ: function increseQ(id) {
-      this.currentTable.orders.map(function (element) {
-        if (element.id == id) {
-          element.quantity++;
+      this.temporeryOrders.map(function (o) {
+        if (o.id == id) {
+          o.quantity++;
         }
       });
     },
     decreseQ: function decreseQ(id) {
-      this.currentTable.orders.map(function (element) {
-        if (element.id == id && element.quantity > 0) {
-          element.quantity--;
+      this.temporeryOrders.map(function (o) {
+        if (o.id == id && o.quantity > 0) {
+          o.quantity--;
         }
       });
     },
     deleteOrder: function deleteOrder(id) {
-      var index = this.currentTable.orders.findIndex(function (o) {
+      var index = this.temporeryOrders.findIndex(function (o) {
         return o.id == id;
       });
-      this.currentTable.orders.splice(index, 1);
+      this.temporeryOrders.splice(index, 1);
     },
     toggleMenu: function toggleMenu() {
       document.querySelector(".menu-wraper").style.display = "block";
     },
     updateOrder: function updateOrder(e) {
-      this.editMode = 1;
+      this.editMode = true;
+      this.temporeryOrders = _toConsumableArray(this.orders);
       $('.fa-remove').css('display', "block");
       $('.fa-plus').css('display', "block");
       $('.fa-minus').css('display', "block");
     },
-    saveOrder: function saveOrder(e) {// this.editMode = 0 ;
-      // $('.fa-remove').css('display', "none");
-      // $('.fa-plus').css('display', "none");
-      // $('.fa-minus').css('display', "none");
-      //   var itemsToDelete = [];
-      //   var newOrders = this.currentTable.orders;
-      //   for (let i = 0; i < this.currentTable.orders.length; i++) {
-      //       if (this.currentTable.orders[i].quantity === 0) {
-      //           itemsToDelete.push(i)
-      //       }
-      //   }
-      //   for (let i = 0; i < itemsToDelete.length; i++) {
-      //       this.currentTable.orders.splice(i,1)
-      //   }
-      //   for (let i = 0; i < newOrders.length; i++) {
-      //       delete  newOrders[i].id;
-      //   }
-      //   store.dispatch("saveOrders",{"tableNumber": this.currentTable.tableNumber ,"orders":newOrders })
+    cancelEditMdde: function cancelEditMdde(e) {
+      this.editMode = false;
+      this.temporeryOrders = [];
+      console.log(this.orders);
+      $('.fa-remove').css('display', "none");
+      $('.fa-plus').css('display', "none");
+      $('.fa-minus').css('display', "none");
+    },
+    saveOrder: function saveOrder(e) {
+      this.editMode = false;
+      $('.fa-remove').css('display', "none");
+      $('.fa-plus').css('display', "none");
+      $('.fa-minus').css('display', "none");
+      _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("saveOrders", {
+        "tableNumber": this.currentTableNumber,
+        "orders": this.temporeryOrders,
+        "updateMode": true
+      });
     }
   },
   mounted: function mounted() {
-    //   var value =  store.state.boards.filter((b)=>{
-    //       return b.tableNumber == router.currentRoute.params.tableNumber
-    //   });
-    //   for (let i = 0; i < value[0].orders.length; i++) {
-    //       value[0].orders[i].id = i;
-    //   }
-    //   this.currentTable=value[0];
     $('.optionplusTotal').css('height', $('.modal-navigation-content').css('height'));
   }
 });
@@ -4366,7 +4407,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         return b.tableNumber == payload.tableNumber;
       });
       axios__WEBPACK_IMPORTED_MODULE_0___default().post("/set-table-orders/".concat(this.state.currentHall, "/").concat(this.state.currentTable), {
-        "orders": payload.orders
+        "orders": payload.orders,
+        "updateMode": payload.updateMode
       }).then(function (res) {
         var data = {
           "index": index,
@@ -4594,7 +4636,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.links-bar[data-v-c5e50ae0]{\n    display: flex;\n    margin-right: 1.5rem;\n    align-items: center;\n    height: 80%;\n    gap: 1.5rem;\n}\n.links-bar .nav-bar-button[data-v-c5e50ae0]{\n}\n.links-bar .nav-bar-button[data-v-c5e50ae0]:hover{\n    background-color :blue;\n}\n.links-divider[data-v-c5e50ae0]{\n    height: 40%;\n}\n#setting-menu-toggle[data-v-c5e50ae0]{\n    margin-left: 22px;\n}\n#setting-menu[data-v-c5e50ae0]{\n    background-color: rgb(126, 126, 126);\n    width: 240px;\n    position: absolute;\n    top: 44px;\n    left:20px;\n    color:rgb(255, 255, 255);\n    z-index: 9999;\n    -webkit-clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n            clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n}\n#setting-menu li[data-v-c5e50ae0]{\n    list-style-type: none;\n    padding: 15px;\n    padding-left: 18px;\n    padding-right: 18px;\n    border-bottom: 2px ridge  rgb(255, 255, 255);\n}\nli[data-v-c5e50ae0]:first-of-type{\n    margin-top: 5px;\n}\nli[data-v-c5e50ae0]:last-of-type{\n    border-bottom: 0 solid black !important;\n}\n.fa[data-v-c5e50ae0]{\n    margin-top: 5px;\n\n    float: left;\n}\nh1[data-v-c5e50ae0]{\n    margin: auto;\n    transform: translateX(2.5rem);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.links-bar[data-v-c5e50ae0]{\n    display: flex;\n    margin-right: 1.5rem;\n    align-items: center;\n    height: 80%;\n    gap: 1.5rem;\n}\n.setting-link[data-v-c5e50ae0]{\n    -webkit-appearance:none;\n       -moz-appearance:none;\n            appearance:none;\n}\n.links-bar .nav-bar-button[data-v-c5e50ae0]:hover{\n    background-color :blue;\n}\n.links-divider[data-v-c5e50ae0]{\n    height: 40%;\n}\n#setting-menu-toggle[data-v-c5e50ae0]{\n    margin-left: 22px;\n}\n#setting-menu[data-v-c5e50ae0]{\n    background-color: rgb(126, 126, 126);\n    width: 240px;\n    position: absolute;\n    top: 44px;\n    left:20px;\n    color:rgb(255, 255, 255);\n    z-index: 9999;\n    -webkit-clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n            clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n}\n#setting-menu li[data-v-c5e50ae0]{\n    list-style-type: none;\n    padding: 15px;\n    padding-left: 18px;\n    padding-right: 18px;\n    border-bottom: 2px ridge  rgb(255, 255, 255);\n}\nli[data-v-c5e50ae0]:first-of-type{\n    margin-top: 5px;\n}\nli[data-v-c5e50ae0]:last-of-type{\n    border-bottom: 0 solid black !important;\n}\n.fa[data-v-c5e50ae0]{\n    margin-top: 5px;\n\n    float: left;\n}\nh1[data-v-c5e50ae0]{\n    margin: auto;\n    transform: translateX(2.5rem);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4666,7 +4708,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n      overflow: hidden;\n      -webkit-clip-path: inset(0 0 0 0);\n              clip-path: inset(0 0 0 0);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n.filter[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:125px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto 50px 0px auto ;\n}\n.reserved[data-v-8313a3d6],.active[data-v-8313a3d6],.empty[data-v-8313a3d6], .showAll[data-v-8313a3d6]{\n    width:20px;\n    height:20px;\n    border-radius:3px;\n    box-shadow: 0px 1px  2px black;\n}\n.reserved[data-v-8313a3d6]:hover ,.active[data-v-8313a3d6]:hover  ,.empty[data-v-8313a3d6]:hover ,.showAll[data-v-8313a3d6]:hover{\n    transform:scale(1.3);\n    outline-style:solid ;\n    outline-offset: 2px;\n    outline-color: rgb(100, 100, 70);\n    outline-width: 1px;\n}\n.showAll[data-v-8313a3d6]{\n    background-color: rgb(2150, 172, 102)\n}\n.showAll[data-v-8313a3d6]:hover{\n    background-color: rgb(200, 150, 90)\n}\n.active[data-v-8313a3d6] {\n    background-color: rgb(119, 82, 82)\n}\n.active[data-v-8313a3d6]:hover {\n    background-color: rgb(110, 70, 70)\n}\n.reserved[data-v-8313a3d6] {\n    background-color: rgb(66, 21, 21)\n}\n.reserved[data-v-8313a3d6]:hover {\n    background-color: rgb(50, 10, 10)\n}\n.empty[data-v-8313a3d6]{\n    background-color:  rgb(151, 130, 151)\n}\n.empty[data-v-8313a3d6]:hover{\n    background-color:  rgb(131, 120, 140)\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6890,7 +6932,7 @@ var render = function () {
         ),
         _vm._v(" "),
         _c("div", [
-          _vm._v("حول البرنامج   "),
+          _vm._v("حول البرنامج    "),
           _c("i", { staticClass: "fa fa-circle-question" }),
         ]),
       ]),
@@ -6921,7 +6963,14 @@ var render = function () {
         ]),
         _vm._v(" "),
         _c("li", [
-          _vm._v("\n            الأعدادات "),
+          _c(
+            "a",
+            {
+              staticClass: "setting-link",
+              attrs: { href: "" + _vm.url + "/show-setting-view" },
+            },
+            [_vm._v(" الأعدادات ")]
+          ),
           _c("i", {
             staticClass: "fa fa-cog",
             attrs: { "aria-hidden": "true" },
@@ -7255,6 +7304,32 @@ var render = function () {
     { staticClass: "container" },
     [
       _c("header", { staticClass: "boards-header" }, [
+        _c("div", { staticClass: "filter" }, [
+          _c("div", {
+            staticClass: "showAll",
+            attrs: { title: "عرض الكل" },
+            on: { click: _vm.showAll },
+          }),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "empty",
+            attrs: { title: "عرض الطاولات المتاحة" },
+            on: { click: _vm.showEmpty },
+          }),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "active",
+            attrs: { title: "عرض الطاولات المشغولة" },
+            on: { click: _vm.showActive },
+          }),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "reserved",
+            attrs: { title: "عرض الطاولات المحجوزة" },
+            on: { click: _vm.showReserved },
+          }),
+        ]),
+        _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "hall-navigation" }, [
@@ -7375,7 +7450,13 @@ var render = function () {
                         ? board.active
                           ? board.order
                           : _vm.orderHelper * 10 + board.tableNumber
-                        : board.order),
+                        : board.order) +
+                      ";\n            display:" +
+                      (_vm.currentFilterVal == "all" ||
+                      _vm.currentFilterVal == board.status
+                        ? "block"
+                        : "none") +
+                      ";",
                     attrs: {
                       id:
                         "" +
@@ -7539,14 +7620,29 @@ var render = function () {
                   },
                   [_vm._v("حفظ")]
                 )
-              : _c(
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.editMode
+              ? _c(
+                  "v-btn",
+                  {
+                    attrs: { rounded: "", color: "primary", dark: "" },
+                    on: { click: _vm.cancelEditMdde },
+                  },
+                  [_vm._v("إلغاء")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.editMode
+              ? _c(
                   "v-btn",
                   {
                     attrs: { rounded: "", color: "primary", dark: "" },
                     on: { click: _vm.updateOrder },
                   },
                   [_vm._v("تعديل طلب")]
-                ),
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c(
               "v-btn",
@@ -7569,47 +7665,50 @@ var render = function () {
           _vm.orders
             ? _c(
                 "tbody",
-                _vm._l(_vm.orders, function (order) {
-                  return _c("tr", { key: order.id }, [
-                    _c("td", [
-                      _vm._v(_vm._s(order.title) + " "),
-                      _c("i", {
-                        staticClass: "fa fa-remove",
-                        on: {
-                          click: function ($event) {
-                            return _vm.deleteOrder(order.id)
+                _vm._l(
+                  _vm.editMode ? _vm.temporeryOrders : _vm.orders,
+                  function (order) {
+                    return _c("tr", { key: order.id }, [
+                      _c("td", [
+                        _vm._v(_vm._s(order.title) + " "),
+                        _c("i", {
+                          staticClass: "fa fa-remove",
+                          on: {
+                            click: function ($event) {
+                              return _vm.deleteOrder(order.id)
+                            },
                           },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(order.price) + "  ل.س")]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("i", {
-                        staticClass: "fa fa-plus",
-                        on: {
-                          click: function ($event) {
-                            return _vm.increseQ(order.id)
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(order.price) + "  ل.س")]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("i", {
+                          staticClass: "fa fa-plus",
+                          on: {
+                            click: function ($event) {
+                              return _vm.increseQ(order.id)
+                            },
                           },
-                        },
-                      }),
-                      _vm._v(_vm._s(order.quantity)),
-                      _c("i", {
-                        staticClass: "fa fa-minus",
-                        on: {
-                          click: function ($event) {
-                            return _vm.decreseQ(order.id)
+                        }),
+                        _vm._v(_vm._s(order.quantity)),
+                        _c("i", {
+                          staticClass: "fa fa-minus",
+                          on: {
+                            click: function ($event) {
+                              return _vm.decreseQ(order.id)
+                            },
                           },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(order.quantity * order.price) + " ل.س"),
-                    ]),
-                  ])
-                }),
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(order.quantity * order.price) + " ل.س"),
+                      ]),
+                    ])
+                  }
+                ),
                 0
               )
             : _vm._e(),

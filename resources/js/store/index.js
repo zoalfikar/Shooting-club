@@ -76,7 +76,7 @@ const store = new vuex.Store({
             var index = this.state.boards.findIndex((b) => {
                 return b.tableNumber == payload.tableNumber;
             })
-            axios.post(`/set-table-orders/${this.state.currentHall}/${this.state.currentTable}`, { "orders": payload.orders })
+            axios.post(`/set-table-orders/${this.state.currentHall}/${this.state.currentTable}`, { "orders": payload.orders, "updateMode": payload.updateMode })
                 .then((res) => {
                     var data = { "index": index, "orders": res.data.orders }
                     commit('setoOrders', data)

@@ -1,11 +1,11 @@
 <template>
     <v-app-bar app color="#2F4F4F" dark>
         <div class="links-bar">
-                <span class="nav-bar-button" onClick="navigatTo(event,this)" href="/resturant">مطعم</span> 
-                <div class="links-divider"><v-divider vertical></v-divider></div>
-                <span>نقطة مبيع</span>
-                <div class="links-divider"><v-divider vertical></v-divider></div>
-                <div>حول البرنامج &nbsp; <i class="fa fa-circle-question"></i></div>
+            <span class="nav-bar-button" onClick="navigatTo(event,this)" href="/resturant">مطعم</span> 
+            <div class="links-divider"><v-divider vertical></v-divider></div>
+            <span>نقطة مبيع</span>
+            <div class="links-divider"><v-divider vertical></v-divider></div>
+            <div>حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></div>
         </div>
         <h1> نادي الرماية </h1>
         <v-btn icon id="setting-menu-toggle" data-bs-toggle="collapse" data-bs-target="#setting-menu">
@@ -18,13 +18,14 @@
                   تسجيل خروج <i class="fa fa-sign-out" aria-hidden="true"></i>
             </li>
             <li>
-                الأعدادات <i class="fa fa-cog" aria-hidden="true"></i>
+               <a :href="`${url}`+'/show-setting-view'" class="setting-link"> الأعدادات </a><i class="fa fa-cog" aria-hidden="true"></i>
             </li>
         </div>
     </v-app-bar>
 </template>
 <script>
     export default {
+        props:['url'],
         mounted : function () {
             document.addEventListener('click', function(event) {
                 var settingMenu = document.getElementById('setting-menu');
@@ -45,8 +46,8 @@
         height: 80%;
         gap: 1.5rem;
     }
-    .links-bar .nav-bar-button{
-
+    .setting-link{
+        appearance:none;
     }
     .links-bar .nav-bar-button:hover{
         background-color :blue;

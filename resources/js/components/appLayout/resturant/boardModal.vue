@@ -56,7 +56,7 @@ export default {
             document.querySelector(".board-modal-content").classList.add('animat-hide-modal')
             document.querySelector(".board-modal-content").addEventListener("animationend" , clearHideModal)
             router.push({
-                path:"/dev",
+                path:"/resturant",
             });
         },
         getOrders:function(){
