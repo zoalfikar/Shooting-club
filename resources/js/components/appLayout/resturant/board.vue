@@ -122,7 +122,13 @@ export default {
 
     },
     mounted:function () {
-
+        let created = (e)=>{
+            if( e.animationName == 'fade-in-down'){
+                this.$el.classList.remove('animate-fade-in-down')
+                this.$el.removeEventListener("animationend",created );
+            }
+        }
+        this.$el.addEventListener("animationend",created)
     }
 };
 </script>

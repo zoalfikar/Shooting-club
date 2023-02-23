@@ -56723,9 +56723,9 @@ readers do not read off random characters that represent icons */
 }
 .animate-fade-in-down {
 
-    -webkit-animation: fade-in-down 0.2s ease-in-out both;
+    -webkit-animation: fade-in-down 0.2s ease-in-out backwards;
 
-            animation: fade-in-down 0.2s ease-in-out both
+            animation: fade-in-down 0.2s ease-in-out backwards
 }
 .resize {
 

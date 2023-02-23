@@ -14,9 +14,6 @@ class HallSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('halls')->insert([
-            'hallNumber' => 1,
-            'description' => 'test',
-        ]);
+
     }
 }

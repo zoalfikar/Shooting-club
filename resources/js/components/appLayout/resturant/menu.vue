@@ -39,9 +39,9 @@
                 <div v-for="(item,index) in section.items" 
                 v-bind:key="item.id"
                 class="menu-section-list">
-                    <div class="menu-section-list-item">
+                    <div class="menu-section-list-item" :style="`opacity: ${!item.active ? 0.7 : 1}`" >
                         <input id="id" type="hidden" :value="item.id" >
-                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox" name="chosen" @click="checkBoxClicked">
+                        <input type="checkbox" class=" form-check-input resturant-m-item-checkBox"   :disabled="!item.active ? true : false " name="chosen" @click="checkBoxClicked">
                         <div for="" :class="'resturant-m-item'" @click="itemClicked">{{item.title}}</div>
                         <div :class="'resturant-m-item-info'">
                             {{item.price}}&nbsp;ل.س &nbsp;&nbsp; / &nbsp;&nbsp;  <i>{{item.unit}}&nbsp;</i> 

@@ -7,7 +7,7 @@
             <div class="links-divider"><v-divider vertical></v-divider></div>
             <div>حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></div>
         </div>
-        <h1> نادي الرماية </h1>
+        <h1> {{navbarTitle}}</h1>
         <v-btn icon id="setting-menu-toggle" data-bs-toggle="collapse" data-bs-target="#setting-menu">
             <v-icon>
                 mdi-menu
@@ -25,7 +25,7 @@
 </template>
 <script>
     export default {
-        props:['url'],
+        props:['url','navbarTitle'],
         mounted : function () {
             document.addEventListener('click', function(event) {
                 var settingMenu = document.getElementById('setting-menu');

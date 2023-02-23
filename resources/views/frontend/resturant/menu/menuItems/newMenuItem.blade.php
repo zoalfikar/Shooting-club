@@ -175,7 +175,7 @@
                        الزيادة بمقدار (الخطوة)
                       </label>
                       <div class="flex">
-                          <input class="appearance-none block w-full ml-10 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white" id="pace" name="pace" type="number" disabled placeholder="  لتسهيل ملىء الطلب (إختياري)" min="0.001" step="0.01"> &nbsp; <span class="unit"></span>
+                          <input class="appearance-none block w-full ml-10 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white" id="pace" name="pace" type="number" disabled placeholder="  لتسهيل ملىء الطلب (إختياري)" min="0.001" step="0.0001"> &nbsp; <span class="unit"></span>
                       </div>
                       @error('pace')
                           <p class="text-red-500 text-xl italic">

@@ -7,6 +7,10 @@
                 <div  @click="showActive" title="عرض الطاولات المشغولة" class="active"></div>
                 <div  @click="showReserved" title="عرض الطاولات المحجوزة" class="reserved"></div>
             </div>
+            <div class="filter2">
+                    <div class="customer-name-filter"><input v-model="currentCustomerNameFilter" type="text"  name="" id="" placeholder="اسم الزبون"><i @click="resetCustonmerNameInput" class="fa fa-close close"></i></div>
+                    <div class="table-number-filter"><input v-model="currentTableNameFilter" type="number" placeholder=" الطاولة"></div>
+            </div>
             <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
             <div class="hall-navigation">
                 <div class="navigations-title">
@@ -38,17 +42,24 @@
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :style=" 
               `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
-              display:${currentFilterVal == 'all' || currentFilterVal == board.status ? 'block' : 'none'};`
+              display:${
+                currentTableNameFilter == board.tableNumber ||
+               ( !currentTableNameFilter  &&
+               ( currentCustomerNameFilter == board.customerInfo.customerName || 
+               ( currentCustomerNameFilter == '' && 
+               ( currentFilterVal == 'all' || 
+                currentFilterVal == board.status ))))
+                ? 'block' : 'none'};`
               "
               :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
                   <board
                         :index="index"
-                      :active="currentHallActive ? board.active : 0"
-                      :status="board.status"
-                      :tablenumber="board.tableNumber"
-                      :style="`animation-delay: ${(index) * 0.1}s`"
-                      class="animate-fade-in-down"
-                      @statusChanged="(data)=>moveitem(data)" >
+                        :active="currentHallActive ? board.active : 0"
+                        :status="board.status"
+                        :tablenumber="board.tableNumber"
+                        :style="`animation-delay: ${(index) * 0.1}s`"
+                        class="animate-fade-in-down"
+                        @statusChanged="(data)=>moveitem(data)" >
                   </board>
           </div>
       </div>
@@ -69,6 +80,8 @@ import store from '../../../store';
                 total:0,
                 orderHelper:0,
                 currentFilterVal:"all",
+                currentCustomerNameFilter:"",
+                currentTableNameFilter:null,
               }
           },
 
@@ -96,25 +109,21 @@ import store from '../../../store';
                     return  (getComputedStyle(this.$el).padding).replace('px','')
                 },
                 ease: ()=> Power1.easeInOut ,
-
           },
         watch: {
             boards(newVal, oldVal) {
                 this.showHallName();
                 this.getNewBoards(newVal).then((value) => {
-
-                    
                     this.nodes = this.group.querySelectorAll(".h"+this.currentHall);
-                    // this.layoutWorker.postMessage({ cmd: 'doDomStuff', data: this.group.style });
                     this.total= this.nodes.length;
                     this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
-                    return this.getNewNods(this.nodes).then((value) => {
+                    return this.getNewNods(this.nodes).then((nodes) => {
                         this.initBoardsPositions ();
                     });
                 });
             },
         },
-          methods:{
+        methods:{
 
             getNewBoards:function(boards){
                 return new Promise((resolve, reject) => {
@@ -140,26 +149,26 @@ import store from '../../../store';
                 this.currentFilterVal='taken'
             },
             bringHalls:function (event) {
-                    event.preventDefault();
-                    var target = event.target ;
-                    if (target.tagName == 'SPAN') {
-                        target = event.target.parentElement
-                    }
-                    this.currentButtun = target.value;
+                event.preventDefault();
+                var target = event.target ;
+                if (target.tagName == 'SPAN') {
+                    target = event.target.parentElement
+                }
+                this.currentButtun = target.value;
 
-                    this.$el.querySelector(".current-nav-val").animate([
-                    { clipPath  : getComputedStyle(this.$el.querySelector(".current-nav-val")).clipPath },
-                    { clipPath  : "inset(0% 0% 0% 100%)", }
-                    ],
-                    {
-                        duration: 300,
-                        fill: 'forwards'
-                    })
+                this.$el.querySelector(".current-nav-val").animate([
+                { clipPath  : getComputedStyle(this.$el.querySelector(".current-nav-val")).clipPath },
+                { clipPath  : "inset(0% 0% 0% 100%)", }
+                ],
+                {
+                    duration: 300,
+                    fill: 'forwards'
+                })
 
-                        setTimeout(() => {
-                            store.dispatch("changeCurrentHallNumber",target.value)
-                            store.dispatch("pringAllBoardsInThisHall",target.value)
-                        }, 300);
+                setTimeout(() => {
+                    store.dispatch("changeCurrentHallNumber",target.value)
+                    store.dispatch("pringAllBoardsInThisHall",target.value)
+                }, 300);
 
             },
             showHallName:function(){
@@ -174,22 +183,22 @@ import store from '../../../store';
             },
 
             numberOfElementsInRows: function () {
-                  if (this.total == 0) throw new Error("no elements"); ;
-                  var count = 1;
+                if (this.total == 0) throw new Error("no elements"); ;
+                var count = 1;
 
-                  for (var i = 0; i < this.total - 1; i++) {
-                      if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
-                          if (i+1==this.total-1) {
-                              break;
-                          };
-                          continue;
-                          }
-                      count++;
-                      if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
-                          break;
-                      }
-                  }
-                  return count;
+                for (var i = 0; i < this.total - 1; i++) {
+                    if (this.nodes[i].offsetTop !== this.nodes[i+1].offsetTop){
+                        if (i+1==this.total-1) {
+                            break;
+                        };
+                        continue;
+                        }
+                    count++;
+                    if (this.nodes[i+1].offsetTop !== this.nodes[i+2].offsetTop){
+                        break;
+                    }
+                }
+                return count;
             },
             layout:function(orderChanged) {
                 var numberOfElementsInRow = this.numberOfElementsInRows();
@@ -302,43 +311,46 @@ import store from '../../../store';
                 e.style.order =  newOrder;
                 array.push(newOrder)
                 this.layout(array).then(()=>{this.removeTemporaryAlternatives()});
+            },
+            resetCustonmerNameInput:function() {
+                this.currentCustomerNameFilter = "";
             }
-          },
-          mounted: function () {
-            window.addEventListener('resize',(e)=>{ this.initBoardsPositions()}  );
-            $(document).ready(function () {
+        },
+        mounted: function () {
+        window.addEventListener('resize',(e)=>{ this.initBoardsPositions()}  );
+        $(document).ready(function () {
 
-                store.dispatch("pringAllHalls")
-                store.dispatch("bringAllMenuItems")
-                const scrollLef = ()=>{
-                document.querySelector('.navigations-links').scrollBy({
-                    left: -200,
-                    behavior: 'smooth'
-                });
-                }
-                const scrollRigh = ()=>{
-                document.querySelector('.navigations-links').scrollBy({
-                    left: 200,
-                    behavior: 'smooth'
-                });
-                }
-                $('.naviga-link-end').click(function (e) {
-                e.preventDefault();
-                scrollLef();
-                });
-                $('.naviga-link-start').click(function (e) {
-                e.preventDefault();
-                scrollRigh();
-
-                });
+            store.dispatch("pringAllHalls")
+            store.dispatch("bringAllMenuItems")
+            const scrollLef = ()=>{
+            document.querySelector('.navigations-links').scrollBy({
+                left: -200,
+                behavior: 'smooth'
             });
-            // setTimeout(() => {
-            //     if (this.boards == null) {
-            //         $( ".naviga-link" ).first().trigger('click');
-            //     }
-            // }, 2000);
-          }
-      }
+            }
+            const scrollRigh = ()=>{
+            document.querySelector('.navigations-links').scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+            }
+            $('.naviga-link-end').click(function (e) {
+            e.preventDefault();
+            scrollLef();
+            });
+            $('.naviga-link-start').click(function (e) {
+            e.preventDefault();
+            scrollRigh();
+
+            });
+        });
+        // setTimeout(() => {
+        //     if (this.boards == null) {
+        //         $( ".naviga-link" ).first().trigger('click');
+        //     }
+        // }, 2000);
+        }
+    }
   </script>
 
   <style scoped >
@@ -490,6 +502,45 @@ import store from '../../../store';
         align-items:top;
         inset:auto 50px 0px auto ;
     }
+    .filter2{
+        display:flex;
+        position:absolute;
+        width:130px;
+        height:30px;
+        justify-content: space-between;
+        align-items:top;
+        inset:auto auto 0px 280px   ;
+    }
+    .filter2 input{
+       background-color:rgba(200,200,200,0.7);
+       border-radius:5px;
+       box-shadow: 0px 1px  4px black;
+
+    }
+    .filter2 input[type=text]{
+        width:80px;
+        padding-right:4px;
+    }
+    .filter2 input[type=text]::-webkit-input-placeholder {
+        font-size: 14px;
+    }
+    .filter2 input[type=number]{
+        width:40px;
+    }
+    .filter2 input[type=number]::-webkit-input-placeholder {
+        font-size: 14px;
+    }
+    .filter2 input[type=number]::-webkit-inner-spin-button
+    {
+        appearance: none;
+    }
+    .customer-name-filter i {
+        display:none;
+        transform: translateX(calc(100% + 4px));
+    }
+    .customer-name-filter:hover i {
+        display:inline-block;
+    }
     .reserved ,.active  ,.empty , .showAll{
         width:20px;
         height:20px;
@@ -503,8 +554,14 @@ import store from '../../../store';
         outline-color: rgb(100, 100, 70);
         outline-width: 1px;
     }
+    .filter-clicked{
+        outline-style:solid ;
+        outline-offset: 0px;
+        outline-color: rgba(60, 50, 70 ,0.5);
+        outline-width: 4px;
+    }
     .showAll{
-        background-color: rgb(2150, 172, 102)
+        background-color: rgb(215, 172, 102)
     }
     .showAll:hover{
         background-color: rgb(200, 150, 90)
