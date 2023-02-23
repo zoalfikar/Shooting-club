@@ -5,6 +5,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Menu;
 use App\Http\Controllers\Resturant;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserHallTableController;
 use App\Http\Middleware\UnAuth;
 use App\Models\Hall;
 use Illuminate\Http\Request;
@@ -98,6 +99,9 @@ Route::middleware('authenticate')->group(function () {
         Route::post('/delete-menu-item', [Menu::class,'deleteMenuItem']);
         Route::match(['get', 'post'], '/users/all', [UserController::class ,'editUsers']);
         Route::resource('users', UserController::class);
+        Route::get('/show-waiter-area-form', [UserHallTableController::class,'index']);
+        Route::get('/get-waiter-hall-tables', [UserHallTableController::class,'getWaiterHallTables']);
+        Route::get('/set-user-hall-tables', [UserHallTableController::class,'getWaiterHallTables']);
     });
     Route::post('/set-table-info/{hall}/{table}', [Resturant::class,'setInfo']);
     Route::post('/set-table-status/{hall}/{table}', [Resturant::class,'setStatus']);
