@@ -17,16 +17,25 @@
     <div class="extendedStyles">
         @yield('styles')
     </div>
+    @if (Auth::user()->role !== 'acountant')
+        <style>
+            .footer 
+            {
+                width: 100% !important;
+            }
+        </style>
+    @endif
 </head>
 <body>
     <div id="app" v-cloak>
         <div class="navbar">
-
             <navbar navbar-title="{{$facility}}" url={{ url('/') }}></navbar >
         </div>
         <div class="app-grid">
             <div id="sidebar" class="sidebar">
-                <sidebar url={{ url('/') }} src={{asset("images/logo.png")}}></sidebar>
+                @if (Auth::user()->role == 'acountant')
+                    <sidebar url={{ url('/') }} src={{asset("images/logo.png")}}></sidebar>
+                @endif
             </div>
             <div class="app-container">
                 @yield('content')

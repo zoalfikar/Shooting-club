@@ -4663,7 +4663,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.links-bar[data-v-c5e50ae0]{\n    display: flex;\n    margin-right: 1.5rem;\n    align-items: center;\n    height: 80%;\n    gap: 1.5rem;\n}\n.setting-link[data-v-c5e50ae0]{\n    -webkit-appearance:none;\n       -moz-appearance:none;\n            appearance:none;\n}\n.links-bar .nav-bar-button[data-v-c5e50ae0]:hover{\n    background-color :blue;\n}\n.links-divider[data-v-c5e50ae0]{\n    height: 40%;\n}\n#setting-menu-toggle[data-v-c5e50ae0]{\n    margin-left: 22px;\n}\n#setting-menu[data-v-c5e50ae0]{\n    background-color: rgb(126, 126, 126);\n    width: 240px;\n    position: absolute;\n    top: 44px;\n    left:20px;\n    color:rgb(255, 255, 255);\n    z-index: 9999;\n    -webkit-clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n            clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n}\n#setting-menu li[data-v-c5e50ae0]{\n    list-style-type: none;\n    padding: 15px;\n    padding-left: 18px;\n    padding-right: 18px;\n    border-bottom: 2px ridge  rgb(255, 255, 255);\n}\nli[data-v-c5e50ae0]:first-of-type{\n    margin-top: 5px;\n}\nli[data-v-c5e50ae0]:last-of-type{\n    border-bottom: 0 solid black !important;\n}\n.fa[data-v-c5e50ae0]{\n    margin-top: 5px;\n\n    float: left;\n}\nh1[data-v-c5e50ae0]{\n    margin: auto;\n    transform: translateX(2.5rem);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.links-bar[data-v-c5e50ae0]{\n    display: flex;\n    margin-right: 1.5rem;\n    align-items: center;\n    height: 80%;\n    gap: 1.5rem;\n}\n.setting-link[data-v-c5e50ae0]{\n    text-decoration:none;\n    color:rgb(255, 255, 255)\n}\n.links-bar .nav-bar-button[data-v-c5e50ae0]:hover{\n    background-color :blue;\n}\n.links-divider[data-v-c5e50ae0]{\n    height: 40%;\n}\n#setting-menu-toggle[data-v-c5e50ae0]{\n    margin-left: 22px;\n}\n#setting-menu[data-v-c5e50ae0]{\n    background-color: rgb(126, 126, 126);\n    width: 240px;\n    position: absolute;\n    top: 44px;\n    left:20px;\n    color:rgb(255, 255, 255);\n    z-index: 9999;\n    -webkit-clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n            clip-path: polygon(100% 100%, 100% 100%, 100% 5.25%, 21.88% 5.25%, 17.89% 0%, 13.89% 5.25%, 0% 5.25%, 0% 100%);\n}\n#setting-menu li[data-v-c5e50ae0]{\n    list-style-type: none;\n    padding: 15px;\n    padding-left: 18px;\n    padding-right: 18px;\n    border-bottom: 2px ridge  rgb(255, 255, 255);\n}\nli[data-v-c5e50ae0]:first-of-type{\n    margin-top: 5px;\n}\nli[data-v-c5e50ae0]:last-of-type{\n    border-bottom: 0 solid black !important;\n}\n.fa[data-v-c5e50ae0]{\n    margin-top: 5px;\n\n    float: left;\n}\nh1[data-v-c5e50ae0]{\n    margin: auto;\n    transform: translateX(2.5rem);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7085,33 +7085,37 @@ var render = function () {
                 [_vm._v("\n        حجز\n    ")]
               ),
               _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "teal accent-4" },
-                  on: {
-                    click: function ($event) {
-                      $event.stopPropagation()
-                      return _vm.occupied.apply(null, arguments)
+              _vm.status == "" || _vm.status == "taken"
+                ? _c(
+                    "v-btn",
+                    {
+                      attrs: { text: "", color: "teal accent-4" },
+                      on: {
+                        click: function ($event) {
+                          $event.stopPropagation()
+                          return _vm.occupied.apply(null, arguments)
+                        },
+                      },
                     },
-                  },
-                },
-                [_vm._v("\n        مشغولة\n    ")]
-              ),
+                    [_vm._v("\n        مشغولة\n    ")]
+                  )
+                : _vm._e(),
               _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "teal accent-4" },
-                  on: {
-                    click: function ($event) {
-                      $event.stopPropagation()
-                      return _vm.empty.apply(null, arguments)
+              _vm.status == "active" || _vm.status == "taken"
+                ? _c(
+                    "v-btn",
+                    {
+                      attrs: { text: "", color: "teal accent-4" },
+                      on: {
+                        click: function ($event) {
+                          $event.stopPropagation()
+                          return _vm.empty.apply(null, arguments)
+                        },
+                      },
                     },
-                  },
-                },
-                [_vm._v("\n        فارغة\n    ")]
-              ),
+                    [_vm._v("\n        دفع الحساب\n    ")]
+                  )
+                : _vm._e(),
             ],
             1
           ),
@@ -8347,7 +8351,27 @@ var render = function () {
           [_vm._m(0), _vm._v(" "), _vm._m(1)]
         ),
         _vm._v(" "),
-        _vm._m(2),
+        _c("div", { staticClass: "item-children" }, [
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(2),
+            _c("span", [
+              _vm._v("   "),
+              _c("a", { attrs: { href: "" + _vm.url + "/users/create" } }, [
+                _vm._v(" إضافة مستخدمين جدد"),
+              ]),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(3),
+            _vm._v("   "),
+            _c("span", [
+              _c("a", { attrs: { href: "" + _vm.url + "/users/all" } }, [
+                _vm._v("تعديل المستخدمين"),
+              ]),
+            ]),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "menu-item-itemChild" }, [
@@ -8361,7 +8385,7 @@ var render = function () {
               },
             },
           },
-          [_vm._m(3), _vm._v(" "), _vm._m(4)]
+          [_vm._m(4), _vm._v(" "), _vm._m(5)]
         ),
         _vm._v(" "),
         _c(
@@ -8375,8 +8399,6 @@ var render = function () {
             },
           },
           [
-            _vm._m(5),
-            _vm._v(" "),
             _vm._m(6),
             _vm._v(" "),
             _vm._m(7),
@@ -8390,6 +8412,8 @@ var render = function () {
             _vm._m(11),
             _vm._v(" "),
             _vm._m(12),
+            _vm._v(" "),
+            _vm._m(13),
           ]
         ),
       ]),
@@ -8405,12 +8429,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(13), _vm._v(" "), _vm._m(14)]
+          [_vm._m(14), _vm._v(" "), _vm._m(15)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(15),
+            _vm._m(16),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8422,7 +8446,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(16),
+            _vm._m(17),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8434,7 +8458,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(17),
+            _vm._m(18),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8446,7 +8470,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(18),
+            _vm._m(19),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8470,12 +8494,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(19), _vm._v(" "), _vm._m(20)]
+          [_vm._m(20), _vm._v(" "), _vm._m(21)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(21),
+            _vm._m(22),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8487,7 +8511,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(22),
+            _vm._m(23),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8499,7 +8523,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(23),
+            _vm._m(24),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8511,7 +8535,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(24),
+            _vm._m(25),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -8547,30 +8571,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "item-children" }, [
-      _c("div", { staticClass: "item-child" }, [
-        _c("span", [
-          _c("i", {
-            staticClass: "fa fa-angle-double-left",
-            attrs: { "aria-hidden": "true" },
-          }),
-        ]),
-        _c("span", [
-          _vm._v("   "),
-          _c("a", { attrs: { href: "" } }, [_vm._v("فرع أول")]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "item-child" }, [
-        _c("span", [
-          _c("i", {
-            staticClass: "fa fa-angle-double-left",
-            attrs: { "aria-hidden": "true" },
-          }),
-        ]),
-        _vm._v("   "),
-        _c("span", [_c("a", { attrs: { href: "" } }, [_vm._v("فرع ثاني")])]),
-      ]),
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
     ])
   },
   function () {

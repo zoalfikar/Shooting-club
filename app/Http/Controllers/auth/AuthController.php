@@ -49,6 +49,9 @@ class AuthController extends Controller
         if (!Auth::attempt($dataValidated)) {
             return  redirect()->back()->withInput(['email'])->withErrors(['error'=>'خطأ في اسم المستخدم او كلمة المرور']);
         }
+        if (Auth::user()->role == 'waiter') {
+            redirect('/resturant');
+        }
         return redirect('/');
     }
 

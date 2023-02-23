@@ -47,7 +47,8 @@
         gap: 1.5rem;
     }
     .setting-link{
-        appearance:none;
+        text-decoration:none;
+        color:rgb(255, 255, 255)
     }
     .links-bar .nav-bar-button:hover{
         background-color :blue;

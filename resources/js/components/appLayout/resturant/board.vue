@@ -23,19 +23,19 @@
         >
             حجز
         </v-btn>
-        <v-btn
+        <v-btn v-if="status == '' || status == 'taken'"
             text
             color="teal accent-4"
             @click.stop="occupied"
         >
             مشغولة
         </v-btn>
-        <v-btn
+        <v-btn v-if="status == 'active' || status == 'taken'"
             text
             color="teal accent-4"
             @click.stop="empty"
         >
-            فارغة
+            دفع الحساب
         </v-btn>
         </v-card-actions>
     </v-card>

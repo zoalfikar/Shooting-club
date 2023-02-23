@@ -20,10 +20,10 @@
             </div>
             <div class="item-children">
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span><span>&nbsp;&nbsp;&nbsp;<a href="">فرع أول</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span><span>&nbsp;&nbsp;&nbsp;<a :href="`${url}`+'/users/create'"> إضافة مستخدمين جدد</a></span>
                 </div>
                 <div class="item-child">
-                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a href="">فرع ثاني</a></span>
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/users/all'">تعديل المستخدمين</a></span>
                 </div>
             </div>
         </div>
