@@ -480,4 +480,30 @@ appearance: none;
     border-radius: 100% 0 0 100%  ;
 
 }
+@media only screen and (max-device-width: 1024px) and (orientation:landscape) {
+    .menu-wraper{
+        display: none;
+        position: fixed;
+        background-color: rgba(0, 0, 0, 10%);
+        width:85vw;
+        height: 100vh;
+        top: 0px;
+        left: 0px;
+        z-index: 9999;
+    }
+    .RMioptions{
+        position: fixed;
+        background-color: rgb(0, 0, 0 ,0%);
+        right: 23px;
+        top:180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        gap: 20px;
+        z-index:10000;
+        height: max-content;
+        width: max-content;
+    }
+}
 </style>

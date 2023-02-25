@@ -19,6 +19,10 @@
     </div>
     @if (Auth::user()->role !== 'acountant')
         <style>
+            .sidebar 
+            {
+                width: 0% !important;
+            }
             .footer 
             {
                 width: 100% !important;

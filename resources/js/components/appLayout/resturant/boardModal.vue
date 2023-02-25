@@ -410,5 +410,18 @@ export default {
     .btns button:last-child{
         background: #1b1212 !important;
     }
+    @media only screen and (max-device-width: 1024px) and (orientation:landscape) {
+        .board-modal-content{
+            position: relative;
+            overflow-x: hidden;
+            color: aliceblue;
+            margin: auto;
+            margin-top: -50px;
+            width: 750px;
+            min-height: 400px;
+            border-radius: 13px;
+            position: relative;
+        }
+    }
 
 </style>

@@ -14,8 +14,19 @@
             </div>
             
         </div>
-        <v-card-subtitle> 
-            {{ String(borad.customerInfo.customerName)  !== "null" ? "اسم الزبون : " + borad.customerInfo.customerName   : 'الحالة : متوفرة ' }} 
+        <v-card-subtitle :id="`cutomerInfo-${tablenumber}`"> 
+            <span v-if="borad.customerInfo.customerName"> 
+                اسم الزبون :  <span v-if="!filterActive" :id="`nofilter-cutomer-info-name-${tablenumber}`">
+                                    {{ borad.customerInfo.customerName}}
+                                </span>
+                                <span  :id="`cutomer-info-name-${tablenumber}`">
+                                    
+                                </span>
+                                
+            </span>
+            <span v-else> 
+                <span :id="`table-info-state-${tablenumber}`"> الحالة : متوفرة </span>
+            </span>
             <span class="max-capacity"> سعة :&nbsp;{{maxCapacity}} اشخاص</span></v-card-subtitle>
         <v-card-actions>
         <v-btn
@@ -63,7 +74,6 @@
   </template>
 
 <script>
-import router from '../../../routes';
 import store from "../../../store";
 export default {
     props:{
@@ -76,11 +86,40 @@ export default {
         // emits:['statusChanged'],
     data () {
         return {
+            filterActive : false,
         }
     },
     computed: {
         borad:function( )  {
             return store.state.boards[this.index]
+        },
+        nameFilter:function () {
+           return this.$parent.$data.currentCustomerNameFilter;
+        },
+        customerNameEl:function () {
+                var el1 = this.$el.querySelector(`#cutomer-info-name-${this.tablenumber}`);
+                var el2 = this.$el.querySelector(`#nofilter-cutomer-info-name-${this.tablenumber}`)
+                if (el2 && el1) {
+                    el1.innerHTML = String(el2.innerHTML);
+                }
+                return el1;
+        },
+
+    },
+    watch:{
+        nameFilter(newVal,oldVal){
+            if (this.nameFilter !== '') {
+                this.filterActive=true;
+                if (this.customerNameEl) {
+                    this.customerNameEl.innerHTML =  this.customerNameEl.innerHTML.replace('</strong>', '')
+                    this.customerNameEl.innerHTML =  this.customerNameEl.innerHTML.replace('<strong style="color:blue;">', '')
+                    this.customerNameEl.innerHTML = String(this.customerNameEl.innerHTML).replace(String(newVal) , `<strong style="color:blue;">${String(newVal)}</strong>` )
+                }
+            }
+            else {
+                this.filterActive=false;
+            }
+            
         }
     },
     methods : {
@@ -155,6 +194,12 @@ export default {
     .v-card-disabled:hover{
         top: 0 !important;
         box-shadow: unset !important;
+    }
+    .v-card__subtitle{
+        position: relative;
+    }
+    #cutomerInfo{
+        position: relative;
     }
     .boardNumber{
         padding-top: 35px;

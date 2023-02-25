@@ -15,7 +15,7 @@
         </v-btn>
         <div class="collapse" id="setting-menu" >
             <li>
-                  تسجيل خروج <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <a :href="`${url}`+'/logout'" onClick="navigatTo(event,this)" class="setting-link logout" @click="logout">  تسجيل خروج  </a><i class="fa fa-sign-out" aria-hidden="true"></i>
             </li>
             <li>
                <a :href="`${url}`+'/setting'" onClick="navigatTo(event,this)" class="setting-link"> الأعدادات </a><i class="fa fa-cog" aria-hidden="true"></i>
@@ -26,6 +26,11 @@
 <script>
     export default {
         props:['url','navbarTitle'],
+        methods:{
+            logout:function () {
+                window.location.reload();
+            }
+        },
         mounted : function () {
             document.addEventListener('click', function(event) {
                 var settingMenu = document.getElementById('setting-menu');

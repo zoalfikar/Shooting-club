@@ -42,16 +42,16 @@
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :style=" 
               `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
-              display:${
+              display:${ 
                 currentTableNameFilter == board.tableNumber ||
                ( !currentTableNameFilter  &&
-               ( currentCustomerNameFilter == board.customerInfo.customerName || 
+               ( String( board.customerInfo.customerName).indexOf(currentCustomerNameFilter) == 0 || 
                ( currentCustomerNameFilter == '' && 
                ( currentFilterVal == 'all' || 
                 currentFilterVal == board.status ))))
                 ? 'block' : 'none'};`
               "
-              :class="`${'col-lg-3 col-md-4 h'+currentHall}`">
+              :class="`${'col-lg-3 col-md-4 h'+currentHall} boardContainter`">
                   <board
                         :index="index"
                         :active="currentHallActive ? board.active : 0"
@@ -586,5 +586,31 @@ import store from '../../../store';
     }
     .empty:hover{
         background-color:  rgb(131, 120, 140)
+    }
+    @media only screen and (max-device-width: 1024px) and (orientation:landscape) {
+        .boards-header{
+            box-sizing: border-box !important;
+            width: 100%;
+            position: relative;
+            margin-top: 10px;
+            min-height: 70px;
+  
+            display:  flex;
+            align-items: center;
+            background-color: hsla(120, 100%, 13%, 0.4);
+            transition: height 10s ease-in-out;
+            flex-grow: 1;
+        }
+        .container {
+            max-width: 100% !important;
+            width: 100%;
+            align-self :stretch;
+            min-width: 700px;
+        }
+
+        .boardContainter{
+            width: 25% !important;
+            max-width: 25% !important;
+        }
     }
   </style>

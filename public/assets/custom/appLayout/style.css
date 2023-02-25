@@ -58,3 +58,23 @@ body {
 .footer-expended {
     width: calc(100% - 2rem - 32px) !important;
 }
+
+@media only screen and (max-device-width: 1024px) and (orientation:landscape) {
+    .app-grid {
+        margin-top: 10PX;
+        display: grid;
+        grid-template-areas: 'conatiner';
+        grid-template-columns: 100%;
+    }
+    .app-grid .sidebar {
+        /* width: max-content; */
+        /* transition: 0.2s ease-in-out; */
+        display: none;
+    }
+    .navbar {
+        display: none;
+    }
+    .app-grid .app-container {
+        margin: auto;
+    }
+}

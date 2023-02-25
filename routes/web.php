@@ -15,6 +15,7 @@ use App\Http\Middleware\Waiter;
 use App\Models\User;
 use App\Models\UserHallTable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +70,10 @@ Route::middleware('authenticate')->group(function () {
             return view('appLayouts.app');
             
         });
-        Route::get('/setting', function () {
+        Route::get('/setting', function (Request $req) {
+            if ($req->ajax()) {
+                return getAjaxResponse('frontend.setting' , []);
+            }
             return view('frontend.setting');
             
         });

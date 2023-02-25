@@ -3,6 +3,8 @@
 use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Table;
+use App\Models\UserHallTable;
+use Illuminate\Support\Facades\Auth ;
 use Illuminate\Support\Facades\Redis;
 
 if (! function_exists('getAjaxResponse')) {
@@ -27,8 +29,14 @@ if (! function_exists('getAvailableHallNumber')) {
 }
 if (! function_exists('getHalls')) {
     function getHalls(){
-        $halls = Hall::all();
-        return $halls;
+        if (Auth::user()->role == 'waiter') {
+            $waiterInfo = UserHallTable::select('hall')->where("user_id" , Auth::id() )->first();
+            $halls = Hall::where('hallNumber',$waiterInfo->hall)->get();
+            return $halls;
+        }
+        else{
+            return $halls = Hall::all();
+        }
     }
 }
 if (! function_exists('deleteHallTablesFromRedis')) {
@@ -89,7 +97,13 @@ if (! function_exists('deleteTableFromRedis')) {
 if (! function_exists('getHallTables')) {
     function getHallTables($hallNumber){
         $reslt = [];
-        $tables = Table::where('hallNumber',$hallNumber)->get()->toArray();
+        if (Auth::user()->role == 'waiter') {
+            $waiterTables = UserHallTable::select('tables')->where('user_id',Auth::id())->pluck('tables')->toArray();
+            // dd($waiterTables);
+            $tables = Table::whereIn('tableNumber',$waiterTables[0])->where('hallNumber',$hallNumber)->get()->toArray();
+        }else {
+            $tables = Table::where('hallNumber',$hallNumber)->get()->toArray();
+        }
         foreach ($tables as $table) {
             $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $table['tableNumber']);
             $tableStatus['orders'] = unserialize($tableStatus['orders']);

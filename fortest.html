@@ -27,26 +27,19 @@
         <p>dsd</p>
         <!-- <h6>test git ignore</h6> -->
 
-        <div class="div2">
-            <p>dlckdlkcldkclskdlckdlscvklsdkvldvdfjjkfjdfjbjdfbjdfvzdfkvklczv ckxjvkxcjvkzj xcxvxc xcvxcvxc
-            </p>
+        <div id="div2">
+            zzzzzzzzz pppppp
+
         </div>
     </div>
 
 
 
     <script>
-        var df = document.getElementById("dddd")
-        df.addEventListener('click', function(param) {
-            alert('dd')
-        })
-
-        function test() {
-            console.log(df);
-            var evt = document.createEvent("MouseEvents");
-            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
-            df.dispatchEvent(evt)
-        }
+        var df = document.getElementById('div2');
+        var t = df.innerHTML;
+        console.log(df.innerHTML);
+        df.innerHTML = t.replace('zz', '<strong>pp</strong>')
     </script>
 </body>
 
