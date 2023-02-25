@@ -11,7 +11,7 @@ const vueAppOptions = {
     store,
     router,
 }
-const npmDependencies  = {
+const npmDependencies = {
     uuidv4
 }
 window.vueAppOptions = vueAppOptions;
@@ -26,6 +26,7 @@ Vue.component('boards', require('./components/appLayout/resturant/boards.vue').d
 Vue.component('board-modal', require('./components/appLayout/resturant/boardModal.vue').default);
 Vue.component('info-modal', require('./components/appLayout/resturant/infoModel.vue').default);
 Vue.component('resturant-menu', require('./components/appLayout/resturant/menu.vue').default);
+Vue.component('setting', require('./components/appLayout/setting/index.vue').default);
 
 const app = new Vue({
     vuetify,

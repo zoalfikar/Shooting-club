@@ -1,27 +1,10 @@
 <template>
-    <v-app-bar app color="#2F4F4F" dark>
-        <div class="links-bar">
-            <span class="nav-bar-button" onClick="navigatTo(event,this)" href="/resturant">مطعم</span> 
-            <div class="links-divider"><v-divider vertical></v-divider></div>
-            <span>نقطة مبيع</span>
-            <div class="links-divider"><v-divider vertical></v-divider></div>
-            <div>حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></div>
+    <div class="wrapper">
+        <div class="title">
+            <h1>الاعدادات</h1>
         </div>
-        <h1> {{navbarTitle}}</h1>
-        <v-btn icon id="setting-menu-toggle" data-bs-toggle="collapse" data-bs-target="#setting-menu">
-            <v-icon>
-                mdi-menu
-            </v-icon>
-        </v-btn>
-        <div class="collapse" id="setting-menu" >
-            <li>
-                  تسجيل خروج <i class="fa fa-sign-out" aria-hidden="true"></i>
-            </li>
-            <li>
-               <a :href="`${url}`+'/setting'" onClick="navigatTo(event,this)" class="setting-link"> الأعدادات </a><i class="fa fa-cog" aria-hidden="true"></i>
-            </li>
-        </div>
-    </v-app-bar>
+        
+    </div>
 </template>
 <script>
     export default {

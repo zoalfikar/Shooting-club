@@ -14,7 +14,9 @@
             </div>
             
         </div>
-        <v-card-subtitle> {{ String(borad.customerInfo.customerName)  !== "null" ? "اسم الزبون : " + borad.customerInfo.customerName   : 'الحالة : متوفرة ' }}</v-card-subtitle>
+        <v-card-subtitle> 
+            {{ String(borad.customerInfo.customerName)  !== "null" ? "اسم الزبون : " + borad.customerInfo.customerName   : 'الحالة : متوفرة ' }} 
+            <span class="max-capacity"> سعة :&nbsp;{{maxCapacity}} اشخاص</span></v-card-subtitle>
         <v-card-actions>
         <v-btn
             text
@@ -66,6 +68,7 @@ import store from "../../../store";
 export default {
     props:{
         'status': String ,
+        'maxCapacity': Number ,
         'tablenumber' : Number,
         'active' : Number,
         'index' : Number,
@@ -172,5 +175,8 @@ export default {
     }
     .boardNumber-border h1{
         margin: auto;
+    }
+    .max-capacity{
+        float: left;
     }
 </style>

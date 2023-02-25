@@ -15,6 +15,11 @@ class CreateUserHallTablesTable extends Migration
     {
         Schema::create('user_hall_tables', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->bigInteger('hall')->nullable();
+            $table->json('tables')->nullable();
+            $table->foreign('user_id')->references("id")->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

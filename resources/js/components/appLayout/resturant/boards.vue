@@ -55,6 +55,7 @@
                   <board
                         :index="index"
                         :active="currentHallActive ? board.active : 0"
+                        :maxCapacity="board.maxCapacity"
                         :status="board.status"
                         :tablenumber="board.tableNumber"
                         :style="`animation-delay: ${(index) * 0.1}s`"
@@ -154,6 +155,7 @@ import store from '../../../store';
                 if (target.tagName == 'SPAN') {
                     target = event.target.parentElement
                 }
+                sessionStorage.setItem('currentResturantHall',target.value);
                 this.currentButtun = target.value;
 
                 this.$el.querySelector(".current-nav-val").animate([
@@ -322,6 +324,12 @@ import store from '../../../store';
 
             store.dispatch("pringAllHalls")
             store.dispatch("bringAllMenuItems")
+            if (sessionStorage.currentResturantHall) {
+                setTimeout(() => {
+                    $('.naviga-link').filter(function(){return this.value == parseInt(sessionStorage.getItem('currentResturantHall'))}).click();
+                }, 1000);
+                    
+            }
             const scrollLef = ()=>{
             document.querySelector('.navigations-links').scrollBy({
                 left: -200,
@@ -344,11 +352,6 @@ import store from '../../../store';
 
             });
         });
-        // setTimeout(() => {
-        //     if (this.boards == null) {
-        //         $( ".naviga-link" ).first().trigger('click');
-        //     }
-        // }, 2000);
         }
     }
   </script>

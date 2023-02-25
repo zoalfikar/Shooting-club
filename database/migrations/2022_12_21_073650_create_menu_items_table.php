@@ -19,7 +19,7 @@ class CreateMenuItemsTable extends Migration
             $table->unsignedBigInteger('section');
             $table->string('description')->nullable();
             $table->tinyInteger('active');
-            $table->float('price');
+            $table->decimal('price' ,8,2,true);
             $table->string('unit');
             $table->tinyInteger('fragmentable');
             $table->float('pace')->default(1);

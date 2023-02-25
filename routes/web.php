@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Middleware\Acountant;
 use App\Http\Middleware\Waiter;
+use App\Models\User;
+use App\Models\UserHallTable;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,14 +29,8 @@ use App\Http\Middleware\Waiter;
 
 
 Route::get('/test', function () {
-    
-    
-    setTableOrders(1,1,'');
-    setTableOrders(1,2,'');
-    setTableOrders(1,3,'');
-    setTableOrders(1,5,'');
-    setTableOrders(1,4,'');
-    setTableOrders(1,6,'');
+
+    $userHallTables = UserHallTable::select('tables')->pluck('tables')->toArray();
     
 });
 
@@ -72,6 +69,10 @@ Route::middleware('authenticate')->group(function () {
             return view('appLayouts.app');
             
         });
+        Route::get('/setting', function () {
+            return view('frontend.setting');
+            
+        });
         Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
         Route::get('/show-update-tables-form', [Resturant::class,'showFormUpdateTables']);
         Route::post('/add-new-table', [Resturant::class,'addNewTable']);
@@ -101,7 +102,10 @@ Route::middleware('authenticate')->group(function () {
         Route::resource('users', UserController::class);
         Route::get('/show-waiter-area-form', [UserHallTableController::class,'index']);
         Route::get('/get-waiter-hall-tables', [UserHallTableController::class,'getWaiterHallTables']);
-        Route::get('/set-user-hall-tables', [UserHallTableController::class,'getWaiterHallTables']);
+        Route::post('/set-user-hall-tables', [UserHallTableController::class,'setWaiterHallTables']);
+        Route::get('/get-waiters-by-date', [UserHallTableController::class,'getWaitersByDate']);
+        Route::get('/get-waiters-by-name', [UserHallTableController::class,'getWaitersByName']);
+        Route::get('/get-tables-by-waiters-number', [UserHallTableController::class,'getTablesByWaitersNumber']);
     });
     Route::post('/set-table-info/{hall}/{table}', [Resturant::class,'setInfo']);
     Route::post('/set-table-status/{hall}/{table}', [Resturant::class,'setStatus']);

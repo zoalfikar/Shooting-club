@@ -13,7 +13,7 @@
         <div class="section-nav"><v-btn tile >مشروبات</v-btn ></div>
     </div>
     <div class="resturant-menu d-flex flex-row flex-wrap justify-content-center">
-        <div v-for="(section,index) in menuItems"
+        <div v-for="(section) in menuItems"
          v-bind:key="section.id"
          :id="section.id"
          class="col">
@@ -36,7 +36,7 @@
                     </div>
                     
                 </div>
-                <div v-for="(item,index) in section.items" 
+                <div v-for="(item) in section.items" 
                 v-bind:key="item.id"
                 class="menu-section-list">
                     <div class="menu-section-list-item" :style="`opacity: ${!item.active ? 0.7 : 1}`" >

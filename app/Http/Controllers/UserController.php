@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserHallTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,20 +56,26 @@ class UserController extends Controller
             }
 
             return  redirect()->back()->with('errore',"كلمة المرور غير متطابقة")->withInput();
+    }
+        $data = $req->only('name','email','password','role');
+        $dataValidated = Validator::make($data,[
+            'role'=>'required|in:acountant,waiter',
+            'name' =>'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+        ])->validate();
+        $dataValidated['password']=Hash::make($dataValidated['password']);
+        $user = User::create($dataValidated);
+        if ($user->role == 'waiter') {
+            UserHallTable::insert([
+                "user_id"=>$user->id,
+                "name"=>$user->name,
+            ]);
         }
-            $data = $req->only('name','email','password');
-            $dataValidated = Validator::make($data,[
-                'role'=>'in:acountant,waiter',
-                'name' =>'required|string',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|min:8',
-            ])->validate();
-            $dataValidated['password']=Hash::make($dataValidated['password']);
-            $user = User::create($dataValidated);
-            if ($req->ajax()) {
-                return response()->json(["message"=>"تم إدخال مستخدم جدديد بنجاح"]);
-            }
-            return redirect()->back();
+        if ($req->ajax()) {
+            return response()->json(["message"=>"تم إدخال مستخدم جدديد بنجاح"]);
+        }
+        return redirect()->back();
     }
 
     /**
