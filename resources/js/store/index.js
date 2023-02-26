@@ -5,13 +5,13 @@ Vue.use(vuex);
 
 const store = new vuex.Store({
     state: {
-        // halls
+        // halls //
         halls: [],
         currentHall: '',
         currentHallName: '',
         currentHallActive: 1,
         noHalls: false,
-        // tables
+        // tables //
         currentTable: '',
         currentTableIndex: -1,
         currentTableStatus: '',
@@ -19,17 +19,25 @@ const store = new vuex.Store({
         boardsLoading: false,
         noBoards: false,
         aviliabeBoards: [],
-        // menu
+        // menu //
         menuItems: [],
-        // orders
-        currentOrders: [],
-        // customer info
+        // orders //
+        // currentOrders: [],
+        // customer info //
     },
     getters: {
-        currentOrder(state) {
-            var board = state.boards.find(board => board.tableNumber === state.currentTable);
+        table: (state) => (tableNumber) => {
+            var board = state.boards.find(board => board.tableNumber === tableNumber);
+            return board;
+        },
+        orders: (state) => (tableNumber) => {
+            var board = state.boards.find(board => board.tableNumber === tableNumber);
             return board.orders;
         },
+        // currentOrder(state) {
+        //     var board = state.boards.find(board => board.tableNumber === state.currentTable);
+        //     return board.orders;
+        // },
     },
     actions: {
         pringAllHalls({ commit }) {
@@ -97,6 +105,15 @@ const store = new vuex.Store({
 
 
         },
+        //
+        getTableByNumber({ commit }, tableNumber) {
+            // console.log(tableNumber);
+            this.dispatch('findBoardIndex', tableNumber).then((index) => {
+                // console.log(index);
+                // console.log(this.state.boards[index]);
+                return Promise.resolve(this.state.boards[index]);
+            })
+        },
         // helpers 
         findBoardIndex({ commit }, tableNumber) {
             var index = this.state.boards.findIndex((board) => { return board.tableNumber === tableNumber });
@@ -116,6 +133,34 @@ const store = new vuex.Store({
                 commit("setCurrentTableData", index);
             })
         },
+        //test//
+        // switchArrayPistion({ commit }, data) {
+        //     var temp = this.state.boards[data.index1];
+        //     this.state.boards[data.index1] = this.state.boards[data.index2];
+        //     this.state.boards[data.index2] = temp;
+        //     // this.state.boards = [this.state.boards[data.index2], this.state.boards[data.index1]]
+        //     console.log(data.index1, this.state.boards[data.index1]);
+        //     console.log(data.index2, this.state.boards[data.index2]);
+        // },
+        // addElement({ commit }, data) {
+        //     var temp = this.state.boards[data.index1];
+        //     var newTable = {
+        //         status: 'taken',
+        //         tableNumber: 10000,
+        //         hallNumber: 1,
+        //         active: 1,
+        //         customerInfo: {
+        //             customerId: 787878,
+        //             customerName: 'zoalfikar alassad',
+        //             extraInfo: 'ok'
+        //         },
+        //         order: 1000,
+        //         orders: [],
+        //     }
+        //     this.state.boards.push(newTable)
+        //     console.log(data.x, this.state.boards[data.x]);
+        // },
+        //
     },
     mutations: {
         setHalls: (state, halls) => {
@@ -150,6 +195,10 @@ const store = new vuex.Store({
             } else {
                 state.noBoards = false;
             }
+            boards.forEach(board => {
+                board.extra = {}
+                board.extra.filterShow = true;
+            });
             state.boards = boards.sort((a, b) => a.order - b.order);
         },
         setCurrentTableNumber: (state, tableNumber) => {

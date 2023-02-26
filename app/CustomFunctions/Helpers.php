@@ -108,7 +108,7 @@ if (! function_exists('getHallTables')) {
             $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $table['tableNumber']);
             $tableStatus['orders'] = unserialize($tableStatus['orders']);
             $tableStatus['customerInfo'] = unserialize($tableStatus['customerInfo']);
-            $table=(object)(array_merge($table,(array)$tableStatus));
+            $table=(object)(array_merge($table,(array)$tableStatus)); 
             array_push( $reslt,$table);
         }
         return $reslt;

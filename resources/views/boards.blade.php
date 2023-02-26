@@ -7,6 +7,16 @@
 @endsection
 
 @section('scripts')
+    {{-- @if (Auth::user()->role == 'acountant')
+        <script>
+            alert('contant')
+        </script>
+        @endif
+        @if (Auth::user()->role == 'waiter')
+        <script>
+            alert('waiter')
+        </script>
+    @endif --}}
     {{-- <script>
             var header ;
             var headerIsExpended;

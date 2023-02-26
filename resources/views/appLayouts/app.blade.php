@@ -66,6 +66,7 @@
     <!--extended scripts-->
     <div class="extendedScripts">
         @yield('scripts')
+
     </div>
     <script>
         // printer

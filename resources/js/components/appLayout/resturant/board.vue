@@ -10,22 +10,22 @@
     >
         <div class="boardNumber text-h1 font-weight-light">
             <div class="boardNumber-border">
-                <h1>{{tablenumber}}</h1>
+                <h1>{{tableNumber}}</h1>
             </div>
             
         </div>
-        <v-card-subtitle :id="`cutomerInfo-${tablenumber}`"> 
+        <v-card-subtitle :id="`cutomerInfo-${tableNumber}`"> 
             <span v-if="borad.customerInfo.customerName"> 
-                اسم الزبون :  <span v-if="!filterActive" :id="`nofilter-cutomer-info-name-${tablenumber}`">
+                اسم الزبون :  <span v-if="!nameFilterActive">
                                     {{ borad.customerInfo.customerName}}
                                 </span>
-                                <span  :id="`cutomer-info-name-${tablenumber}`">
-                                    
+                                <span :style="`display: ${nameFilterActive ? 'block' : 'none'}`" :id="`cutomer-info-name-${tableNumber}`">
+                                    {{customerNameAlternative}}
                                 </span>
                                 
             </span>
             <span v-else> 
-                <span :id="`table-info-state-${tablenumber}`"> الحالة : متوفرة </span>
+                <span :id="`table-info-state-${tableNumber}`"> الحالة : متوفرة </span>
             </span>
             <span class="max-capacity"> سعة :&nbsp;{{maxCapacity}} اشخاص</span></v-card-subtitle>
         <v-card-actions>
@@ -63,7 +63,7 @@
     >
         <div class="boardNumber text-h1 font-weight-light">
             <div class="boardNumber-border">
-                <h1>{{tablenumber}}</h1>
+                <h1>{{tableNumber}}</h1>
             </div>
         </div>
         <v-card-subtitle><div style="color: hwb(153 7% 76%);">الحالة : للعرض فقط</div></v-card-subtitle>
@@ -77,81 +77,114 @@
 import store from "../../../store";
 export default {
     props:{
-        'status': String ,
-        'maxCapacity': Number ,
-        'tablenumber' : Number,
-        'active' : Number,
+        currentHallActive : Number,
+        'tableNumber' : Number,
         'index' : Number,
+        // 'status': String ,
+        // 'maxCapacity': Number ,
+        // 'active' : Number,
         },
         // emits:['statusChanged'],
     data () {
         return {
-            filterActive : false,
+            nameFilterActive : false,
+            customerNameAlternativeEl:null,
+            customerNameAlternativeColorLetterEl:null,
         }
     },
     computed: {
+        // borad:function( )  {
+        //     return store.state.boards[this.index]
+        // },
+        //
         borad:function( )  {
-            return store.state.boards[this.index]
+            return store.getters.table(this.tableNumber)
         },
+        status:function( )  {
+            return this.borad.status
+        },
+        maxCapacity:function( )  {
+            return this.borad.maxCapacity
+        },
+        active:function( )  {
+            return  this.currentHallActive ? this.borad.active : 0
+        },
+        customerNameAlternative:function( )  {
+            if (this.borad.customerInfo.customerName) {
+                
+                return  (this.borad.customerInfo.customerName).toString() ;
+            }
+            else{
+                return  '' ;
+
+            }
+        },
+        //
         nameFilter:function () {
            return this.$parent.$data.currentCustomerNameFilter;
         },
-        customerNameEl:function () {
-                var el1 = this.$el.querySelector(`#cutomer-info-name-${this.tablenumber}`);
-                var el2 = this.$el.querySelector(`#nofilter-cutomer-info-name-${this.tablenumber}`)
-                if (el2 && el1) {
-                    el1.innerHTML = String(el2.innerHTML);
-                }
-                return el1;
-        },
-
     },
     watch:{
-        nameFilter(newVal,oldVal){
-            if (this.nameFilter !== '') {
-                this.filterActive=true;
-                if (this.customerNameEl) {
-                    this.customerNameEl.innerHTML =  this.customerNameEl.innerHTML.replace('</strong>', '')
-                    this.customerNameEl.innerHTML =  this.customerNameEl.innerHTML.replace('<strong style="color:blue;">', '')
-                    this.customerNameEl.innerHTML = String(this.customerNameEl.innerHTML).replace(String(newVal) , `<strong style="color:blue;">${String(newVal)}</strong>` )
+        nameFilter:{
+            handler(newVal,oldVal){
+                if (this.nameFilter !== '') {
+                    this.$data.nameFilterActive=true;
+                    if (this.customerNameAlternativeEl) {
+                        if (this.customerNameAlternativeEl.querySelector('strong')) {
+                            this.customerNameAlternativeEl.querySelector('strong').remove()
+                        }
+                        this.customerNameAlternativeEl.innerHTML = this.customerNameAlternative.replace(String(newVal) , `<strong style="color:blue; background:gray;">${String(newVal)}</strong>` )
+                    }
                 }
+                else {
+                    this.$data.nameFilterActive=false;
+                }
+            },
+            immediate:true,
+        },
+        nameFilterActive(newVal,oldVal){
+            if (newVal == true) {
+                var el = this.$el.querySelector(`#cutomer-info-name-${this.tableNumber}`);
+                if (el ) this.customerNameAlternativeEl = el;
+                // var strong = document.createElement('strong');
+                // strong.style.color = 'blue';
+                // strong.style.background = 'grey';
+                // strong.innerText = '';
+                // customerNameAlternativeColorLetterEl=strong;
+                // customerNameAlternativeEl.appendChild(customerNameAlternativeColorLetterEl);
             }
-            else {
-                this.filterActive=false;
-            }
-            
         }
     },
     methods : {
         reservation: function(){
-            this.status = 'taken';
-            this.$emit('statusChanged' , {order:3,tableNumber:this.tablenumber });
-            // moveitem('3', this.tablenumber);
-            store.dispatch("changeBoardState" ,  {"status":'taken' ,"tableNumber":this.tablenumber} );
+            // this.status = 'taken';
+            this.$emit('statusChanged' , {order:3,tableNumber:this.tableNumber });
+            // moveitem('3', this.tableNumber);
+            store.dispatch("changeBoardState" ,  {"status":'taken' ,"tableNumber":this.tableNumber} );
         },
         empty: function(){
-            this.status = '';
-            this.$emit('statusChanged' , {order:1,tableNumber:this.tablenumber });
+            // this.status = '';
+            this.$emit('statusChanged' , {order:1,tableNumber:this.tableNumber });
 
-            // moveitem('1',this.tablenumber)
-            store.dispatch("changeBoardState" ,  {"status":'' ,"tableNumber":this.tablenumber} );
+            // moveitem('1',this.tableNumber)
+            store.dispatch("changeBoardState" ,  {"status":'' ,"tableNumber":this.tableNumber} );
         },
         occupied: function(){
-            this.status = 'active';
-            store.dispatch("changeCurrentTableNumber" , this.tablenumber  );
-            // moveitem('2',this.tablenumber)
-            // this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
-
+            store.dispatch("changeCurrentTableNumber" , this.tableNumber  );
+            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
             $(".info-modal").css("display", "block");
-            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tablenumber}  );
+            // this.status = 'active';
+            // moveitem('2',this.tableNumber)
+            // this.$emit('statusChanged' , {order:2,tableNumber:this.tableNumber });
+
         },
         notActiveAction:function (element) {
             console.log(element);
         },
         toggleBoardModal : function() {
-            store.dispatch("changeCurrentTableNumber" , this.tablenumber);
+            store.dispatch("changeCurrentTableNumber" , this.tableNumber);
             store.dispatch("changeCurrentTableStatus" , this.status);
-            // store.dispatch("changeCurrentTableData",this.tablenumber);
+            // store.dispatch("changeCurrentTableData",this.tableNumber);
             var clearShowModel = ()=>{
                 document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
                 document.querySelector(".board-modal-content").removeEventListener('animationend',clearShowModel);

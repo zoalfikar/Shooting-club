@@ -42,22 +42,22 @@
               :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
               :style=" 
               `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
-              display:${ 
-                currentTableNameFilter == board.tableNumber ||
-               ( !currentTableNameFilter  &&
-               ( String( board.customerInfo.customerName).indexOf(currentCustomerNameFilter) == 0 || 
-               ( currentCustomerNameFilter == '' && 
-               ( currentFilterVal == 'all' || 
-                currentFilterVal == board.status ))))
-                ? 'block' : 'none'};`
+              display:${ board.extra.filterShow ? 'block' : 'none' }`
               "
               :class="`${'col-lg-3 col-md-4 h'+currentHall} boardContainter`">
-                  <board
+                  <!-- <board
                         :index="index"
                         :active="currentHallActive ? board.active : 0"
                         :maxCapacity="board.maxCapacity"
                         :status="board.status"
                         :tablenumber="board.tableNumber"
+                        :style="`animation-delay: ${(index) * 0.1}s`"
+                        class="animate-fade-in-down"
+                        @statusChanged="(data)=>moveitem(data)" >
+                  </board> -->
+                  <board
+                        :currentHallActive="currentHallActive" 
+                        :table-number="board.tableNumber"
                         :style="`animation-delay: ${(index) * 0.1}s`"
                         class="animate-fade-in-down"
                         @statusChanged="(data)=>moveitem(data)" >
@@ -122,9 +122,30 @@ import store from '../../../store';
                         this.initBoardsPositions ();
                     });
                 });
+
+            },
+            currentFilterVal(newVal, oldVal){
+                this.filter()
+            },
+            currentCustomerNameFilter(newVal, oldVal)
+            {
+                this.filter()
+
+            },
+            currentTableNameFilter(newVal, oldVal){
+                this.filter()
             },
         },
         methods:{
+        //test
+            // switchArrayPistion:function(index1,index2){
+            //     store.dispatch('switchArrayPistion' , {"index1":index1,"index2":index2});
+            // },
+            // addElement:function(index1){
+            //     store.dispatch('addElement' , {"x":index1});
+
+            // },
+        //
 
             getNewBoards:function(boards){
                 return new Promise((resolve, reject) => {
@@ -316,8 +337,21 @@ import store from '../../../store';
             },
             resetCustonmerNameInput:function() {
                 this.currentCustomerNameFilter = "";
-            }
+            },
+            filter:function(){
+                return this.boards.map((board) =>{
+                    var condition =   
+                    ( this.currentTableNameFilter == board.tableNumber ||
+                    ( !this.currentTableNameFilter  &&
+                    ( String( board.customerInfo.customerName).indexOf(this.currentCustomerNameFilter) == 0 || 
+                    ( this.currentCustomerNameFilter == '' && 
+                    ( this.currentFilterVal == 'all' || 
+                    this.currentFilterVal == board.status )))))
+                    board.extra.filterShow = condition
+                })
+            },
         },
+
         mounted: function () {
         window.addEventListener('resize',(e)=>{ this.initBoardsPositions()}  );
         $(document).ready(function () {

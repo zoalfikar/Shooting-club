@@ -2547,93 +2547,122 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    'status': String,
-    'maxCapacity': Number,
-    'tablenumber': Number,
-    'active': Number,
-    'index': Number
+    currentHallActive: Number,
+    'tableNumber': Number,
+    'index': Number // 'status': String ,
+    // 'maxCapacity': Number ,
+    // 'active' : Number,
+
   },
   // emits:['statusChanged'],
   data: function data() {
     return {
-      filterActive: false
+      nameFilterActive: false,
+      customerNameAlternativeEl: null,
+      customerNameAlternativeColorLetterEl: null
     };
   },
   computed: {
+    // borad:function( )  {
+    //     return store.state.boards[this.index]
+    // },
+    //
     borad: function borad() {
-      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.boards[this.index];
+      return _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters.table(this.tableNumber);
     },
+    status: function status() {
+      return this.borad.status;
+    },
+    maxCapacity: function maxCapacity() {
+      return this.borad.maxCapacity;
+    },
+    active: function active() {
+      return this.currentHallActive ? this.borad.active : 0;
+    },
+    customerNameAlternative: function customerNameAlternative() {
+      if (this.borad.customerInfo.customerName) {
+        return this.borad.customerInfo.customerName.toString();
+      } else {
+        return '';
+      }
+    },
+    //
     nameFilter: function nameFilter() {
       return this.$parent.$data.currentCustomerNameFilter;
-    },
-    customerNameEl: function customerNameEl() {
-      var el1 = this.$el.querySelector("#cutomer-info-name-".concat(this.tablenumber));
-      var el2 = this.$el.querySelector("#nofilter-cutomer-info-name-".concat(this.tablenumber));
-
-      if (el2 && el1) {
-        el1.innerHTML = String(el2.innerHTML);
-      }
-
-      return el1;
     }
   },
   watch: {
-    nameFilter: function nameFilter(newVal, oldVal) {
-      if (this.nameFilter !== '') {
-        this.filterActive = true;
+    nameFilter: {
+      handler: function handler(newVal, oldVal) {
+        if (this.nameFilter !== '') {
+          this.$data.nameFilterActive = true;
 
-        if (this.customerNameEl) {
-          this.customerNameEl.innerHTML = this.customerNameEl.innerHTML.replace('</strong>', '');
-          this.customerNameEl.innerHTML = this.customerNameEl.innerHTML.replace('<strong style="color:blue;">', '');
-          this.customerNameEl.innerHTML = String(this.customerNameEl.innerHTML).replace(String(newVal), "<strong style=\"color:blue;\">".concat(String(newVal), "</strong>"));
+          if (this.customerNameAlternativeEl) {
+            if (this.customerNameAlternativeEl.querySelector('strong')) {
+              this.customerNameAlternativeEl.querySelector('strong').remove();
+            }
+
+            this.customerNameAlternativeEl.innerHTML = this.customerNameAlternative.replace(String(newVal), "<strong style=\"color:blue; background:gray;\">".concat(String(newVal), "</strong>"));
+          }
+        } else {
+          this.$data.nameFilterActive = false;
         }
-      } else {
-        this.filterActive = false;
+      },
+      immediate: true
+    },
+    nameFilterActive: function nameFilterActive(newVal, oldVal) {
+      if (newVal == true) {
+        var el = this.$el.querySelector("#cutomer-info-name-".concat(this.tableNumber));
+        if (el) this.customerNameAlternativeEl = el; // var strong = document.createElement('strong');
+        // strong.style.color = 'blue';
+        // strong.style.background = 'grey';
+        // strong.innerText = '';
+        // customerNameAlternativeColorLetterEl=strong;
+        // customerNameAlternativeEl.appendChild(customerNameAlternativeColorLetterEl);
       }
     }
   },
   methods: {
     reservation: function reservation() {
-      this.status = 'taken';
+      // this.status = 'taken';
       this.$emit('statusChanged', {
         order: 3,
-        tableNumber: this.tablenumber
-      }); // moveitem('3', this.tablenumber);
+        tableNumber: this.tableNumber
+      }); // moveitem('3', this.tableNumber);
 
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
         "status": 'taken',
-        "tableNumber": this.tablenumber
+        "tableNumber": this.tableNumber
       });
     },
     empty: function empty() {
-      this.status = '';
+      // this.status = '';
       this.$emit('statusChanged', {
         order: 1,
-        tableNumber: this.tablenumber
-      }); // moveitem('1',this.tablenumber)
+        tableNumber: this.tableNumber
+      }); // moveitem('1',this.tableNumber)
 
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
         "status": '',
-        "tableNumber": this.tablenumber
+        "tableNumber": this.tableNumber
       });
     },
     occupied: function occupied() {
-      this.status = 'active';
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tablenumber); // moveitem('2',this.tablenumber)
-      // this.$emit('statusChanged' , {order:2,tableNumber:this.tablenumber });
-
-      $(".info-modal").css("display", "block");
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tableNumber);
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
         "status": 'active',
-        "tableNumber": this.tablenumber
+        "tableNumber": this.tableNumber
       });
+      $(".info-modal").css("display", "block"); // this.status = 'active';
+      // moveitem('2',this.tableNumber)
+      // this.$emit('statusChanged' , {order:2,tableNumber:this.tableNumber });
     },
     notActiveAction: function notActiveAction(element) {
       console.log(element);
     },
     toggleBoardModal: function toggleBoardModal() {
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tablenumber);
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableStatus", this.status); // store.dispatch("changeCurrentTableData",this.tablenumber);
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tableNumber);
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableStatus", this.status); // store.dispatch("changeCurrentTableData",this.tableNumber);
 
       var clearShowModel = function clearShowModel() {
         document.querySelector(".board-modal-content").classList.remove("animat-show-modal");
@@ -3107,9 +3136,26 @@ __webpack_require__.r(__webpack_exports__);
           _this.initBoardsPositions();
         });
       });
+    },
+    currentFilterVal: function currentFilterVal(newVal, oldVal) {
+      this.filter();
+    },
+    currentCustomerNameFilter: function currentCustomerNameFilter(newVal, oldVal) {
+      this.filter();
+    },
+    currentTableNameFilter: function currentTableNameFilter(newVal, oldVal) {
+      this.filter();
     }
   },
   methods: {
+    //test
+    // switchArrayPistion:function(index1,index2){
+    //     store.dispatch('switchArrayPistion' , {"index1":index1,"index2":index2});
+    // },
+    // addElement:function(index1){
+    //     store.dispatch('addElement' , {"x":index1});
+    // },
+    //
     getNewBoards: function getNewBoards(boards) {
       return new Promise(function (resolve, reject) {
         resolve(boards);
@@ -3353,13 +3399,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetCustonmerNameInput: function resetCustonmerNameInput() {
       this.currentCustomerNameFilter = "";
+    },
+    filter: function filter() {
+      var _this3 = this;
+
+      return this.boards.map(function (board) {
+        var condition = _this3.currentTableNameFilter == board.tableNumber || !_this3.currentTableNameFilter && (String(board.customerInfo.customerName).indexOf(_this3.currentCustomerNameFilter) == 0 || _this3.currentCustomerNameFilter == '' && (_this3.currentFilterVal == 'all' || _this3.currentFilterVal == board.status));
+        board.extra.filterShow = condition;
+      });
     }
   },
   mounted: function mounted() {
-    var _this3 = this;
+    var _this4 = this;
 
     window.addEventListener('resize', function (e) {
-      _this3.initBoardsPositions();
+      _this4.initBoardsPositions();
     });
     $(document).ready(function () {
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("pringAllHalls");
@@ -4510,13 +4564,13 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
-    // halls
+    // halls //
     halls: [],
     currentHall: '',
     currentHallName: '',
     currentHallActive: 1,
     noHalls: false,
-    // tables
+    // tables //
     currentTable: '',
     currentTableIndex: -1,
     currentTableStatus: '',
@@ -4524,19 +4578,33 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     boardsLoading: false,
     noBoards: false,
     aviliabeBoards: [],
-    // menu
-    menuItems: [],
-    // orders
-    currentOrders: [] // customer info
+    // menu //
+    menuItems: [] // orders //
+    // currentOrders: [],
+    // customer info //
 
   },
   getters: {
-    currentOrder: function currentOrder(state) {
-      var board = state.boards.find(function (board) {
-        return board.tableNumber === state.currentTable;
-      });
-      return board.orders;
-    }
+    table: function table(state) {
+      return function (tableNumber) {
+        var board = state.boards.find(function (board) {
+          return board.tableNumber === tableNumber;
+        });
+        return board;
+      };
+    },
+    orders: function orders(state) {
+      return function (tableNumber) {
+        var board = state.boards.find(function (board) {
+          return board.tableNumber === tableNumber;
+        });
+        return board.orders;
+      };
+    } // currentOrder(state) {
+    //     var board = state.boards.find(board => board.tableNumber === state.currentTable);
+    //     return board.orders;
+    // },
+
   },
   actions: {
     pringAllHalls: function pringAllHalls(_ref) {
@@ -4617,31 +4685,71 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         });
       });
     },
-    // helpers 
-    findBoardIndex: function findBoardIndex(_ref9, tableNumber) {
+    //
+    getTableByNumber: function getTableByNumber(_ref9, tableNumber) {
+      var _this = this;
+
       var commit = _ref9.commit;
+      // console.log(tableNumber);
+      this.dispatch('findBoardIndex', tableNumber).then(function (index) {
+        // console.log(index);
+        // console.log(this.state.boards[index]);
+        return Promise.resolve(_this.state.boards[index]);
+      });
+    },
+    // helpers 
+    findBoardIndex: function findBoardIndex(_ref10, tableNumber) {
+      var commit = _ref10.commit;
       var index = this.state.boards.findIndex(function (board) {
         return board.tableNumber === tableNumber;
       });
       return index;
     },
-    changeCurrentTableNumber: function changeCurrentTableNumber(_ref10, tableNumber) {
-      var commit = _ref10.commit;
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref11, tableNumber) {
+      var commit = _ref11.commit;
       var index = store.dispatch("findBoardIndex", tableNumber).then(function (index) {
         commit('setCurrentTableIndex', index);
         commit('setCurrentTableNumber', tableNumber);
       });
     },
-    changeCurrentTableStatus: function changeCurrentTableStatus(_ref11, status) {
-      var commit = _ref11.commit;
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref12, status) {
+      var commit = _ref12.commit;
       commit('setCurrentTableStatus', status);
     },
-    changeCurrentTableData: function changeCurrentTableData(_ref12, tableNumber) {
-      var commit = _ref12.commit;
+    changeCurrentTableData: function changeCurrentTableData(_ref13, tableNumber) {
+      var commit = _ref13.commit;
       this.dispatch("findBoardIndex", tableNumber).then(function (index) {
         commit("setCurrentTableData", index);
       });
-    }
+    } //test//
+    // switchArrayPistion({ commit }, data) {
+    //     var temp = this.state.boards[data.index1];
+    //     this.state.boards[data.index1] = this.state.boards[data.index2];
+    //     this.state.boards[data.index2] = temp;
+    //     // this.state.boards = [this.state.boards[data.index2], this.state.boards[data.index1]]
+    //     console.log(data.index1, this.state.boards[data.index1]);
+    //     console.log(data.index2, this.state.boards[data.index2]);
+    // },
+    // addElement({ commit }, data) {
+    //     var temp = this.state.boards[data.index1];
+    //     var newTable = {
+    //         status: 'taken',
+    //         tableNumber: 10000,
+    //         hallNumber: 1,
+    //         active: 1,
+    //         customerInfo: {
+    //             customerId: 787878,
+    //             customerName: 'zoalfikar alassad',
+    //             extraInfo: 'ok'
+    //         },
+    //         order: 1000,
+    //         orders: [],
+    //     }
+    //     this.state.boards.push(newTable)
+    //     console.log(data.x, this.state.boards[data.x]);
+    // },
+    //
+
   },
   mutations: {
     setHalls: function setHalls(state, halls) {
@@ -4680,6 +4788,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         state.noBoards = false;
       }
 
+      boards.forEach(function (board) {
+        board.extra = {};
+        board.extra.filterShow = true;
+      });
       state.boards = boards.sort(function (a, b) {
         return a.order - b.order;
       });
@@ -4893,7 +5005,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n.filter[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:125px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto 50px 0px auto ;\n}\n.filter2[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:130px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto auto 0px 280px   ;\n}\n.filter2 input[data-v-8313a3d6]{\n   background-color:rgba(200,200,200,0.7);\n   border-radius:5px;\n   box-shadow: 0px 1px  4px black;\n}\n.filter2 input[type=text][data-v-8313a3d6]{\n    width:80px;\n    padding-right:4px;\n}\n.filter2 input[type=text][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]{\n    width:40px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-inner-spin-button\n{\n    -webkit-appearance: none;\n            appearance: none;\n}\n.customer-name-filter i[data-v-8313a3d6] {\n    display:none;\n    transform: translateX(calc(100% + 4px));\n}\n.customer-name-filter:hover i[data-v-8313a3d6] {\n    display:inline-block;\n}\n.reserved[data-v-8313a3d6],.active[data-v-8313a3d6],.empty[data-v-8313a3d6], .showAll[data-v-8313a3d6]{\n    width:20px;\n    height:20px;\n    border-radius:3px;\n    box-shadow: 0px 1px  2px black;\n}\n.reserved[data-v-8313a3d6]:hover ,.active[data-v-8313a3d6]:hover  ,.empty[data-v-8313a3d6]:hover ,.showAll[data-v-8313a3d6]:hover{\n    transform:scale(1.3);\n    outline-style:solid ;\n    outline-offset: 2px;\n    outline-color: rgb(100, 100, 70);\n    outline-width: 1px;\n}\n.filter-clicked[data-v-8313a3d6]{\n    outline-style:solid ;\n    outline-offset: 0px;\n    outline-color: rgba(60, 50, 70 ,0.5);\n    outline-width: 4px;\n}\n.showAll[data-v-8313a3d6]{\n    background-color: rgb(215, 172, 102)\n}\n.showAll[data-v-8313a3d6]:hover{\n    background-color: rgb(200, 150, 90)\n}\n.active[data-v-8313a3d6] {\n    background-color: rgb(119, 82, 82)\n}\n.active[data-v-8313a3d6]:hover {\n    background-color: rgb(110, 70, 70)\n}\n.reserved[data-v-8313a3d6] {\n    background-color: rgb(66, 21, 21)\n}\n.reserved[data-v-8313a3d6]:hover {\n    background-color: rgb(50, 10, 10)\n}\n.empty[data-v-8313a3d6]{\n    background-color:  rgb(151, 130, 151)\n}\n.empty[data-v-8313a3d6]:hover{\n    background-color:  rgb(131, 120, 140)\n}\n@media only screen and (max-device-width: 1024px) and (orientation:landscape) {\n.boards-header[data-v-8313a3d6]{\n        box-sizing: border-box !important;\n        width: 100%;\n        position: relative;\n        margin-top: 10px;\n        min-height: 70px;\n\n        display:  flex;\n        align-items: center;\n        background-color: hsla(120, 100%, 13%, 0.4);\n        transition: height 10s ease-in-out;\n        flex-grow: 1;\n}\n.container[data-v-8313a3d6] {\n        max-width: 100% !important;\n        width: 100%;\n        align-self :stretch;\n        min-width: 700px;\n}\n.boardContainter[data-v-8313a3d6]{\n        width: 25% !important;\n        max-width: 25% !important;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n.filter[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:125px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto 50px 0px auto ;\n}\n.filter2[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:130px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto auto 0px 280px   ;\n}\n.filter2 input[data-v-8313a3d6]{\n   background-color:rgba(200,200,200,0.7);\n   border-radius:5px;\n   box-shadow: 0px 1px  4px black;\n}\n.filter2 input[type=text][data-v-8313a3d6]{\n    width:80px;\n    padding-right:4px;\n}\n.filter2 input[type=text][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]{\n    width:40px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-inner-spin-button\n{\n    -webkit-appearance: none;\n            appearance: none;\n}\n.customer-name-filter i[data-v-8313a3d6] {\n    display:none;\n    transform: translateX(calc(100% + 4px));\n}\n.customer-name-filter:hover i[data-v-8313a3d6] {\n    display:inline-block;\n}\n.reserved[data-v-8313a3d6],.active[data-v-8313a3d6],.empty[data-v-8313a3d6], .showAll[data-v-8313a3d6]{\n    width:20px;\n    height:20px;\n    border-radius:3px;\n    box-shadow: 0px 1px  2px black;\n}\n.reserved[data-v-8313a3d6]:hover ,.active[data-v-8313a3d6]:hover  ,.empty[data-v-8313a3d6]:hover ,.showAll[data-v-8313a3d6]:hover{\n    transform:scale(1.3);\n    outline-style:solid ;\n    outline-offset: 2px;\n    outline-color: rgb(100, 100, 70);\n    outline-width: 1px;\n}\n.filter-clicked[data-v-8313a3d6]{\n    outline-style:solid ;\n    outline-offset: 0px;\n    outline-color: rgba(60, 50, 70 ,0.5);\n    outline-width: 4px;\n}\n.showAll[data-v-8313a3d6]{\n    background-color: rgb(215, 172, 102)\n}\n.showAll[data-v-8313a3d6]:hover{\n    background-color: rgb(200, 150, 90)\n}\n.active[data-v-8313a3d6] {\n    background-color: rgb(119, 82, 82)\n}\n.active[data-v-8313a3d6]:hover {\n    background-color: rgb(110, 70, 70)\n}\n.reserved[data-v-8313a3d6] {\n    background-color: rgb(66, 21, 21)\n}\n.reserved[data-v-8313a3d6]:hover {\n    background-color: rgb(50, 10, 10)\n}\n.empty[data-v-8313a3d6]{\n    background-color:  rgb(151, 130, 151)\n}\n.empty[data-v-8313a3d6]:hover{\n    background-color:  rgb(131, 120, 140)\n}\n@media only screen and (max-device-width: 1024px) and (orientation:landscape) {\n.boards-header[data-v-8313a3d6]{\n        box-sizing: border-box !important;\n        width: 100%;\n        position: relative;\n        margin-top: 10px;\n        min-height: 70px;\n\n        display:  flex;\n        align-items: center;\n        background-color: hsla(120, 100%, 13%, 0.4);\n        transition: height 10s ease-in-out;\n        flex-grow: 1;\n}\n.container[data-v-8313a3d6] {\n        max-width: 100% !important;\n        width: 100%;\n        align-self :stretch;\n        min-width: 700px;\n}\n.boardContainter[data-v-8313a3d6]{\n        width: 25% !important;\n        max-width: 25% !important;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7441,44 +7553,48 @@ var render = function () {
         [
           _c("div", { staticClass: "boardNumber text-h1 font-weight-light" }, [
             _c("div", { staticClass: "boardNumber-border" }, [
-              _c("h1", [_vm._v(_vm._s(_vm.tablenumber))]),
+              _c("h1", [_vm._v(_vm._s(_vm.tableNumber))]),
             ]),
           ]),
           _vm._v(" "),
           _c(
             "v-card-subtitle",
-            { attrs: { id: "cutomerInfo-" + _vm.tablenumber } },
+            { attrs: { id: "cutomerInfo-" + _vm.tableNumber } },
             [
               _vm.borad.customerInfo.customerName
                 ? _c("span", [
                     _vm._v(" \n            اسم الزبون :  "),
-                    !_vm.filterActive
-                      ? _c(
-                          "span",
-                          {
-                            attrs: {
-                              id:
-                                "nofilter-cutomer-info-name-" + _vm.tablenumber,
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(_vm.borad.customerInfo.customerName) +
-                                "\n                            "
-                            ),
-                          ]
-                        )
+                    !_vm.nameFilterActive
+                      ? _c("span", [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(_vm.borad.customerInfo.customerName) +
+                              "\n                            "
+                          ),
+                        ])
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("span", {
-                      attrs: { id: "cutomer-info-name-" + _vm.tablenumber },
-                    }),
+                    _c(
+                      "span",
+                      {
+                        style:
+                          "display: " +
+                          (_vm.nameFilterActive ? "block" : "none"),
+                        attrs: { id: "cutomer-info-name-" + _vm.tableNumber },
+                      },
+                      [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(_vm.customerNameAlternative) +
+                            "\n                            "
+                        ),
+                      ]
+                    ),
                   ])
                 : _c("span", [
                     _c(
                       "span",
-                      { attrs: { id: "table-info-state-" + _vm.tablenumber } },
+                      { attrs: { id: "table-info-state-" + _vm.tableNumber } },
                       [_vm._v(" الحالة : متوفرة ")]
                     ),
                   ]),
@@ -7562,7 +7678,7 @@ var render = function () {
         [
           _c("div", { staticClass: "boardNumber text-h1 font-weight-light" }, [
             _c("div", { staticClass: "boardNumber-border" }, [
-              _c("h1", [_vm._v(_vm._s(_vm.tablenumber))]),
+              _c("h1", [_vm._v(_vm._s(_vm.tableNumber))]),
             ]),
           ]),
           _vm._v(" "),
@@ -7964,17 +8080,7 @@ var render = function () {
                           : _vm.orderHelper * 10 + board.tableNumber
                         : board.order) +
                       ";\n            display:" +
-                      (_vm.currentTableNameFilter == board.tableNumber ||
-                      (!_vm.currentTableNameFilter &&
-                        (String(board.customerInfo.customerName).indexOf(
-                          _vm.currentCustomerNameFilter
-                        ) == 0 ||
-                          (_vm.currentCustomerNameFilter == "" &&
-                            (_vm.currentFilterVal == "all" ||
-                              _vm.currentFilterVal == board.status))))
-                        ? "block"
-                        : "none") +
-                      ";",
+                      (board.extra.filterShow ? "block" : "none"),
                     attrs: {
                       id:
                         "" +
@@ -7986,11 +8092,8 @@ var render = function () {
                       staticClass: "animate-fade-in-down",
                       style: "animation-delay: " + index * 0.1 + "s",
                       attrs: {
-                        index: index,
-                        active: _vm.currentHallActive ? board.active : 0,
-                        maxCapacity: board.maxCapacity,
-                        status: board.status,
-                        tablenumber: board.tableNumber,
+                        currentHallActive: _vm.currentHallActive,
+                        "table-number": board.tableNumber,
                       },
                       on: {
                         statusChanged: function (data) {
