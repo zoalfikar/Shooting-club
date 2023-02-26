@@ -2594,7 +2594,7 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     nameFilter: {
       handler: function handler(newVal, oldVal) {
-        if (this.nameFilter !== '') {
+        if (String(newVal) !== '') {
           this.$data.nameFilterActive = true;
 
           if (this.customerNameAlternativeEl) {
@@ -2609,17 +2609,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       immediate: true
-    },
-    nameFilterActive: function nameFilterActive(newVal, oldVal) {
-      if (newVal == true) {
-        var el = this.$el.querySelector("#cutomer-info-name-".concat(this.tableNumber));
-        if (el) this.customerNameAlternativeEl = el; // var strong = document.createElement('strong');
-        // strong.style.color = 'blue';
-        // strong.style.background = 'grey';
-        // strong.innerText = '';
-        // customerNameAlternativeColorLetterEl=strong;
-        // customerNameAlternativeEl.appendChild(customerNameAlternativeColorLetterEl);
-      }
     }
   },
   methods: {
@@ -2677,15 +2666,19 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    var created = function created(e) {
-      if (e.animationName == 'fade-in-down') {
-        _this.$el.classList.remove('animate-fade-in-down');
+    $(document).ready(function () {
+      _this.customerNameAlternativeEl = _this.$el.querySelector("#cutomer-info-name-alternative-".concat(_this.tableNumber));
 
-        _this.$el.removeEventListener("animationend", created);
-      }
-    };
+      var created = function created(e) {
+        if (e.animationName == 'fade-in-down') {
+          _this.$el.classList.remove('animate-fade-in-down');
 
-    this.$el.addEventListener("animationend", created);
+          _this.$el.removeEventListener("animationend", created);
+        }
+      };
+
+      _this.$el.addEventListener("animationend", created);
+    });
   }
 });
 
@@ -3054,18 +3047,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['statusChanged'],
   data: function data() {
     return {
+      headerFolded: false,
       currentButtun: 0,
       boxes: [],
       nodes: '',
@@ -3156,6 +3143,36 @@ __webpack_require__.r(__webpack_exports__);
     //     store.dispatch('addElement' , {"x":index1});
     // },
     //
+    toggleHeader: function toggleHeader() {
+      var animationProps = [{
+        clipPath: "inset(0px 0px 0px 0px)",
+        minHeight: '70px',
+        height: '70px'
+      }, {
+        clipPath: "inset(0px 0px 100% 0px)",
+        minHeight: '0',
+        height: '0'
+      }];
+      $('.toggle-boards-header').toggleClass('rotate-toggle-boards-header');
+
+      if (this.headerFolded) {
+        this.headerFolded = false;
+        document.querySelector('.boards-header').animate(animationProps, {
+          duration: 500,
+          iterations: 1,
+          fill: 'forwards',
+          direction: 'reverse'
+        });
+      } else {
+        this.headerFolded = true;
+        document.querySelector('.boards-header').animate(animationProps, {
+          duration: 500,
+          iterations: 1,
+          fill: 'forwards',
+          direction: 'normal'
+        });
+      }
+    },
     getNewBoards: function getNewBoards(boards) {
       return new Promise(function (resolve, reject) {
         resolve(boards);
@@ -3166,16 +3183,24 @@ __webpack_require__.r(__webpack_exports__);
         resolve(nodes);
       });
     },
-    showAll: function showAll() {
+    showAll: function showAll(e) {
+      $('.stateFilter').removeClass('stateFilterSelected');
+      $(e.target).addClass('stateFilterSelected');
       this.currentFilterVal = 'all';
     },
-    showEmpty: function showEmpty() {
+    showEmpty: function showEmpty(e) {
+      $('.stateFilter').removeClass('stateFilterSelected');
+      $(e.target).addClass('stateFilterSelected');
       this.currentFilterVal = '';
     },
-    showActive: function showActive() {
+    showActive: function showActive(e) {
+      $('.stateFilter').removeClass('stateFilterSelected');
+      $(e.target).addClass('stateFilterSelected');
       this.currentFilterVal = 'active';
     },
-    showReserved: function showReserved() {
+    showReserved: function showReserved(e) {
+      $('.stateFilter').removeClass('stateFilterSelected');
+      $(e.target).addClass('stateFilterSelected');
       this.currentFilterVal = 'taken';
     },
     bringHalls: function bringHalls(event) {
@@ -3404,7 +3429,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       return this.boards.map(function (board) {
-        var condition = _this3.currentTableNameFilter == board.tableNumber || !_this3.currentTableNameFilter && (String(board.customerInfo.customerName).indexOf(_this3.currentCustomerNameFilter) == 0 || _this3.currentCustomerNameFilter == '' && (_this3.currentFilterVal == 'all' || _this3.currentFilterVal == board.status));
+        var condition = _this3.currentTableNameFilter == board.tableNumber || !_this3.currentTableNameFilter && (String(board.customerInfo.customerName).indexOf(_this3.currentCustomerNameFilter) == 0 && _this3.currentCustomerNameFilter !== '' || _this3.currentCustomerNameFilter == '' && (_this3.currentFilterVal == 'all' || _this3.currentFilterVal == board.status));
         board.extra.filterShow = condition;
       });
     }
@@ -5005,7 +5030,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n\n      display:  flex;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n      flex-grow: 1;\n}\n@-webkit-keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n@keyframes animate-header-data-v-8313a3d6{\nfrom{height:unset ;}\nto{height:0 ;}\n}\n.hide-header[data-v-8313a3d6]{\n      -webkit-animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n              animation: animate-header-data-v-8313a3d6 0.3s ease-in-out;\n      -webkit-animation-fill-mode: forwards;\n              animation-fill-mode: forwards;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n      right: 10px;\n      bottom: 5px;\n      position: absolute;\n      height: 20px;\n      width:  20px;\n      transition: transform 0.2s ease-in-out ;\n      overflow: visible;\n      color:white;\n      transform: rotate(0);\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n      transform: rotate(180deg);\n}\n  /* .boards-header-collapse .toggle-boards-header{\n      transform: rotate(180deg);\n  } */\n.toggle-boards-header[data-v-8313a3d6]:hover{\n      transform: translateY(-4px)\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: blue;\n      transform: rotate(180deg);\n}\n.hall-navigation[data-v-8313a3d6]{\n    padding-right: 100px;\n      overflow: hidden;\n      height: 70px;\n      align-items: center;\n      flex-grow: 1;\n      display: flex;\n      justify-content: center;\n      width:80%;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n    white-space: nowrap;\n      overflow: hidden;\n      position: relative;\n      height: inherit;\n      font-weight: bold;\n      color:hsl(0, 9%, 27%);\n      flex-grow: 1;\n      text-align:center;\n      width:20%;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n.filter[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:125px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto 50px 0px auto ;\n}\n.filter2[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:130px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto auto 0px 280px   ;\n}\n.filter2 input[data-v-8313a3d6]{\n   background-color:rgba(200,200,200,0.7);\n   border-radius:5px;\n   box-shadow: 0px 1px  4px black;\n}\n.filter2 input[type=text][data-v-8313a3d6]{\n    width:80px;\n    padding-right:4px;\n}\n.filter2 input[type=text][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]{\n    width:40px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-inner-spin-button\n{\n    -webkit-appearance: none;\n            appearance: none;\n}\n.customer-name-filter i[data-v-8313a3d6] {\n    display:none;\n    transform: translateX(calc(100% + 4px));\n}\n.customer-name-filter:hover i[data-v-8313a3d6] {\n    display:inline-block;\n}\n.reserved[data-v-8313a3d6],.active[data-v-8313a3d6],.empty[data-v-8313a3d6], .showAll[data-v-8313a3d6]{\n    width:20px;\n    height:20px;\n    border-radius:3px;\n    box-shadow: 0px 1px  2px black;\n}\n.reserved[data-v-8313a3d6]:hover ,.active[data-v-8313a3d6]:hover  ,.empty[data-v-8313a3d6]:hover ,.showAll[data-v-8313a3d6]:hover{\n    transform:scale(1.3);\n    outline-style:solid ;\n    outline-offset: 2px;\n    outline-color: rgb(100, 100, 70);\n    outline-width: 1px;\n}\n.filter-clicked[data-v-8313a3d6]{\n    outline-style:solid ;\n    outline-offset: 0px;\n    outline-color: rgba(60, 50, 70 ,0.5);\n    outline-width: 4px;\n}\n.showAll[data-v-8313a3d6]{\n    background-color: rgb(215, 172, 102)\n}\n.showAll[data-v-8313a3d6]:hover{\n    background-color: rgb(200, 150, 90)\n}\n.active[data-v-8313a3d6] {\n    background-color: rgb(119, 82, 82)\n}\n.active[data-v-8313a3d6]:hover {\n    background-color: rgb(110, 70, 70)\n}\n.reserved[data-v-8313a3d6] {\n    background-color: rgb(66, 21, 21)\n}\n.reserved[data-v-8313a3d6]:hover {\n    background-color: rgb(50, 10, 10)\n}\n.empty[data-v-8313a3d6]{\n    background-color:  rgb(151, 130, 151)\n}\n.empty[data-v-8313a3d6]:hover{\n    background-color:  rgb(131, 120, 140)\n}\n@media only screen and (max-device-width: 1024px) and (orientation:landscape) {\n.boards-header[data-v-8313a3d6]{\n        box-sizing: border-box !important;\n        width: 100%;\n        position: relative;\n        margin-top: 10px;\n        min-height: 70px;\n\n        display:  flex;\n        align-items: center;\n        background-color: hsla(120, 100%, 13%, 0.4);\n        transition: height 10s ease-in-out;\n        flex-grow: 1;\n}\n.container[data-v-8313a3d6] {\n        max-width: 100% !important;\n        width: 100%;\n        align-self :stretch;\n        min-width: 700px;\n}\n.boardContainter[data-v-8313a3d6]{\n        width: 25% !important;\n        max-width: 25% !important;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* :root{\n  } */\n.container[data-v-8313a3d6] {\n      align-self :stretch;\n      min-width: 700px;\n}\n.boards-header[data-v-8313a3d6]{\n    padding-right: 220px;\n      box-sizing: border-box !important;\n      position: relative;\n      margin-top: 10px;\n      min-height: 70px;\n      display:  flex;\n      justify-content: space-evenly;\n      align-items: center;\n      background-color: hsla(120, 100%, 13%, 0.4);\n      transition: height 10s ease-in-out;\n}\n.toggle-boards-header[data-v-8313a3d6]{\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        right: 10px;\n        bottom: 5px;\n        position: absolute;\n        height: 20px;\n        width:  20px;\n        overflow: visible;\n        color:white;\n        transform: rotate(0);\n        transition: transform 0.2s ease-in-out , bottom 0.7s ease-in-out ;\n        z-index:4;\n}\n.toggle-boards-header[data-v-8313a3d6]:hover{\n        color: rgb(77, 255, 115);\n        border-radius: 100%;\n        background: rgba(0, 0, 0 , 0.4);\n        transform: translateY(-4px)\n}\n.rotate-toggle-boards-header[data-v-8313a3d6]{\n        bottom: -10px;\n        transform: rotate(180deg);\n}\n.rotate-toggle-boards-header.toggle-boards-header[data-v-8313a3d6]:hover{\n      color: rgb(77, 255, 115);\n      transform:  rotate(180deg) translate(0px, -4px);\n}\n.hall-navigation[data-v-8313a3d6]{\n        overflow: hidden;\n        height: 70px;\n        align-items: center;\n        display: flex;\n        justify-content: center;\n}\n.navigations-links[data-v-8313a3d6]{\n      height: 70px;\n      position: relative;\n      display: flex;\n      padding-left:10px;\n      padding-right:10px;\n      gap: 10px;\n      align-items: center;\n      width: 210px;\n      overflow: scroll ;\n}\n.navigations-links[data-v-8313a3d6]::-webkit-scrollbar{\n    display: none;\n}\n.naviga-link[data-v-8313a3d6]{\n      border-radius: 100%;\n      color: beige;\n      min-width: 40px;\n      height: 40px;\n      display: flex;\n      transition: transform 0.2s ease-in-out , background-color  0.3s ease-out;\n}\n.naviga-link-end[data-v-8313a3d6], .naviga-link-start[data-v-8313a3d6]{\n      border-radius: 20%;\n      background-color: rgb(65, 77, 54);\n      color: beige;\n      width: 40px;\n      height: 30px;\n      display: flex;\n      padding-bottom: 3px;\n      transition: transform 0.2s ease-in-out;\n}\n.naviga-link[data-v-8313a3d6]:hover,.naviga-link-end[data-v-8313a3d6]:hover ,.naviga-link-start[data-v-8313a3d6]:hover{\n      transform: scale(1.2) ;\n      cursor: pointer;\n}\n  /* .naviga-link:active{\n    transform: translateY(-4px)\n  } */\n.naviga-link span[data-v-8313a3d6], .naviga-link-start span[data-v-8313a3d6],.naviga-link-end span[data-v-8313a3d6]{\n      margin: auto;\n}\n.navigations-title[data-v-8313a3d6]{\n      position: relative;\n      overflow: hidden;\n      padding-top: 3px;\n      margin-left: 10px;\n      color:hsl(0, 9%, 27%);\n}\n.current-nav-val[data-v-8313a3d6]{\n        height: 70%;\n        white-space: nowrap;\n        overflow: hidden;\n        position: relative;\n        font-weight: bold;\n        color:hsl(0, 9%, 27%);\n        text-align:center;\n        width: 310px;\n        background-color: rgba(200,200, 200, 0.7);\n        border-radius: 10px;\n        padding-right: 13px;\n        padding-left: 13px;\n}\n.current-nav-val h1[data-v-8313a3d6]{\n        margin: auto;\n}\n.noHalls[data-v-8313a3d6]{\n    background-color: red;\n    color: white;\n    width: 100%;\n    height: 300px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 20px;\n}\n.d-flex[data-v-8313a3d6] {\n    overflow: hidden;\n    -webkit-clip-path: inset(0 0 0 0);\n            clip-path: inset(0 0 0 0);\n}\n.filter[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:125px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:7px 53px auto auto ;\n}\n.filter2[data-v-8313a3d6]{\n    display:flex;\n    position:absolute;\n    width:130px;\n    height:30px;\n    justify-content: space-between;\n    align-items:top;\n    inset:auto 50px 2px auto ;\n}\n.filter2 input[data-v-8313a3d6]{\n   background-color:rgba(200,200,200,0.7);\n   border-radius:5px;\n   box-shadow: 0px 1px  4px black;\n}\n.filter2 input[type=text][data-v-8313a3d6]{\n    width:80px;\n    padding-right:4px;\n}\n.filter2 input[type=text][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]{\n    width:40px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-input-placeholder {\n    font-size: 14px;\n}\n.filter2 input[type=number][data-v-8313a3d6]::-webkit-inner-spin-button\n{\n    -webkit-appearance: none;\n            appearance: none;\n}\n.customer-name-filter i[data-v-8313a3d6] {\n    display:none;\n    transform: translateX(calc(100% + 4px));\n}\n.customer-name-filter:hover i[data-v-8313a3d6] {\n    display:inline-block;\n}\n.reserved[data-v-8313a3d6],.active[data-v-8313a3d6],.empty[data-v-8313a3d6], .showAll[data-v-8313a3d6]{\n    width:20px;\n    height:20px;\n    border-radius:3px;\n    box-shadow: 0px 1px  2px black;\n}\n.reserved[data-v-8313a3d6]:hover ,.active[data-v-8313a3d6]:hover  ,.empty[data-v-8313a3d6]:hover ,.showAll[data-v-8313a3d6]:hover{\n    transform:scale(1.3);\n    outline-style:solid ;\n    outline-offset: 2px;\n    outline-color: rgb(100, 100, 70);\n    outline-width: 1px;\n}\n.filter-clicked[data-v-8313a3d6]{\n    outline-style:solid ;\n    outline-offset: 0px;\n    outline-color: rgba(60, 50, 70 ,0.5);\n    outline-width: 4px;\n}\n.showAll[data-v-8313a3d6]{\n    background-color: rgb(215, 172, 102)\n}\n.showAll[data-v-8313a3d6]:hover{\n    background-color: rgb(200, 150, 90)\n}\n.active[data-v-8313a3d6] {\n    background-color: rgb(119, 82, 82)\n}\n.active[data-v-8313a3d6]:hover {\n    background-color: rgb(110, 70, 70)\n}\n.reserved[data-v-8313a3d6] {\n    background-color: rgb(66, 21, 21)\n}\n.reserved[data-v-8313a3d6]:hover {\n    background-color: rgb(50, 10, 10)\n}\n.empty[data-v-8313a3d6]{\n    background-color:  rgb(151, 130, 151)\n}\n.empty[data-v-8313a3d6]:hover{\n    background-color:  rgb(131, 120, 140)\n}\n.stateFilterSelected[data-v-8313a3d6]{\n    border:2px solid rgba(255, 225, 225, 0.7);\n}\n@media only screen and (max-device-width: 1024px) and (orientation:landscape) {\n.boards-header[data-v-8313a3d6]{\n        box-sizing: border-box !important;\n        width: 100%;\n        position: relative;\n        margin-top: 10px;\n        min-height: 70px;\n\n        display:  flex;\n        align-items: center;\n        background-color: hsla(120, 100%, 13%, 0.4);\n        transition: height 10s ease-in-out;\n        flex-grow: 1;\n}\n.container[data-v-8313a3d6] {\n        max-width: 100% !important;\n        width: 100%;\n        align-self :stretch;\n        min-width: 700px;\n}\n.boardContainter[data-v-8313a3d6]{\n        width: 25% !important;\n        max-width: 25% !important;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7563,13 +7588,13 @@ var render = function () {
             [
               _vm.borad.customerInfo.customerName
                 ? _c("span", [
-                    _vm._v(" \n            اسم الزبون :  "),
+                    _vm._v(" \n            اسم الزبون : \n            "),
                     !_vm.nameFilterActive
                       ? _c("span", [
                           _vm._v(
-                            "\n                                " +
+                            "\n                " +
                               _vm._s(_vm.borad.customerInfo.customerName) +
-                              "\n                            "
+                              "\n            "
                           ),
                         ])
                       : _vm._e(),
@@ -7579,14 +7604,17 @@ var render = function () {
                       {
                         style:
                           "display: " +
-                          (_vm.nameFilterActive ? "block" : "none"),
-                        attrs: { id: "cutomer-info-name-" + _vm.tableNumber },
+                          (_vm.nameFilterActive ? "inline" : "none"),
+                        attrs: {
+                          id:
+                            "cutomer-info-name-alternative-" + _vm.tableNumber,
+                        },
                       },
                       [
                         _vm._v(
-                          "\n                                " +
+                          "\n                " +
                             _vm._s(_vm.customerNameAlternative) +
-                            "\n                            "
+                            "\n            "
                         ),
                       ]
                     ),
@@ -7871,132 +7899,148 @@ var render = function () {
     "div",
     { staticClass: "container" },
     [
-      _c("header", { staticClass: "boards-header" }, [
-        _c("div", { staticClass: "filter" }, [
-          _c("div", {
-            staticClass: "showAll",
-            attrs: { title: "عرض الكل" },
-            on: { click: _vm.showAll },
-          }),
-          _vm._v(" "),
-          _c("div", {
-            staticClass: "empty",
-            attrs: { title: "عرض الطاولات المتاحة" },
-            on: { click: _vm.showEmpty },
-          }),
-          _vm._v(" "),
-          _c("div", {
-            staticClass: "active",
-            attrs: { title: "عرض الطاولات المشغولة" },
-            on: { click: _vm.showActive },
-          }),
-          _vm._v(" "),
-          _c("div", {
-            staticClass: "reserved",
-            attrs: { title: "عرض الطاولات المحجوزة" },
-            on: { click: _vm.showReserved },
-          }),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "filter2" }, [
-          _c("div", { staticClass: "customer-name-filter" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.currentCustomerNameFilter,
-                  expression: "currentCustomerNameFilter",
-                },
-              ],
-              attrs: {
-                type: "text",
-                name: "",
-                id: "",
-                placeholder: "اسم الزبون",
-              },
-              domProps: { value: _vm.currentCustomerNameFilter },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.currentCustomerNameFilter = $event.target.value
-                },
-              },
-            }),
-            _c("i", {
-              staticClass: "fa fa-close close",
-              on: { click: _vm.resetCustonmerNameInput },
-            }),
+      _c(
+        "div",
+        {
+          staticClass: "boards-header-wrapper",
+          staticStyle: { position: "relative" },
+        },
+        [
+          _c("header", { staticClass: "boards-header" }, [
+            _c("div", { staticClass: "filter" }, [
+              _c("div", {
+                staticClass: "showAll stateFilter stateFilterSelected",
+                attrs: { title: "عرض الكل" },
+                on: { click: _vm.showAll },
+              }),
+              _vm._v(" "),
+              _c("div", {
+                staticClass: "empty stateFilter",
+                attrs: { title: "عرض الطاولات المتاحة" },
+                on: { click: _vm.showEmpty },
+              }),
+              _vm._v(" "),
+              _c("div", {
+                staticClass: "active stateFilter",
+                attrs: { title: "عرض الطاولات المشغولة" },
+                on: { click: _vm.showActive },
+              }),
+              _vm._v(" "),
+              _c("div", {
+                staticClass: "reserved stateFilter",
+                attrs: { title: "عرض الطاولات المحجوزة" },
+                on: { click: _vm.showReserved },
+              }),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "filter2" }, [
+              _c("div", { staticClass: "customer-name-filter" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentCustomerNameFilter,
+                      expression: "currentCustomerNameFilter",
+                    },
+                  ],
+                  attrs: {
+                    type: "text",
+                    name: "",
+                    id: "",
+                    placeholder: "اسم الزبون",
+                  },
+                  domProps: { value: _vm.currentCustomerNameFilter },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.currentCustomerNameFilter = $event.target.value
+                    },
+                  },
+                }),
+                _c("i", {
+                  staticClass: "fa fa-close close",
+                  on: { click: _vm.resetCustonmerNameInput },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "table-number-filter" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentTableNameFilter,
+                      expression: "currentTableNameFilter",
+                    },
+                  ],
+                  attrs: { type: "number", placeholder: " الطاولة" },
+                  domProps: { value: _vm.currentTableNameFilter },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.currentTableNameFilter = $event.target.value
+                    },
+                  },
+                }),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "hall-navigation" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "navigations-links" },
+                _vm._l(_vm.halls, function (hall) {
+                  return _c(
+                    "button",
+                    {
+                      key: hall.hallNumber,
+                      staticClass: "naviga-link",
+                      style:
+                        "background-color:" +
+                        (hall.hallNumber == _vm.currentButtun
+                          ? "rgb(199, 176, 146)"
+                          : "rgb(90, 117, 65)") +
+                        " ",
+                      attrs: { value: hall.hallNumber },
+                      on: {
+                        click: function (event) {
+                          _vm.bringHalls(event)
+                        },
+                      },
+                    },
+                    [_c("span", [_vm._v(_vm._s(hall.hallNumber))])]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _vm._m(2),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "current-nav-val" }, [
+              _c("h1", [_vm._v(_vm._s(_vm.currentHallName))]),
+            ]),
           ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "table-number-filter" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.currentTableNameFilter,
-                  expression: "currentTableNameFilter",
-                },
-              ],
-              attrs: { type: "number", placeholder: " الطاولة" },
-              domProps: { value: _vm.currentTableNameFilter },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.currentTableNameFilter = $event.target.value
-                },
-              },
-            }),
-          ]),
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "hall-navigation" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _vm._m(2),
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "navigations-links" },
-            _vm._l(_vm.halls, function (hall) {
-              return _c(
-                "button",
-                {
-                  key: hall.hallNumber,
-                  staticClass: "naviga-link",
-                  style:
-                    "background-color:" +
-                    (hall.hallNumber == _vm.currentButtun
-                      ? "rgb(199, 176, 146)"
-                      : "rgb(90, 117, 65)") +
-                    " ",
-                  attrs: { value: hall.hallNumber },
-                  on: {
-                    click: function (event) {
-                      _vm.bringHalls(event)
-                    },
-                  },
-                },
-                [_c("span", [_vm._v(_vm._s(hall.hallNumber))])]
-              )
-            }),
-            0
+            {
+              staticClass: "toggle-boards-header",
+              on: { click: _vm.toggleHeader },
+            },
+            [_vm._m(3)]
           ),
-          _vm._v(" "),
-          _vm._m(3),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "current-nav-val" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.currentHallName))]),
-        ]),
-      ]),
+        ]
+      ),
       _vm._v(" "),
       _vm.noHalls
         ? _c(
@@ -8079,7 +8123,7 @@ var render = function () {
                           ? board.order
                           : _vm.orderHelper * 10 + board.tableNumber
                         : board.order) +
-                      ";\n            display:" +
+                      ";\n        display:" +
                       (board.extra.filterShow ? "block" : "none"),
                     attrs: {
                       id:
@@ -8127,14 +8171,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "toggle-boards-header" }, [
-      _c("span", [_c("i", { staticClass: "fa fa-angle-double-up" })]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "navigations-title" }, [
       _c("h4", [_vm._v("الصالة :")]),
     ])
@@ -8166,6 +8202,12 @@ var staticRenderFns = [
         ]),
       ]
     )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [_c("i", { staticClass: "fa fa-angle-double-up" })])
   },
 ]
 render._withStripped = true

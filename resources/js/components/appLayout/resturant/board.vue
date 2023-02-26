@@ -16,13 +16,13 @@
         </div>
         <v-card-subtitle :id="`cutomerInfo-${tableNumber}`"> 
             <span v-if="borad.customerInfo.customerName"> 
-                اسم الزبون :  <span v-if="!nameFilterActive">
-                                    {{ borad.customerInfo.customerName}}
-                                </span>
-                                <span :style="`display: ${nameFilterActive ? 'block' : 'none'}`" :id="`cutomer-info-name-${tableNumber}`">
-                                    {{customerNameAlternative}}
-                                </span>
-                                
+                اسم الزبون : 
+                <span v-if="!nameFilterActive">
+                    {{ borad.customerInfo.customerName}}
+                </span>
+                <span :style="`display: ${nameFilterActive ? 'inline' : 'none'}`" :id="`cutomer-info-name-alternative-${tableNumber}`">
+                    {{customerNameAlternative}}
+                </span>
             </span>
             <span v-else> 
                 <span :id="`table-info-state-${tableNumber}`"> الحالة : متوفرة </span>
@@ -120,40 +120,28 @@ export default {
             }
         },
         //
-        nameFilter:function () {
+        nameFilter:function () { 
            return this.$parent.$data.currentCustomerNameFilter;
         },
     },
     watch:{
         nameFilter:{
             handler(newVal,oldVal){
-                if (this.nameFilter !== '') {
+                if (String(newVal) !== '') {
                     this.$data.nameFilterActive=true;
-                    if (this.customerNameAlternativeEl) {
-                        if (this.customerNameAlternativeEl.querySelector('strong')) {
-                            this.customerNameAlternativeEl.querySelector('strong').remove()
+                        if (this.customerNameAlternativeEl) {
+                            if (this.customerNameAlternativeEl.querySelector('strong')) {
+                                this.customerNameAlternativeEl.querySelector('strong').remove()
+                            }
+                         this.customerNameAlternativeEl.innerHTML = this.customerNameAlternative.replace(String(newVal) , `<strong style="color:blue; background:gray;">${String(newVal)}</strong>` )
                         }
-                        this.customerNameAlternativeEl.innerHTML = this.customerNameAlternative.replace(String(newVal) , `<strong style="color:blue; background:gray;">${String(newVal)}</strong>` )
-                    }
-                }
+                }   
                 else {
                     this.$data.nameFilterActive=false;
                 }
             },
             immediate:true,
         },
-        nameFilterActive(newVal,oldVal){
-            if (newVal == true) {
-                var el = this.$el.querySelector(`#cutomer-info-name-${this.tableNumber}`);
-                if (el ) this.customerNameAlternativeEl = el;
-                // var strong = document.createElement('strong');
-                // strong.style.color = 'blue';
-                // strong.style.background = 'grey';
-                // strong.innerText = '';
-                // customerNameAlternativeColorLetterEl=strong;
-                // customerNameAlternativeEl.appendChild(customerNameAlternativeColorLetterEl);
-            }
-        }
     },
     methods : {
         reservation: function(){
@@ -197,13 +185,16 @@ export default {
 
     },
     mounted:function () {
-        let created = (e)=>{
+        $(document).ready(()=> { 
+            this.customerNameAlternativeEl = this.$el.querySelector(`#cutomer-info-name-alternative-${this.tableNumber}`)
+            let created = (e)=>{
             if( e.animationName == 'fade-in-down'){
                 this.$el.classList.remove('animate-fade-in-down')
                 this.$el.removeEventListener("animationend",created );
             }
         }
         this.$el.addEventListener("animationend",created)
+        });
     }
 };
 </script>

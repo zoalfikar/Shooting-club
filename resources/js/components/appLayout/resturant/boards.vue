@@ -1,72 +1,65 @@
 <template>
     <div class="container">
-      <header class="boards-header">
-            <div class="filter">
-                <div @click="showAll" title="عرض الكل" class="showAll"></div>
-                <div @click="showEmpty" title="عرض الطاولات المتاحة" class="empty"></div>
-                <div  @click="showActive" title="عرض الطاولات المشغولة" class="active"></div>
-                <div  @click="showReserved" title="عرض الطاولات المحجوزة" class="reserved"></div>
-            </div>
-            <div class="filter2">
-                    <div class="customer-name-filter"><input v-model="currentCustomerNameFilter" type="text"  name="" id="" placeholder="اسم الزبون"><i @click="resetCustonmerNameInput" class="fa fa-close close"></i></div>
-                    <div class="table-number-filter"><input v-model="currentTableNameFilter" type="number" placeholder=" الطاولة"></div>
-            </div>
-            <div class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
-            <div class="hall-navigation">
-                <div class="navigations-title">
-                    <h4>الصالة :</h4>
+        <div class="boards-header-wrapper" style="position:relative">
+            <header  class="boards-header">
+                <div class="filter">
+                    <div @click="showAll" title="عرض الكل" class="showAll stateFilter stateFilterSelected"></div>
+                    <div @click="showEmpty" title="عرض الطاولات المتاحة" class="empty stateFilter"></div>
+                    <div  @click="showActive" title="عرض الطاولات المشغولة" class="active stateFilter"></div>
+                    <div  @click="showReserved" title="عرض الطاولات المحجوزة" class="reserved stateFilter"></div>
                 </div>
-                <button value="" class="naviga-link-start"><span href=""><i class="fa fa-angle-right"></i></span></button>
-                <div class="navigations-links">
-                    <button @click="(event)=>{bringHalls(event)}" v-for="hall in halls" :key="hall.hallNumber" :value="hall.hallNumber" class="naviga-link"  :style=" `background-color:${ hall.hallNumber == currentButtun ? 'rgb(199, 176, 146)':'rgb(90, 117, 65)'} `"><span>{{hall.hallNumber}}</span></button>
+                <div class="filter2">
+                        <div class="customer-name-filter"><input v-model="currentCustomerNameFilter" type="text"  name="" id="" placeholder="اسم الزبون"><i @click="resetCustonmerNameInput" class="fa fa-close close"></i></div>
+                        <div class="table-number-filter"><input v-model="currentTableNameFilter" type="number" placeholder=" الطاولة"></div>
                 </div>
-                <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
-            </div>
-            <div  class="current-nav-val">
-                <h1>{{currentHallName}}</h1>
-            </div>
-      </header>
-    <div v-if="noHalls" class="noHalls">
-        <h1>لاتوجد صالات حتى الان</h1>
-        <v-btn onClick="navigatTo(event,this)" href="show-new-hall-form" dark>أدخل بيانات صالة</v-btn>
-    </div>
-    <div v-if="loading" class="flex justify-center">تحميل ...</div>
-      <div v-else class="d-flex flex-row flex-wrap justify-content-center">
+                <div class="hall-navigation">
+                    <div class="navigations-title">
+                        <h4>الصالة :</h4>
+                    </div>
+                    <button value="" class="naviga-link-start"><span href=""><i class="fa fa-angle-right"></i></span></button>
+                    <div class="navigations-links">
+                        <button @click="(event)=>{bringHalls(event)}" v-for="hall in halls" :key="hall.hallNumber" :value="hall.hallNumber" class="naviga-link"  :style=" `background-color:${ hall.hallNumber == currentButtun ? 'rgb(199, 176, 146)':'rgb(90, 117, 65)'} `"><span>{{hall.hallNumber}}</span></button>
+                    </div>
+                    <button value="" class="naviga-link-end"><span href=""><i class="fa fa-angle-left"></i></span></button>
+                </div>
+                <div  class="current-nav-val">
+                    <h1>{{currentHallName}}</h1>
+                </div>
+            </header>
+            <div  @click="toggleHeader" class="toggle-boards-header"><span><i class="fa fa-angle-double-up"></i></span></div>
+        </div>
+       <div  v-if="noHalls" class="noHalls">
+            <h1>لاتوجد صالات حتى الان</h1>
+            <v-btn onClick="navigatTo(event,this)" href="show-new-hall-form" dark>أدخل بيانات صالة</v-btn>
+        </div>
+        <div v-if="loading" class="flex justify-center">تحميل ...</div>
+
+        <div v-else class="d-flex flex-row flex-wrap justify-content-center">
         <div v-if="noBoards" class="noHalls">
             <h1>لاتوجد طاولات في هذه الصالة حتى الان</h1>
             <v-btn dark onClick="navigatTo(event,this)" href="show-new-table-form" >أضف طاولات جديدة</v-btn>
         </div>
         <div v-if="!currentHallActive" class="flex justify-center col-lg-12 col-md-12">هذه الصالة للعرض فقط (غير جاهة)</div>
-          <div  v-for="(board,index) in boards"
-              v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
-              :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
-              :style=" 
-              `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
-              display:${ board.extra.filterShow ? 'block' : 'none' }`
-              "
-              :class="`${'col-lg-3 col-md-4 h'+currentHall} boardContainter`">
-                  <!-- <board
-                        :index="index"
-                        :active="currentHallActive ? board.active : 0"
-                        :maxCapacity="board.maxCapacity"
-                        :status="board.status"
-                        :tablenumber="board.tableNumber"
-                        :style="`animation-delay: ${(index) * 0.1}s`"
-                        class="animate-fade-in-down"
-                        @statusChanged="(data)=>moveitem(data)" >
-                  </board> -->
-                  <board
-                        :currentHallActive="currentHallActive" 
-                        :table-number="board.tableNumber"
-                        :style="`animation-delay: ${(index) * 0.1}s`"
-                        class="animate-fade-in-down"
-                        @statusChanged="(data)=>moveitem(data)" >
-                  </board>
-          </div>
-      </div>
-      <board-modal></board-modal>
-      <info-modal  @statusChanged="(data)=>moveitem(data)"></info-modal>
-  </div>
+            <div   v-for="(board,index) in boards"
+            v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
+            :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
+            :style=" 
+            `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
+            display:${ board.extra.filterShow ? 'block' : 'none' }`
+            "
+            :class="`${'col-lg-3 col-md-4 h'+currentHall} boardContainter`">
+                <board
+                    :currentHallActive="currentHallActive" 
+                    :table-number="board.tableNumber"
+                    :style="`animation-delay: ${(index) * 0.1}s`"
+                    class="animate-fade-in-down"
+                    @statusChanged="(data)=>moveitem(data)" >
+                </board>
+            </div>
+        </div>
+        <board-modal></board-modal>
+        <info-modal  @statusChanged="(data)=>moveitem(data)"></info-modal> 
+    </div>
   </template>
 
 <script>
@@ -75,6 +68,7 @@ import store from '../../../store';
           emits:['statusChanged'],
           data(){
               return{
+                headerFolded : false ,
                 currentButtun:0,
                 boxes:[],
                 nodes:'',
@@ -146,7 +140,37 @@ import store from '../../../store';
 
             // },
         //
-
+        
+            toggleHeader:function(){
+                var  animationProps = 
+                [
+                    { clipPath: "inset(0px 0px 0px 0px)" , minHeight: '70px' , height : '70px'},
+                    { clipPath: "inset(0px 0px 100% 0px)" , minHeight: '0' , height : '0'}
+                ];
+                $('.toggle-boards-header').toggleClass('rotate-toggle-boards-header');
+                if (this.headerFolded) {
+                    this.headerFolded = false;
+                    document.querySelector('.boards-header').animate( animationProps, 
+                        {
+                            duration: 500,
+                            iterations: 1,
+                            fill:'forwards',
+                            direction:'reverse'
+                        }
+                    )
+                } else {
+                    this.headerFolded = true;
+                    document.querySelector('.boards-header').animate( animationProps, 
+                        {
+                            duration: 500,
+                            iterations: 1,
+                            fill:'forwards',
+                            direction:'normal'
+                        }
+                    )
+                }
+             
+            },
             getNewBoards:function(boards){
                 return new Promise((resolve, reject) => {
                     resolve(boards);
@@ -157,17 +181,24 @@ import store from '../../../store';
                     resolve(nodes);
                 });
             },
-            showAll:function(){
+            showAll:function(e){
+                $('.stateFilter').removeClass('stateFilterSelected');
+                $(e.target).addClass('stateFilterSelected');
                 this.currentFilterVal='all'
             },
-            showEmpty:function(){
+            showEmpty:function(e){
+                $('.stateFilter').removeClass('stateFilterSelected');
+                $(e.target).addClass('stateFilterSelected');
                 this.currentFilterVal=''
             },
-            showActive:function(){
+            showActive:function(e){
+                $('.stateFilter').removeClass('stateFilterSelected');
+                $(e.target).addClass('stateFilterSelected');
                 this.currentFilterVal='active'
-
             },
-            showReserved:function(){
+            showReserved:function(e){
+                $('.stateFilter').removeClass('stateFilterSelected');
+                $(e.target).addClass('stateFilterSelected');
                 this.currentFilterVal='taken'
             },
             bringHalls:function (event) {
@@ -204,7 +235,6 @@ import store from '../../../store';
                         fill: 'forwards'
                 })
             },
-
             numberOfElementsInRows: function () {
                 if (this.total == 0) throw new Error("no elements"); ;
                 var count = 1;
@@ -343,7 +373,7 @@ import store from '../../../store';
                     var condition =   
                     ( this.currentTableNameFilter == board.tableNumber ||
                     ( !this.currentTableNameFilter  &&
-                    ( String( board.customerInfo.customerName).indexOf(this.currentCustomerNameFilter) == 0 || 
+                    (( String( board.customerInfo.customerName).indexOf(this.currentCustomerNameFilter) == 0 && this.currentCustomerNameFilter !== '')  || 
                     ( this.currentCustomerNameFilter == '' && 
                     ( this.currentFilterVal == 'all' || 
                     this.currentFilterVal == board.status )))))
@@ -398,60 +428,54 @@ import store from '../../../store';
           min-width: 700px;
       }
       .boards-header{
+        padding-right: 220px;
           box-sizing: border-box !important;
           position: relative;
           margin-top: 10px;
           min-height: 70px;
-
           display:  flex;
+          justify-content: space-evenly;
           align-items: center;
           background-color: hsla(120, 100%, 13%, 0.4);
           transition: height 10s ease-in-out;
-          flex-grow: 1;
-      }
-      @keyframes animate-header{
-          from{height:unset ;}
-          to{height:0 ;}
-      }
-      .hide-header{
-          animation: animate-header 0.3s ease-in-out ;
-          animation-fill-mode: forwards;
       }
       .toggle-boards-header{
-          right: 10px;
-          bottom: 5px;
-          position: absolute;
-          height: 20px;
-          width:  20px;
-          transition: transform 0.2s ease-in-out ;
-          overflow: visible;
-          color:white;
-          transform: rotate(0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            right: 10px;
+            bottom: 5px;
+            position: absolute;
+            height: 20px;
+            width:  20px;
+            overflow: visible;
+            color:white;
+            transform: rotate(0);
+            transition: transform 0.2s ease-in-out , bottom 0.7s ease-in-out ;
+            z-index:4;
       }
-      .rotate-toggle-boards-header{
-          transform: rotate(180deg);
-      }
-      /* .boards-header-collapse .toggle-boards-header{
-          transform: rotate(180deg);
-      } */
       .toggle-boards-header:hover{
-          transform: translateY(-4px)
-      }
+            color: rgb(77, 255, 115);
+            border-radius: 100%;
+            background: rgba(0, 0, 0 , 0.4);
+            transform: translateY(-4px)
+        }
+        .rotate-toggle-boards-header{
+            bottom: -10px;
+            transform: rotate(180deg);
+        }
       .rotate-toggle-boards-header.toggle-boards-header:hover{
-          color: blue;
-          transform: rotate(180deg);
-      }
+          color: rgb(77, 255, 115);
+          transform:  rotate(180deg) translate(0px, -4px);
+        }        
 
       .hall-navigation{
-        padding-right: 100px;
-          overflow: hidden;
-          height: 70px;
-          align-items: center;
-          flex-grow: 1;
-          display: flex;
-          justify-content: center;
-          width:80%;
-      }
+            overflow: hidden;
+            height: 70px;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
 
       .navigations-links{
           height: 70px;
@@ -506,16 +530,22 @@ import store from '../../../store';
 
       }
       .current-nav-val{
-        white-space: nowrap;
-          overflow: hidden;
-          position: relative;
-          height: inherit;
-          font-weight: bold;
-          color:hsl(0, 9%, 27%);
-          flex-grow: 1;
-          text-align:center;
-          width:20%;
-    }
+            height: 70%;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            font-weight: bold;
+            color:hsl(0, 9%, 27%);
+            text-align:center;
+            width: 310px;
+            background-color: rgba(200,200, 200, 0.7);
+            border-radius: 10px;
+            padding-right: 13px;
+            padding-left: 13px;
+        }
+        .current-nav-val h1{
+            margin: auto;
+        }
     .noHalls{
         background-color: red;
         color: white;
@@ -537,7 +567,7 @@ import store from '../../../store';
         height:30px;
         justify-content: space-between;
         align-items:top;
-        inset:auto 50px 0px auto ;
+        inset:7px 53px auto auto ;
     }
     .filter2{
         display:flex;
@@ -546,7 +576,7 @@ import store from '../../../store';
         height:30px;
         justify-content: space-between;
         align-items:top;
-        inset:auto auto 0px 280px   ;
+        inset:auto 50px 2px auto ;
     }
     .filter2 input{
        background-color:rgba(200,200,200,0.7);
@@ -620,6 +650,9 @@ import store from '../../../store';
     }
     .empty:hover{
         background-color:  rgb(131, 120, 140)
+    }
+    .stateFilterSelected{
+        border:2px solid rgba(255, 225, 225, 0.7);
     }
     @media only screen and (max-device-width: 1024px) and (orientation:landscape) {
         .boards-header{
