@@ -159,7 +159,7 @@ export default {
         },
         occupied: function(){
             store.dispatch("changeCurrentTableNumber" , this.tableNumber  );
-            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
+            // store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
             $(".info-modal").css("display", "block");
             // this.status = 'active';
             // moveitem('2',this.tableNumber)

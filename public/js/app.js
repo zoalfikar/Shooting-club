@@ -2637,11 +2637,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     occupied: function occupied() {
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tableNumber);
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
-        "status": 'active',
-        "tableNumber": this.tableNumber
-      });
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeCurrentTableNumber", this.tableNumber); // store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
+
       $(".info-modal").css("display", "block"); // this.status = 'active';
       // moveitem('2',this.tableNumber)
       // this.$emit('statusChanged' , {order:2,tableNumber:this.tableNumber });
@@ -3605,7 +3602,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   watch: {
     orders: {
       handler: function handler(newVal, oldVal) {
-        this.temporeryOrders = _toConsumableArray(this.orders);
+        this.temporeryOrders = JSON.parse(JSON.stringify(this.orders));
+        this.temporeryOrders.forEach(function (TeOrder) {
+          TeOrder.price = parseInt(TeOrder.price);
+        });
       },
       deep: true,
       immediate: true
@@ -3769,6 +3769,10 @@ __webpack_require__.r(__webpack_exports__);
       };
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('setTableInfo', {
         "info": info
+      });
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
+        "status": 'active',
+        "tableNumber": _this.tableNumber
       });
 
       _this.$emit('statusChanged', {

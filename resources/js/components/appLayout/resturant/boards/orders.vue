@@ -78,7 +78,10 @@
     watch:{
         orders:{
             handler(newVal,oldVal){
-                this.temporeryOrders = [...this.orders];
+                this.temporeryOrders = JSON.parse(JSON.stringify(this.orders));
+                this.temporeryOrders.forEach(TeOrder => {
+                    TeOrder.price = parseInt(TeOrder.price);
+                });
             },
             deep:true,
             immediate: true

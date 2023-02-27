@@ -65,6 +65,7 @@ export default {
                 extraInfo: $('#des').val(),
             };
             store.dispatch('setTableInfo' , {"info":info});
+            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
             this.$emit('statusChanged' , {order:2,"tableNumber":this.tableNumber });
             $('input').val("");
             $('textarea').html("");
