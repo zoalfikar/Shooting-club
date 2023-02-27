@@ -1,75 +1,82 @@
 @extends('appLayouts.app')
 @section('styles')
 <style>
+    .app-container{
+        display: block !important;
+    }
     .wrapper{
-        height: 100%;
+        margin: auto;
         margin-top: 20px;
-        padding-top:5px; 
-        max-width: 900px;
-        min-width: 300px;
-        min-height: 300px;
-        background-color: rgb(127, 221, 224);
+        width: 80%;
+        background-color: rgb(88, 88, 88);
         display: grid;
         grid-template-areas:
         'filter filter'
         'waiter halls'
         'tables tables';
         grid-template-columns: 25% 75% ;
-        /* column-gap: 10px; */
-        }
+        align-items: start;
+        color: white;
+    }
     .filter{
         grid-area: filter ;
-        display: block;
-        border: 2px solid black;
+        border-bottom: 2px solid rgba(153, 108, 108 , 0.5);
         display: flex;
-        height: 120px;
+        height: 170px;
         flex-grow: 1;
-        /* min-width: 50px; */
-        /* background-color: rgb(124, 251, 255); */
     }
     .filter .waiterFilter , .filter .tablesFilter{
-        padding: 5px;
-        padding-top: 10px;
-    }
-    #filterName, #filterDate , #waiterNumber{
-        margin-top: 10px;
-    }
-    #filterName , #filterDate{
-       width: 40%;
-       margin-right:40px; 
-    }
-    .filter .waiterFilter{
         width: 50%;
     }
-    #waiterNumber{
-        margin-right: 10px;
+    .filter .waiterFilter {
+        padding-right:40px; 
+        padding-left:40px; 
     }
-    
+    #filterName , #filterDate{
+        width: 40%;
+        margin:auto; 
+    }
+
+     .nameFilter, .dateFilter , .waiterNumber{
+        margin-top:15px; 
+        display: flex;
+        align-items: center;
+    }
+    .nameFilter, .dateFilter{
+        gap:20px;
+        justify-content: space-between !important;
+    }
+    .waiterNumber{
+        height: 40px;
+        gap: 20px;
+    }
+    .waiter , .hall{
+        min-height: 100px;
+    }
     .waiter{
         grid-area: waiter ;
         display: block;
-        border-bottom: 2px solid black ;
-        border-left: 2px solid black ;
         /* min-width: 50px; */
         /* background-color: cadetblue; */
     }
     .waiter select{
         height: 40px;
-        background-color: bisque;
+        background-color: rgb(22, 22, 22);
         width: 90%;
         padding-right: 20px;
         margin: auto;
-        margin-top: 20px;
+        margin-top: 15px;
+        color: aqua
     }
 
     .hall{
+        border-right: 2px solid rgba(153, 108, 108 , 0.5) ;
+        
         grid-area: halls ;
-        border-bottom: 2px solid black ;
-
         /* background-color: rgb(0, 76, 78); */
-
     }
     .tables{
+        border-top: 2px solid rgba(218, 208, 208, 0.5) ;
         grid-area: tables ;
         /* background-color: rgb(0, 216, 0); */
         display: flex;
@@ -89,6 +96,15 @@
         margin: 5px;
         margin-top: 15px;
         margin-bottom: 15px;
+    }
+    .radio:nth-child(2n) {
+        background-color: rgba(53, 53, 53, 0.7);
+        color:white;
+    }
+    .radio:nth-child(2n+1) {
+        background-color: rgba(34, 25, 25, 0.7);
+        color:white;
+        
     }
     .radio .label {
         position: relative;
@@ -129,7 +145,6 @@
         opacity: 1;
     }
     .cntr {
-        /* position: relative; */
         display: flex;
         gap: 0px;
         flex-wrap: wrap;
@@ -137,29 +152,18 @@
         top: calc(50% - 10px);
         left: 0;
         width: 100%;
-        /* text-align: center; */
+        flex-grow: 1;
+        margin-bottom: 15px;
     }
     .hidden {
         display: none;
     }
-    .credit {
-        /* position: fixed; */
-        right: 20px;
-        bottom: 20px;
-        transition: all 0.2s ease;
-        -webkit-user-select: none;
-        user-select: none;
-        opacity: 0.6;
-    }
-    .credit img {
-        width: 72px;
-    }
-    .credit:hover {
-        transform: scale(0.95);
-    }
+    
     .radio{
-        width: 130px !important;
-        height: 20px !important;
+        border-radius: 10px;
+        padding:10px; 
+        width: 160px !important;
+        height: 40px !important;
         overflow: hidden  !important;
         white-space: nowrap;
     }
@@ -168,20 +172,20 @@
         margin: 15px;
         width: 70px;
     }
-
+    
     ul {
         list-style-type: none;
     }
-
+    
     label {
         font-family: Helvetica;
         letter-spacing: 1px;
     }
-
+    
     .checkbox-flip{
         display: none;
     }
-
+    
     .checkbox-flip + label span {
         display: inline-block;
         width: 25px;
@@ -205,7 +209,7 @@
         z-index: 0;
         border: none;
     }
-
+    
     .checkbox-flip:checked + label span:before {
         -webkit-transform: rotateY(180deg);
         -moz-transform: rotateY(180deg);
@@ -217,13 +221,65 @@
     .subtitle{
         width: 100%;
         text-align: center;
+        font-size: 20px;
+        margin-top: 13px
     }
     .tables .subtitle{
         margin-top: 10px;
     }
+    .tables .option{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+    .tables .option .neitherNor , .tables .option .fromTo{
+        width: 200px;
+    }
 
-
-</style>
+    select{
+        height: 40px;
+        background-color: rgb(22, 22, 22);
+        width: 90%;
+        padding-right: 20px;
+        margin: auto;
+        margin-top: 20px;
+        color: aqua;
+        border-radius:10px; 
+    }
+    input[type='number']{
+        text-align: center;
+        width: 60px;
+        background: rgb(136, 136, 136);
+        border-radius: 10px;
+        color: cyan
+    }
+    input[type='text']{
+        height: 40px;
+        width: 90%;
+        color: cyan;
+        background: rgb(114, 114, 105);
+        border-radius: 10px;
+    }
+    button{
+        border: 2px solid black;
+        border-radius: 10px;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.4)
+    }
+    button:hover{
+        background: rgba(0, 0, 0, 0.7)
+    }
+    button:active{
+        color: chartreuse;
+        background: rgba(0, 0, 0, 0.7)
+    }
+    
+    
+    </style>
 
 @endsection
 @section('content')
@@ -250,11 +306,12 @@
             </div>
             <div class="tablesFilter">
                 <div class="subtitle"> فلتر الطاولات</div>
-
-                <label for="waiterNumber">
-                    حسب عدد النادلين على كل طاولة
-                </label>
-                <input type="number" name="waiterNumber" id="waiterNumber">
+                <div class="waiterNumber">
+                    <label for="waiterNumber">
+                        حسب عدد النادلين على كل طاولة
+                    </label>
+                    <input type="number" name="waiterNumber" id="waiterNumber">
+                </div>
             </div>
             
         </div>
@@ -272,8 +329,8 @@
             <div class="cntr">
                 @foreach ($halls as $hall)
                     <label for="{{$hall->hallNumber}}" class="radio">
-                    <input disabled type="radio" name="hall" value="{{$hall->hallNumber}}"  id="{{$hall->hallNumber}}" class="hidden halls"/>
-                    <span class="label"></span>{{$hall->hallName}}
+                        <input disabled type="radio" name="hall" value="{{$hall->hallNumber}}"  id="{{$hall->hallNumber}}" class="hidden halls"/>
+                        <span class="label"></span>{{$hall->hallName}}
                     </label>
                 @endforeach
             </div>
@@ -284,11 +341,11 @@
                 <button id="selectAllTables">تحديد الكل</button>
                 <button id="resetAllTables"> إزالة التحدد عن الكل</button>
                 <div class="fromTo">
-                    <label for="from">من</label><input id="from" type="number">
+                    <label for="from">من</label><input id="from" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="to">الى</label><input id="to" type="number">
                 </div>
                 <div class="neitherNor">
-                    <label for="neither">ماعدا</label><input id="neither" type="number">
+                    <label for="neither">ماعدا</label><input id="neither" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="nor">الى</label><input id="nor" type="number">
                 </div>
             </div>
