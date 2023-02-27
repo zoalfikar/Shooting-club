@@ -50,6 +50,8 @@
         height: 40px;
         gap: 20px;
     }
+
+
     .waiter , .hall{
         min-height: 100px;
     }
@@ -76,7 +78,7 @@
         /* background-color: rgb(0, 76, 78); */
     }
     .tables{
-        border-top: 2px solid rgba(218, 208, 208, 0.5) ;
+        border-top: 2px solid rgba(153, 108, 108 , 0.5) ;
         grid-area: tables ;
         /* background-color: rgb(0, 216, 0); */
         display: flex;
@@ -191,7 +193,6 @@
         width: 25px;
         height: 19px;
         margin: 0 5px -4px 0;
-    /*layout relationship between check and label*/
     }
     .checkbox-flip + label span:before, .checkbox-flip + label span:after {
         -webkit-transition: all 0.3s ease-in-out;
@@ -237,7 +238,7 @@
         flex-grow: 1;
     }
     .tables .option .neitherNor , .tables .option .fromTo{
-        width: 200px;
+        width: 210px;
     }
 
     select{
@@ -341,12 +342,12 @@
                 <button id="selectAllTables">تحديد الكل</button>
                 <button id="resetAllTables"> إزالة التحدد عن الكل</button>
                 <div class="fromTo">
-                    <label for="from">من</label><input id="from" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="to">الى</label><input id="to" type="number">
+                    <label for="from" style="margin-left: 4px">من</label><input id="from" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="to" style="margin-left: 4px">الى</label><input id="to" type="number">
                 </div>
                 <div class="neitherNor">
-                    <label for="neither">ماعدا</label><input id="neither" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="nor">الى</label><input id="nor" type="number">
+                    <label for="neither" style="margin-left: 4px">ماعدا</label><input id="neither" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="nor" style="margin-left: 4px">الى</label><input id="nor" type="number">
                 </div>
             </div>
             <div id="tablesSection" class="tables">
@@ -515,10 +516,10 @@
                         });
                     });
                     $('#selectAllTables').click(()=>{
-                        $('.tables-checkbox').attr('checked',true);
+                        $('.tables-checkbox').prop('checked',true);
                     })
                     $('#resetAllTables').click(()=>{
-                        $('.tables-checkbox').attr('checked',false);
+                        $('.tables-checkbox').prop('checked',false);
                     })
                     $('#from').on('input', function(){ 
                         if ($('#to').val()) {
