@@ -195,7 +195,13 @@ class Resturant extends Controller
     }
     public function setInfo($hall,$table, Request $req)
     {
-        setTableInfo($hall , $table , $req->info);
+
+        if (isset($req->allTables)) {
+            setTablesInfo($hall , $req->allTables , $req->info );
+        }
+        else {
+            setTableInfo($hall , $table , $req->info);
+        }
         return response()->json(["message"=>"تم الحفظ"]);
     }
     public function setOrders($hall,$table, Request $req)

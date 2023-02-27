@@ -21,7 +21,9 @@
                     <div class="col-md-12 mb-3">
                         <div class="other-boards" >
                             <v-chip-group column multiple class="pl-2">
-                                <v-chip v-for="board in  aviliableBoards" :key="board.tableNumber" filter outlined color="black" text-color="black">{{board.tableNumber}}</v-chip>
+                                <div class="checkboxCollectgion">
+                                    <v-chip  v-for="board in  aviliableBoards" :key="board.tableNumber" @click="setTableSelected" :class="`availiableTable`"  filter outlined color="black" text-color="black">{{board.tableNumber}}<input :class="'tableCheckbox'" :value="board.tableNumber" style="display: none;" type="checkbox" ></v-chip>
+                                </div>
                             </v-chip-group>
                         </div>
                     </div>
@@ -40,7 +42,6 @@ export default {
     emits: ['infoDone'],
     data() {
         return {
-
         }
     },
     computed: {
@@ -49,7 +50,19 @@ export default {
         },
         
     methods:{
-        showOtherTable:()=>{
+
+        setTableSelected:function(e){
+            var checkbox=null;
+            if ($(e.target).hasClass('availiableTable')) {
+                    checkbox= $(e.target).find('input[type="checkbox"]');
+                   $(e.target).hasClass('v-chip--active') ? $(checkbox).prop('checked' , false) : $(checkbox).prop('checked' , true) ;
+
+            } else {
+                checkbox= $(e.target).parents('.availiableTable').find('input[type="checkbox"]')
+                $(e.target).parents('.availiableTable').hasClass('v-chip--active') ? $(checkbox).prop('checked' , false) : $(checkbox).prop('checked' , true) ;
+            }
+        },
+        showOtherTable:function(){
             $('.other-boards').toggle("other-boards-hide");
         }
     },
@@ -59,13 +72,17 @@ export default {
         $('.saveInfo').click((e) => {
             e.preventDefault();
             $(".info-modal").css("display", "none");
+            var allTables = [];
             var info = {
                 customerId: $('#id').val(),
                 customerName: $('#name').val(),
                 extraInfo: $('#des').val(),
             };
-            store.dispatch('setTableInfo' , {"info":info});
-            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber}  );
+            $('.tableCheckbox').each(function (index, element) {
+                $(element).prop('checked') ? allTables.push(parseInt( $(element).val())) : false ;
+            });
+            store.dispatch('setTableInfo' , {"info":info , "allTables": allTables.length > 0 ? allTables : null  });
+            store.dispatch("changeBoardState" ,  {"status":'active' ,"tableNumber":this.tableNumber});
             this.$emit('statusChanged' , {order:2,"tableNumber":this.tableNumber });
             $('input').val("");
             $('textarea').html("");

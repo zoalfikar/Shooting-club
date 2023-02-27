@@ -30,9 +30,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/test', function () {
-
-    $userHallTables = UserHallTable::select('tables')->pluck('tables')->toArray();
-    
+   dd(getTableInfo(1,40) ,getTableInfo(1,41),getTableInfo(1,42),getTableInfo(1,43),getTableInfo(1,44) );
 });
 
 

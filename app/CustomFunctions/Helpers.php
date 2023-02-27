@@ -169,6 +169,13 @@ if (! function_exists('setTableInfo')) {
         Redis::hmset('hall:' . $hallNumber.':table:'.$table, "customerInfo", $info);
     }
 }
+if (! function_exists('setTablesInfo')) {
+    function setTablesInfo($hallNumber, $tables , $info){
+        foreach ($tables as  $table) {
+            Redis::hmset('hall:' . $hallNumber.':table:'.$table, "customerInfo", serialize($info));
+        }
+    }
+}
 if (! function_exists('getTableInfo')) {
     function getTableInfo($hallNumber, $table){
         $info= Redis::hget('hall:' . $hallNumber.':table:'.$table, "customerInfo");

@@ -3602,10 +3602,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   watch: {
     orders: {
       handler: function handler(newVal, oldVal) {
-        this.temporeryOrders = JSON.parse(JSON.stringify(this.orders));
-        this.temporeryOrders.forEach(function (TeOrder) {
-          TeOrder.price = parseInt(TeOrder.price);
-        });
+        if (newVal) {
+          this.temporeryOrders = JSON.parse(JSON.stringify(this.orders));
+          this.temporeryOrders.forEach(function (TeOrder) {
+            TeOrder.price = parseInt(TeOrder.price);
+          });
+        }
       },
       deep: true,
       immediate: true
@@ -3735,6 +3737,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   emits: ['infoDone'],
@@ -3750,6 +3754,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    setTableSelected: function setTableSelected(e) {
+      var checkbox = null;
+
+      if ($(e.target).hasClass('availiableTable')) {
+        checkbox = $(e.target).find('input[type="checkbox"]');
+        $(e.target).hasClass('v-chip--active') ? $(checkbox).prop('checked', false) : $(checkbox).prop('checked', true);
+      } else {
+        checkbox = $(e.target).parents('.availiableTable').find('input[type="checkbox"]');
+        $(e.target).parents('.availiableTable').hasClass('v-chip--active') ? $(checkbox).prop('checked', false) : $(checkbox).prop('checked', true);
+      }
+    },
     showOtherTable: function showOtherTable() {
       $('.other-boards').toggle("other-boards-hide");
     }
@@ -3762,13 +3777,18 @@ __webpack_require__.r(__webpack_exports__);
     $('.saveInfo').click(function (e) {
       e.preventDefault();
       $(".info-modal").css("display", "none");
+      var allTables = [];
       var info = {
         customerId: $('#id').val(),
         customerName: $('#name').val(),
         extraInfo: $('#des').val()
       };
+      $('.tableCheckbox').each(function (index, element) {
+        $(element).prop('checked') ? allTables.push(parseInt($(element).val())) : false;
+      });
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('setTableInfo', {
-        "info": info
+        "info": info,
+        "allTables": allTables.length > 0 ? allTables : null
       });
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("changeBoardState", {
         "status": 'active',
@@ -4659,6 +4679,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/boards/".concat(hallNumber)).then(function (response) {
         commit("setBoardsLoading", false);
         commit("setBoards", response.data.tables);
+        commit("setAviliableTables", response.data.tables);
       });
     },
     getAviliableBoards: function getAviliableBoards(_ref5) {
@@ -4699,31 +4720,44 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         commit('setoOrders', data);
       });
     },
-    setTableInfo: function setTableInfo(_ref8, info) {
+    setTableInfo: function setTableInfo(_ref8, data) {
+      var _this = this;
+
       var commit = _ref8.commit;
       var hall = this.state.currentHall;
       var table = this.state.currentTable;
       var index = -1;
-      this.dispatch("findBoardIndex", table).then(function (data) {
-        index = data;
-        axios__WEBPACK_IMPORTED_MODULE_0___default().post("/set-table-info/".concat(hall, "/").concat(table), info).then(function (response) {
-          commit('setTableInfoState', {
-            "index": index,
-            "info": info.info
+      var indexes = [];
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/set-table-info/".concat(hall, "/").concat(table), data).then(function (response) {
+        if (data.allTables) {
+          _this.dispatch("findBoardsIndexes", data.allTables).then(function (result) {
+            indexes = result;
+            commit('setTablesInfoState', {
+              "indexes": indexes,
+              "info": data.info
+            });
           });
-        });
+        } else {
+          _this.dispatch("findBoardIndex", table).then(function (result) {
+            index = result;
+            commit('setTableInfoState', {
+              "index": index,
+              "info": data.info
+            });
+          });
+        }
       });
     },
     //
     getTableByNumber: function getTableByNumber(_ref9, tableNumber) {
-      var _this = this;
+      var _this2 = this;
 
       var commit = _ref9.commit;
       // console.log(tableNumber);
       this.dispatch('findBoardIndex', tableNumber).then(function (index) {
         // console.log(index);
         // console.log(this.state.boards[index]);
-        return Promise.resolve(_this.state.boards[index]);
+        return Promise.resolve(_this2.state.boards[index]);
       });
     },
     // helpers 
@@ -4734,19 +4768,27 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       });
       return index;
     },
-    changeCurrentTableNumber: function changeCurrentTableNumber(_ref11, tableNumber) {
+    findBoardsIndexes: function findBoardsIndexes(_ref11, tables) {
       var commit = _ref11.commit;
+      var indexes = [];
+      this.state.boards.map(function (board, i) {
+        tables.includes(board.tableNumber) ? indexes.push(i) : false;
+      });
+      return indexes;
+    },
+    changeCurrentTableNumber: function changeCurrentTableNumber(_ref12, tableNumber) {
+      var commit = _ref12.commit;
       var index = store.dispatch("findBoardIndex", tableNumber).then(function (index) {
         commit('setCurrentTableIndex', index);
         commit('setCurrentTableNumber', tableNumber);
       });
     },
-    changeCurrentTableStatus: function changeCurrentTableStatus(_ref12, status) {
-      var commit = _ref12.commit;
+    changeCurrentTableStatus: function changeCurrentTableStatus(_ref13, status) {
+      var commit = _ref13.commit;
       commit('setCurrentTableStatus', status);
     },
-    changeCurrentTableData: function changeCurrentTableData(_ref13, tableNumber) {
-      var commit = _ref13.commit;
+    changeCurrentTableData: function changeCurrentTableData(_ref14, tableNumber) {
+      var commit = _ref14.commit;
       this.dispatch("findBoardIndex", tableNumber).then(function (index) {
         commit("setCurrentTableData", index);
       });
@@ -4837,6 +4879,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     setAviliableBoards: function setAviliableBoards(state, aviliableBoards) {
       state.aviliabeBoards = aviliableBoards;
     },
+    setAviliableTables: function setAviliableTables(state, tables) {
+      var aviliableBoards = tables.filter(function (e, i) {
+        return e.status == '';
+      });
+      state.aviliabeBoards = aviliableBoards;
+    },
     setBoardState: function setBoardState(state, data) {
       state.boards[data.index].status = data.status;
     },
@@ -4846,6 +4894,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     },
     setTableInfoState: function setTableInfoState(state, data) {
       state.boards[data.index].customerInfo = data.info;
+    },
+    setTablesInfoState: function setTablesInfoState(state, data) {
+      data.indexes.forEach(function (ind, i) {
+        console.log(ind);
+        state.boards[ind].customerInfo = data.info;
+      }); // console.log(state.boards);
     },
     setCurrentTableData: function setCurrentTableData(state, index) {
       state.currentTable = state.boards[index].tableNumber;
@@ -8506,22 +8560,38 @@ var render = function () {
                       staticClass: "pl-2",
                       attrs: { column: "", multiple: "" },
                     },
-                    _vm._l(_vm.aviliableBoards, function (board) {
-                      return _c(
-                        "v-chip",
-                        {
-                          key: board.tableNumber,
-                          attrs: {
-                            filter: "",
-                            outlined: "",
-                            color: "black",
-                            "text-color": "black",
-                          },
-                        },
-                        [_vm._v(_vm._s(board.tableNumber))]
-                      )
-                    }),
-                    1
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "checkboxCollectgion" },
+                        _vm._l(_vm.aviliableBoards, function (board) {
+                          return _c(
+                            "v-chip",
+                            {
+                              key: board.tableNumber,
+                              class: "availiableTable",
+                              attrs: {
+                                filter: "",
+                                outlined: "",
+                                color: "black",
+                                "text-color": "black",
+                              },
+                              on: { click: _vm.setTableSelected },
+                            },
+                            [
+                              _vm._v(_vm._s(board.tableNumber)),
+                              _c("input", {
+                                class: "tableCheckbox",
+                                staticStyle: { display: "none" },
+                                attrs: { type: "checkbox" },
+                                domProps: { value: board.tableNumber },
+                              }),
+                            ]
+                          )
+                        }),
+                        1
+                      ),
+                    ]
                   ),
                 ],
                 1

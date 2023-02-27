@@ -121,7 +121,7 @@ class UserController extends Controller
         $dataValidated = Validator::make($data,[
             'role'=>'in:acountant,waiter',
             'name' =>'required|string',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|min:8',
         ])->validate();
         $user = User::find($id);
@@ -130,6 +130,18 @@ class UserController extends Controller
         $user->password=$request->password;
         $user->role=$request->role;
         $user->update();
+        if ($user->role == 'waiter') {
+            UserHallTable::insert([
+                "user_id"=>$user->id,
+                "name"=>$user->name,
+            ]);
+        }
+        if ($user->role == 'acountant') {
+             $userToDelet = UserHallTable::find($user->id);
+            if($userToDelet){
+                $userToDelet->delete();
+            }
+        }
         return response()->json(["message"=>'تم التعديل بنجاح']);
     }
 

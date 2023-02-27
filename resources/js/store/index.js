@@ -63,6 +63,7 @@ const store = new vuex.Store({
                 .then((response) => {
                     commit("setBoardsLoading", false);
                     commit("setBoards", response.data.tables)
+                    commit("setAviliableTables", response.data.tables)
                 })
         },
         getAviliableBoards({ commit }) {
@@ -90,20 +91,25 @@ const store = new vuex.Store({
                     commit('setoOrders', data)
                 })
         },
-        setTableInfo({ commit }, info) {
+        setTableInfo({ commit }, data) {
             var hall = this.state.currentHall;
             var table = this.state.currentTable;
             var index = -1;
-
-            this.dispatch("findBoardIndex", table).then(function(data) {
-                index = data;
-                axios.post(`/set-table-info/${hall}/${table}`, info)
-                    .then((response) => {
-                        commit('setTableInfoState', { "index": index, "info": info.info });
-                    })
-            });
-
-
+            var indexes = [];
+            axios.post(`/set-table-info/${hall}/${table}`, data)
+                .then((response) => {
+                    if (data.allTables) {
+                        this.dispatch("findBoardsIndexes", data.allTables).then(function(result) {
+                            indexes = result;
+                            commit('setTablesInfoState', { "indexes": indexes, "info": data.info });
+                        });
+                    } else {
+                        this.dispatch("findBoardIndex", table).then(function(result) {
+                            index = result;
+                            commit('setTableInfoState', { "index": index, "info": data.info });
+                        });
+                    }
+                })
         },
         //
         getTableByNumber({ commit }, tableNumber) {
@@ -118,6 +124,11 @@ const store = new vuex.Store({
         findBoardIndex({ commit }, tableNumber) {
             var index = this.state.boards.findIndex((board) => { return board.tableNumber === tableNumber });
             return index;
+        },
+        findBoardsIndexes({ commit }, tables) {
+            var indexes = []
+            this.state.boards.map((board, i) => { tables.includes(board.tableNumber) ? indexes.push(i) : false });
+            return indexes;
         },
         changeCurrentTableNumber({ commit }, tableNumber) {
             var index = store.dispatch("findBoardIndex", tableNumber).then((index) => {
@@ -214,6 +225,12 @@ const store = new vuex.Store({
 
             state.aviliabeBoards = aviliableBoards;
         },
+        setAviliableTables: (state, tables) => {
+            var aviliableBoards = tables.filter((e, i) => {
+                return e.status == '';
+            })
+            state.aviliabeBoards = aviliableBoards;
+        },
         setBoardState: (state, data) => {
             state.boards[data.index].status = data.status;
         },
@@ -224,6 +241,14 @@ const store = new vuex.Store({
         setTableInfoState: (state, data) => {
 
             state.boards[data.index].customerInfo = data.info;
+
+        },
+        setTablesInfoState: (state, data) => {
+            data.indexes.forEach((ind, i) => {
+                console.log(ind);
+                state.boards[ind].customerInfo = data.info;
+            });
+            // console.log(state.boards);
 
         },
         setCurrentTableData: (state, index) => {

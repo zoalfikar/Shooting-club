@@ -534,11 +534,11 @@
                                 } 
                                 $('.tables-checkbox').each(function (i, e) {
                                     if (array.includes(parseInt($(e).val()))) {
-                                        $(e).attr('checked',true)
+                                        $(e).prop('checked',true)
                                     }
                                     else
                                     {
-                                        $(e).attr('checked',false)
+                                        $(e).prop('checked',false)
                                     }
                                 });
                             }
@@ -557,11 +557,11 @@
                                 } 
                                 $('.tables-checkbox').each(function (i, e) {
                                     if (array.includes(parseInt($(e).val()))) {
-                                        $(e).attr('checked',true)
+                                        $(e).prop('checked',true)
                                     }
                                     else
                                     {
-                                        $(e).attr('checked',false)
+                                        $(e).prop('checked',false)
                                     }
                                 });
                             }
@@ -580,11 +580,11 @@
                                 } 
                                 $('.tables-checkbox').each(function (i, e) {
                                     if (array.includes(parseInt($(e).val()))) {
-                                        $(e).attr('checked',false)
+                                        $(e).prop('checked',false)
                                     }
                                     else
                                     {
-                                        $(e).attr('checked',true)
+                                        $(e).prop('checked',true)
                                     }
                                 });
                             }
@@ -603,11 +603,11 @@
                                 } 
                                 $('.tables-checkbox').each(function (i, e) {
                                     if (array.includes(parseInt($(e).val()))) {
-                                        $(e).attr('checked',false)
+                                        $(e).prop('checked',false)
                                     }
                                     else
                                     {
-                                        $(e).attr('checked',true)
+                                        $(e).prop('checked',true)
                                     }
                                 });
                             }
