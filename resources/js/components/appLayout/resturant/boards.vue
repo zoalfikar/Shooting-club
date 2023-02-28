@@ -114,20 +114,30 @@ import store from '../../../store';
                     this.orderHelper= Math.pow (10 , parseInt( String(this.total).length));
                     return this.getNewNods(this.nodes).then((nodes) => {
                         this.initBoardsPositions ();
+                        this.filter()
                     });
                 });
-
             },
-            currentFilterVal(newVal, oldVal){
-                this.filter()
-            },
-            currentCustomerNameFilter(newVal, oldVal)
+            currentFilterVal:
             {
+                immediate:true,
+                handler:function(newVal, oldVal){
                 this.filter()
-
+                }
             },
-            currentTableNameFilter(newVal, oldVal){
+            currentCustomerNameFilter:
+            {
+                immediate:true,
+                handler:function(newVal, oldVal){
                 this.filter()
+                }
+            },
+            currentTableNameFilter:
+            {
+                immediate:true,
+                handler:function(newVal, oldVal){
+                this.filter()
+                }
             },
         },
         methods:{

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Menu;
 use App\Http\Controllers\Resturant;
+use App\Http\Controllers\SalePointController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserHallTableController;
 use App\Http\Middleware\UnAuth;
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/test', function () {
-   dd(getTableInfo(1,40) ,getTableInfo(1,41),getTableInfo(1,42),getTableInfo(1,43),getTableInfo(1,44) );
+   dd(Carbon::now()->format('y-m-d g:i A') );
 });
 
 
@@ -75,6 +76,18 @@ Route::middleware('authenticate')->group(function () {
             return view('frontend.setting');
             
         });
+        //sale-point 
+        Route::get('/sale-points', function (Request $req) {
+            if ($req->ajax()) {
+                return getAjaxResponse('frontend.salePoint.index' , []);
+            }
+            return view('frontend.salePoint.index');
+            
+        });
+        Route::get('/show-new-sale-point-form', [SalePointController::class ,'newSalePoint']);
+        Route::get('/sale-point-orders', [SalePointController::class ,'getOrders']);
+        Route::post('/set-sale-point-order', [SalePointController::class ,'setOrder']);
+        Route::post('/delete-sale-point-order', [SalePointController::class ,'deleteOrder']);
         Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
         Route::get('/show-update-tables-form', [Resturant::class,'showFormUpdateTables']);
         Route::post('/add-new-table', [Resturant::class,'addNewTable']);

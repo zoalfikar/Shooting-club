@@ -91,7 +91,7 @@
                 <div class="item-icon">
                     <i class="fa fa-chair" aria-hidden="true"></i>
                 </div>
-                <span class="item-text"> <span>الطاولات والصالات</span></span>
+                <span class="item-text"> <span>نقاط البيع والصالات</span></span>
             </div>
             <div class="item-children ">
                 <div class="item-child">
@@ -105,6 +105,9 @@
                 </div>
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-update-hall-form'">تعديل الصالات</a></span>
+                </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-sale-point-form'"> نقطة بيع جديدة</a></span>
                 </div>
             </div>
         </div>
@@ -363,7 +366,7 @@ export default {
 
    .item-text  {
         overflow: hidden;
-        white-space:nowrap;
+        white-space:nowrap !important;
         transition:transform 0.2s ease-in ;
    }
    .is_expanded .item-text{

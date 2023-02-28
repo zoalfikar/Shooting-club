@@ -7,10 +7,8 @@
         <button class="cancelOrder">إلغاء</button>
     </div>
     <div class="r-menu-navigation">
-        <div class="display-all-section"><v-btn tile >عرض الكل</v-btn ></div>
-        <div class="section-nav"><v-btn tile >مقبلات</v-btn ></div>
-        <div class="section-nav"><v-btn tile >غداء</v-btn ></div>
-        <div class="section-nav"><v-btn tile >مشروبات</v-btn ></div>
+        <div  class="display-all-section"><v-btn tile >عرض الكل</v-btn ></div>
+        <div v-for="(section) in menuItems"  v-bind:key="section.id" class="section-nav"><v-btn tile >{{section.name}}</v-btn ></div>
     </div>
     <div class="resturant-menu d-flex flex-row flex-wrap justify-content-center">
         <div v-for="(section) in menuItems"
@@ -30,7 +28,7 @@
                         </div> 
                         <div class="resturant-m-item-quantity">
                             <button  class="  decrement-btn  "><i class='fa-solid fa-minus'></i></button>
-                            <input type="number" name="quantity"  class=" qty-input text-center" min="0" >
+                            <input type="number" name="quantity"  class=" qty-input text-center" min="1" >
                             <button  class=" increment-btn  "><i class='fa-solid fa-plus'></i></button>
                         </div>
                     </div>

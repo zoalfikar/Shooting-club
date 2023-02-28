@@ -4,6 +4,7 @@ use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Table;
 use App\Models\UserHallTable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth ;
 use Illuminate\Support\Facades\Redis;
 
@@ -226,5 +227,29 @@ if (! function_exists('changeTableStatus')) {
 if (! function_exists('setTableOrderNoStatusRelative')) {
     function setTableOrderNoStatusRelative($hallNumber, $table , $order){
         changeTableOrder($hallNumber , $table , $order);
+    }
+}
+if (! function_exists('getSalePointOrders')) {
+    function getSalePointOrders($salPointId){
+        // dd(Redis::hgetall('salePoint:' . $salPointId));
+        return Redis::hgetall('salePoint:' . $salPointId);
+    }
+}
+if (! function_exists('setSalePointOrder')) {
+    function setSalePointOrder($salPointId, $order ){
+        $oldOrder = Redis::hgetall('salePoint:' . $salPointId .':order:'.$order['id']);
+        Redis::hmset('salePoint:' . $salPointId .':order:'. $order['id'],[
+            'id'=>$order['id'],
+            'status' =>  $order['status'],
+            'orders' => serialize($order['orders']) ,
+            'customerName' =>  $order['customerName'],
+            'created_at' => $oldOrder ? $order['created_at'] : Carbon::now()->format('y-m-d g:i A'),
+            'updated_at' =>  $oldOrder ? Carbon::now()->format('y-m-d g:i A') : null,
+        ]);
+        return $newOrder = Redis::hgetall('salePoint:' . $salPointId .':order:'.$order['id']);
+    }
+}
+if (! function_exists('deleteSalePointOrder')) {
+    function deleteSalePointOrder($salPointId, $order){
     }
 }

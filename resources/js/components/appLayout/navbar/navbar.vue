@@ -1,9 +1,9 @@
 <template>
     <v-app-bar app color="#2F4F4F" dark>
         <div class="links-bar">
-            <span class="nav-bar-button" onClick="navigatTo(event,this)" href="/resturant">مطعم</span> 
+            <span class="nav-bar-button" onClick="navigatTo(event,this)" :href="`${url}`+'/resturant'">مطعم</span> 
             <div class="links-divider"><v-divider vertical></v-divider></div>
-            <span>نقطة مبيع</span>
+            <span class="nav-bar-button" onClick="navigatTo(event,this)" :href="`${url}`+'/sale-points'">نقطة مبيع</span>
             <div class="links-divider"><v-divider vertical></v-divider></div>
             <div>حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></div>
         </div>

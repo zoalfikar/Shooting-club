@@ -24,11 +24,18 @@ const store = new vuex.Store({
         // orders //
         // currentOrders: [],
         // customer info //
+
+        //sale point
+        currentSalePointOrders: [],
     },
     getters: {
         table: (state) => (tableNumber) => {
             var board = state.boards.find(board => board.tableNumber === tableNumber);
             return board;
+        },
+        menuSectionItems: (state) => (sectionId) => {
+            var section = state.menuItems.find(section => section.id === sectionId);
+            return section.items;
         },
         orders: (state) => (tableNumber) => {
             var board = state.boards.find(board => board.tableNumber === tableNumber);
@@ -120,6 +127,11 @@ const store = new vuex.Store({
                 return Promise.resolve(this.state.boards[index]);
             })
         },
+        bringAllSalePointOrders({ commit }) {
+            axios.get('/sale-point-orders').then((res) => {
+                commit('setCurrentSalePointOrders', res.orders)
+            })
+        },
         // helpers 
         findBoardIndex({ commit }, tableNumber) {
             var index = this.state.boards.findIndex((board) => { return board.tableNumber === tableNumber });
@@ -144,7 +156,17 @@ const store = new vuex.Store({
                 commit("setCurrentTableData", index);
             })
         },
-        //test//
+        bringAllSalePointOrders({ commit }, req) {
+            axios.get('/sale-point-orders', req).then((res) => {
+                commit('setSalePointOrder', res.orders)
+            })
+        },
+        saveSalePointOrder({ commit }, req) {
+            axios.post('/set-sale-point-order', req).then((res) => {
+                commit('setSalePointOrder', res.order)
+            })
+        },
+        //test// saveSalePointOrder
         // switchArrayPistion({ commit }, data) {
         //     var temp = this.state.boards[data.index1];
         //     this.state.boards[data.index1] = this.state.boards[data.index2];
@@ -257,6 +279,22 @@ const store = new vuex.Store({
             state.currentTable = state.boards[index].tableNumber
             state.currentTableStatus = state.boards[index].status
         },
+        setCurrentSalePointOrders: (state, orders) => {
+            state.currentSalePointOrders = orders;
+        },
+        setSalePointOrder: (state, orders) => {
+            state.currentSalePointOrders = orders;
+        },
+        setSalePointOrder: (state, order) => {
+
+            // state.currentSalePointOrders = state.currentSalePointOrders.filter((o) => {
+            //     return o['id'] !== order['id']
+            // });
+            state.currentSalePointOrders.push(order);
+            state.currentSalePointOrders.sort((a, b) => {
+                return b["created_at"] - a["created_at"]
+            })
+        }
     },
     modules: {}
 })
