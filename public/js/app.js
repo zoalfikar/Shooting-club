@@ -4170,7 +4170,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       temperoryVal: null,
       currentCustomerName: '',
       currentOrderStatus: 'notpaid',
-      createId: null
+      createId: null,
+      created_at: null,
+      updated_at: null
     };
   },
   computed: {
@@ -4193,8 +4195,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           id: this.createId,
           orders: this.currentOrders,
           customerName: this.currentCustomerName,
-          created_at: null,
-          updated_at: null,
+          created_at: this.created_at,
+          updated_at: this.updated_at,
           status: this.currentOrderStatus
         };
         return finall;
@@ -4424,8 +4426,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     saveFinallOrder: function saveFinallOrder() {
       this.createId = (0,uuid__WEBPACK_IMPORTED_MODULE_1__["default"])();
-      console.log(this.createId);
-      var finallO = JSON.parse(JSON.stringify(this.finallOrder));
+      var finallO = JSON.stringify(this.finallOrder);
       _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('saveSalePointOrder', {
         'order': finallO
       });
@@ -4433,6 +4434,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.currentCustomerName = '';
       this.currentOrderStatus = 'notPaind';
       this.currentOrders = [];
+      this.created_at = null;
+      this.updated_at = null;
     }
   },
   mounted: function mounted() {
@@ -5192,12 +5195,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   }, _defineProperty(_actions, "bringAllSalePointOrders", function bringAllSalePointOrders(_ref16, req) {
     var commit = _ref16.commit;
     axios__WEBPACK_IMPORTED_MODULE_0___default().get('/sale-point-orders', req).then(function (res) {
-      commit('setSalePointOrder', res.orders);
+      commit('setSalePointOrder', res.data.orders);
     });
   }), _defineProperty(_actions, "saveSalePointOrder", function saveSalePointOrder(_ref17, req) {
     var commit = _ref17.commit;
     axios__WEBPACK_IMPORTED_MODULE_0___default().post('/set-sale-point-order', req).then(function (res) {
-      commit('setSalePointOrder', res.order);
+      console.log(res);
+      commit('setSalePointOrder', res.data.order);
     });
   }), _actions),
   mutations: _defineProperty({
@@ -5275,7 +5279,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     },
     setTablesInfoState: function setTablesInfoState(state, data) {
       data.indexes.forEach(function (ind, i) {
-        console.log(ind);
         state.boards[ind].customerInfo = data.info;
       }); // console.log(state.boards);
     },
@@ -5296,9 +5299,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     //     return o['id'] !== order['id']
     // });
     state.currentSalePointOrders.push(order);
-    state.currentSalePointOrders.sort(function (a, b) {
+    console.log(state.currentSalePointOrders);
+    state.currentSalePointOrders = state.currentSalePointOrders.sort(function (a, b) {
       return b["created_at"] - a["created_at"];
     });
+    console.log(state.currentSalePointOrders);
   }),
   modules: {}
 });

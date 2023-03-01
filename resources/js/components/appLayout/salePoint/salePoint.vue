@@ -69,6 +69,8 @@ export default {
             currentCustomerName :'',
             currentOrderStatus :'notpaid',
             createId:null,
+            created_at:null,
+            updated_at:null,
         }
     },
     computed:{
@@ -87,8 +89,8 @@ export default {
                     id:this.createId,
                     orders:this.currentOrders,
                     customerName:this.currentCustomerName,
-                    created_at:null,
-                    updated_at:null,
+                    created_at:this.created_at,
+                    updated_at:this.updated_at,
                     status : this.currentOrderStatus,
                 }
                 return finall
@@ -219,13 +221,14 @@ export default {
         },
         saveFinallOrder(){
             this.createId =  uuidv4();
-            console.log(this.createId);
-            var finallO =  JSON.parse(JSON.stringify(this.finallOrder));
+            var finallO =  JSON.stringify(this.finallOrder);
             store.dispatch('saveSalePointOrder' , {'order':finallO});
             this.createId=null;
             this.currentCustomerName = '';
             this.currentOrderStatus='notPaind';
             this.currentOrders=[];
+            this.created_at=null;
+            this.updated_at=null;
         }
     },
    mounted:function () {

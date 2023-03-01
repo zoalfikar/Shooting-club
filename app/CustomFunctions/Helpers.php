@@ -231,23 +231,26 @@ if (! function_exists('setTableOrderNoStatusRelative')) {
 }
 if (! function_exists('getSalePointOrders')) {
     function getSalePointOrders($salPointId){
-        // dd(Redis::hgetall('salePoint:' . $salPointId));
-        return Redis::hgetall('salePoint:' . $salPointId);
+        // dd(Redis::get('salePoint:' . $salPointId .':order:803a3848-60c0-438d-8b01-5bfeecf27e39'));
+        dd(Redis::keys('salePoint:' . $salPointId .':*'));
+        dd(Redis::get('salePoint:' . $salPointId));
+        return Redis::get('salePoint:' . $salPointId.':*');
+
     }
 }
 if (! function_exists('setSalePointOrder')) {
     function setSalePointOrder($salPointId, $order ){
-        $oldOrder = Redis::hgetall('salePoint:' . $salPointId .':order:'.$order['id']);
-        Redis::hmset('salePoint:' . $salPointId .':order:'. $order['id'],[
-            'id'=>$order['id'],
-            'status' =>  $order['status'],
-            'orders' => serialize($order['orders']) ,
-            'customerName' =>  $order['customerName'],
-            'created_at' => $oldOrder ? $order['created_at'] : Carbon::now()->format('y-m-d g:i A'),
-            'updated_at' =>  $oldOrder ? Carbon::now()->format('y-m-d g:i A') : null,
-        ]);
-        return $newOrder = Redis::hgetall('salePoint:' . $salPointId .':order:'.$order['id']);
+        Redis::set('salePoint:' . $salPointId .':order:'. $order->id, serialize($order));
+        return unserialize(Redis::get('salePoint:' . $salPointId .':order:'. $order->id));
     }
+    // [
+    //     'id'=>$order['id'],
+    //     'status' =>  $order['status'],
+    //     'orders' => serialize($order['orders']) ,
+    //     'customerName' =>  $order['customerName'],
+    //     'created_at' => $oldOrder ? $order['created_at'] : Carbon::now()->format('y-m-d g:i A'),
+    //     'updated_at' =>  $oldOrder ? Carbon::now()->format('y-m-d g:i A') : null,
+    // ]
 }
 if (! function_exists('deleteSalePointOrder')) {
     function deleteSalePointOrder($salPointId, $order){
