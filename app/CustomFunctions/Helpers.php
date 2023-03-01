@@ -241,6 +241,23 @@ if (! function_exists('getSalePointOrders')) {
         for ($i=0; $i < count($orders) ; $i++) { 
             $orders[$i] = unserialize($orders[$i]);
         }
+        usort($orders,function ($a , $b)
+        {
+            if (!$a) {
+                return -1 ; 
+            }
+            if (!$b) {
+                return 1 ; 
+            }
+            $ad = new DateTime($a->created_at);
+            $bd = new DateTime($b->created_at);
+          
+            if ($ad == $bd) {
+              return 0;
+            }
+          
+            return $ad < $bd ? -1 : 1; 
+        });
         return $orders;
 
     }

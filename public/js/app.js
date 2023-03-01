@@ -4159,6 +4159,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4169,7 +4198,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       currentOrders: [],
       temperoryVal: null,
       currentCustomerName: '',
-      currentOrderStatus: 'notpaid',
+      currentOrderStatus: 'notPaid',
       createId: null,
       created_at: null,
       updated_at: null
@@ -4228,6 +4257,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    translate: function translate(word) {
+      switch (word) {
+        case 'paid':
+          word = 'مدفوع';
+          break;
+
+        case 'notPaid':
+          word = 'غير مدفوع';
+          break;
+      }
+
+      return word;
+    },
     setSectionValue: function setSectionValue(val) {
       this.currentSection = val;
     },
@@ -4432,7 +4474,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
       this.createId = null;
       this.currentCustomerName = '';
-      this.currentOrderStatus = 'notPaind';
+      this.currentOrderStatus = 'notPaid';
       this.currentOrders = [];
       this.created_at = null;
       this.updated_at = null;
@@ -5195,7 +5237,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   }, _defineProperty(_actions, "bringAllSalePointOrders", function bringAllSalePointOrders(_ref16, req) {
     var commit = _ref16.commit;
     axios__WEBPACK_IMPORTED_MODULE_0___default().get('/sale-point-orders', req).then(function (res) {
-      commit('setSalePointOrder', res.data.orders);
+      commit('setCurrentSalePointOrders', res.data.orders);
     });
   }), _defineProperty(_actions, "saveSalePointOrder", function saveSalePointOrder(_ref17, req) {
     var commit = _ref17.commit;
@@ -5204,7 +5246,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       commit('setSalePointOrder', res.data.order);
     });
   }), _actions),
-  mutations: _defineProperty({
+  mutations: {
     setHalls: function setHalls(state, halls) {
       if (!halls.length > 0) {
         state.noHalls = true;
@@ -5291,18 +5333,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     setCurrentSalePointOrders: function setCurrentSalePointOrders(state, orders) {
       state.currentSalePointOrders = orders;
     },
-    setSalePointOrder: function setSalePointOrder(state, orders) {
-      orders = orders.sort(function (a, b) {
-        return b["created_at"] - a["created_at"];
+    setSalePointOrder: function setSalePointOrder(state, order) {
+      var oldOrder = state.currentSalePointOrders.find(function (o) {
+        return o.id == order.id;
       });
-      state.currentSalePointOrders = orders;
+      if (oldOrder) oldOrder = order;else state.currentSalePointOrders.push(order);
     }
-  }, "setSalePointOrder", function setSalePointOrder(state, order) {
-    state.currentSalePointOrders.push(order);
-    state.currentSalePointOrders = state.currentSalePointOrders.sort(function (a, b) {
-      return b["created_at"] - a["created_at"];
-    });
-  }),
+  },
   modules: {}
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
@@ -9499,8 +9536,6 @@ var render = function () {
     "div",
     { staticClass: "wrapper", staticStyle: { "background-color": "blue" } },
     [
-      _c("pre", [_vm._v(_vm._s(_vm.currentSalePointOrders))]),
-      _vm._v(" "),
       _c(
         "div",
         {
@@ -9618,9 +9653,60 @@ var render = function () {
         "div",
         { staticClass: "orders", staticStyle: { "background-color": "cyan" } },
         [
-          _vm._v(
-            "\n         + خيارات   مدفوع + اسم الزبون + الوقت + totoal + اخر تعديل\n    "
-          ),
+          _c("table", [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              [
+                _vm._l(_vm.currentSalePointOrders, function (order) {
+                  return [
+                    order
+                      ? _c("tr", { key: order.id }, [
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                order.customerName
+                                  ? order.customerName
+                                  : "غير محدد"
+                              )
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(order.totale))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                order.status.replace(
+                                  /notPaid|paid/i,
+                                  _vm.translate
+                                )
+                              )
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(order.created_at))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(order.updated_at))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("button", [_vm._v("تعديل")]),
+                            _vm._v(" "),
+                            _c("button", [_vm._v("حذف")]),
+                            _vm._v(" "),
+                            order.status == "notPaid"
+                              ? _c("button", [_vm._v("تعليم كمدفوع")])
+                              : _c("button", [_vm._v("تعليم كغير مدفوع")]),
+                          ]),
+                        ])
+                      : _vm._e(),
+                  ]
+                }),
+              ],
+              2
+            ),
+          ]),
         ]
       ),
       _vm._v(" "),
@@ -9636,7 +9722,7 @@ var render = function () {
               _vm._v("حفظ"),
             ]),
             _vm._v(" "),
-            _vm.currentOrderStatus == "notpaid"
+            _vm.currentOrderStatus == "notPaid"
               ? _c(
                   "button",
                   {
@@ -9653,7 +9739,7 @@ var render = function () {
                   {
                     on: {
                       click: function ($event) {
-                        _vm.currentOrderStatus = "notpaid"
+                        _vm.currentOrderStatus = "notPaid"
                       },
                     },
                   },
@@ -9818,7 +9904,28 @@ var render = function () {
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("اسم الزبون")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("المجموع")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("حالة الطلب")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("وقت الطلب")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("اخر تعديل ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v(" خيارات")]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 

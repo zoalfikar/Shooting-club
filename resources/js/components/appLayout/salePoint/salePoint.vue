@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper" style="background-color: blue;">
-        <pre>{{ currentSalePointOrders }}</pre>
+        <!-- <pre>{{currentSalePointOrders[0][30]}}</pre> -->
         <div class="sections" style="background-color: aqua;">
            <ul>
                 <li @click="setSectionValue($event.target.value)" value="-1">عرض الكل</li>
@@ -25,13 +25,42 @@
             </div>
         </div>
         <div style="background-color: cyan;" class="orders">
-             + خيارات   مدفوع + اسم الزبون + الوقت + totoal + اخر تعديل
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم الزبون</th>
+                        <th>المجموع</th>
+                        <th>حالة الطلب</th>
+                        <th>وقت الطلب</th>
+                        <th>اخر تعديل </th>
+                        <th> خيارات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template  v-for="order in currentSalePointOrders">
+                        <tr v-if="order" :key="order.id">
+                            <td>{{order.customerName ? order.customerName : 'غير محدد'}}</td>
+                            <td>{{order.totale}}</td>
+                            <td>{{order.status.replace(/notPaid|paid/i,translate)}}</td>
+                            <td>{{order.created_at}}</td>
+                            <td>{{order.updated_at}}</td>
+                            <td>
+                                <button>تعديل</button>
+                                <button>حذف</button>
+                                <button v-if="order.status =='notPaid'">تعليم كمدفوع</button> 
+                                <button v-else>تعليم كغير مدفوع</button>
+                            </td>
+                        </tr>
+                    </template>
+                  
+                </tbody>
+            </table>
         </div>
         <div style="background-color: coral;" class="currentOrder">
             <div class="order-option">
                 <button @click="saveFinallOrder" >حفظ</button> 
-                <button @click="currentOrderStatus = 'paid'" v-if="currentOrderStatus=='notpaid'">تعليم كمدفوع</button> 
-                <button  @click="currentOrderStatus = 'notpaid'" v-else >تعليم كغير مدفوع</button>
+                <button @click="currentOrderStatus = 'paid'" v-if="currentOrderStatus=='notPaid'">تعليم كمدفوع</button> 
+                <button  @click="currentOrderStatus = 'notPaid'" v-else >تعليم كغير مدفوع</button>
                 <button @click="currentOrders = []" >حذف</button> 
                 <input type="text" name="customerName"  v-model="currentCustomerName" placeholder="إضافة اسم الزبون">
             </div>
@@ -67,7 +96,7 @@ export default {
             currentOrders : [],
             temperoryVal : null,
             currentCustomerName :'',
-            currentOrderStatus :'notpaid',
+            currentOrderStatus :'notPaid',
             createId:null,
             created_at:null,
             updated_at:null,
@@ -125,6 +154,17 @@ export default {
         },
     },
     methods:{
+        translate(word){
+            switch (word) {
+                case 'paid':
+                    word = 'مدفوع'
+                    break;
+                case 'notPaid':
+                    word = 'غير مدفوع'
+                    break;
+            }
+            return word ;
+        },
         setSectionValue(val){
             this.currentSection = val;
         },
@@ -225,7 +265,7 @@ export default {
             store.dispatch('saveSalePointOrder' , {'order':finallO});
             this.createId=null;
             this.currentCustomerName = '';
-            this.currentOrderStatus='notPaind';
+            this.currentOrderStatus='notPaid';
             this.currentOrders=[];
             this.created_at=null;
             this.updated_at=null;

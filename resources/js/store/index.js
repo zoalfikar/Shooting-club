@@ -158,7 +158,7 @@ const store = new vuex.Store({
         },
         bringAllSalePointOrders({ commit }, req) {
             axios.get('/sale-point-orders', req).then((res) => {
-                commit('setSalePointOrder', res.data.orders)
+                commit('setCurrentSalePointOrders', res.data.orders)
             })
         },
         saveSalePointOrder({ commit }, req) {
@@ -282,17 +282,10 @@ const store = new vuex.Store({
         setCurrentSalePointOrders: (state, orders) => {
             state.currentSalePointOrders = orders;
         },
-        setSalePointOrder: (state, orders) => {
-            orders = orders.sort((a, b) => {
-                return b["created_at"] - a["created_at"]
-            })
-            state.currentSalePointOrders = orders;
-        },
         setSalePointOrder: (state, order) => {
-            state.currentSalePointOrders.push(order);
-            state.currentSalePointOrders = state.currentSalePointOrders.sort((a, b) => {
-                return b["created_at"] - a["created_at"]
-            })
+            var oldOrder = state.currentSalePointOrders.find(o => o.id == order.id);
+            if (oldOrder) oldOrder = order;
+            else state.currentSalePointOrders.push(order);
         }
     },
     modules: {}
