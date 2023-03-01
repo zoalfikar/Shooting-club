@@ -283,20 +283,16 @@ const store = new vuex.Store({
             state.currentSalePointOrders = orders;
         },
         setSalePointOrder: (state, orders) => {
+            orders = orders.sort((a, b) => {
+                return b["created_at"] - a["created_at"]
+            })
             state.currentSalePointOrders = orders;
         },
         setSalePointOrder: (state, order) => {
-
-            // state.currentSalePointOrders = state.currentSalePointOrders.filter((o) => {
-            //     return o['id'] !== order['id']
-            // });
             state.currentSalePointOrders.push(order);
-            console.log(state.currentSalePointOrders);
             state.currentSalePointOrders = state.currentSalePointOrders.sort((a, b) => {
                 return b["created_at"] - a["created_at"]
             })
-            console.log(state.currentSalePointOrders);
-
         }
     },
     modules: {}

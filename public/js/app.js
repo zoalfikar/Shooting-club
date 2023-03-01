@@ -5292,18 +5292,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.currentSalePointOrders = orders;
     },
     setSalePointOrder: function setSalePointOrder(state, orders) {
+      orders = orders.sort(function (a, b) {
+        return b["created_at"] - a["created_at"];
+      });
       state.currentSalePointOrders = orders;
     }
   }, "setSalePointOrder", function setSalePointOrder(state, order) {
-    // state.currentSalePointOrders = state.currentSalePointOrders.filter((o) => {
-    //     return o['id'] !== order['id']
-    // });
     state.currentSalePointOrders.push(order);
-    console.log(state.currentSalePointOrders);
     state.currentSalePointOrders = state.currentSalePointOrders.sort(function (a, b) {
       return b["created_at"] - a["created_at"];
     });
-    console.log(state.currentSalePointOrders);
   }),
   modules: {}
 });

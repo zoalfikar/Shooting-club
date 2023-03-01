@@ -232,9 +232,16 @@ if (! function_exists('setTableOrderNoStatusRelative')) {
 if (! function_exists('getSalePointOrders')) {
     function getSalePointOrders($salPointId){
         // dd(Redis::get('salePoint:' . $salPointId .':order:803a3848-60c0-438d-8b01-5bfeecf27e39'));
-        dd(Redis::keys('salePoint:' . $salPointId .':*'));
-        dd(Redis::get('salePoint:' . $salPointId));
-        return Redis::get('salePoint:' . $salPointId.':*');
+        // dd(Redis::mGet(['salePoint:' . $salPointId .':order:803a3848-60c0-438d-8b01-5bfeecf27e39']));
+        $keys = Redis::KEYS('salePoint:' . $salPointId .':order:*');
+        for ($i=0; $i < count($keys) ; $i++) { 
+            $keys[$i] = str_replace('laravel_database_','',$keys[$i]);
+        }
+        $orders = Redis::mGet($keys);
+        for ($i=0; $i < count($orders) ; $i++) { 
+            $orders[$i] = unserialize($orders[$i]);
+        }
+        return $orders;
 
     }
 }
