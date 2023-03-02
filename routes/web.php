@@ -76,7 +76,13 @@ Route::middleware('authenticate')->group(function () {
             return view('frontend.setting');
             
         });
-        //sale-point 
+        //sale-point  /get-salePoint-data
+        Route::get('/show-new-sale-point-form', [SalePointController::class ,'newSalePoint']);
+        Route::post('/add-new-sale-point-form', [SalePointController::class ,'addSalePoint']);
+        Route::get('/show-edit-sale-point-form', [SalePointController::class ,'editSalePoint']);
+        Route::get('/get-salePoint-data/{id}', [SalePointController::class ,'getSalePointData']);
+        Route::post('/update-sale-point', [SalePointController::class ,'updateSalePoint']);
+        Route::post('/delete-sale-point', [SalePointController::class ,'deleteSalePoint']);
         Route::get('/sale-points', function (Request $req) {
             if ($req->ajax()) {
                 return getAjaxResponse('frontend.salePoint.index' , []);
@@ -84,7 +90,6 @@ Route::middleware('authenticate')->group(function () {
             return view('frontend.salePoint.index');
             
         });
-        Route::get('/show-new-sale-point-form', [SalePointController::class ,'newSalePoint']);
         Route::get('/sale-point-orders', [SalePointController::class ,'getOrders']);
         Route::post('/set-sale-point-order', [SalePointController::class ,'setOrder']);
         Route::post('/delete-sale-point-order', [SalePointController::class ,'deleteOrder']);

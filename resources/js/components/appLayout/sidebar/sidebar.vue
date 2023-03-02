@@ -109,6 +109,9 @@
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-new-sale-point-form'"> نقطة بيع جديدة</a></span>
                 </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-edit-sale-point-form'"> تعديل نقطة البيع </a></span>
+                </div>
             </div>
         </div>
         </div>

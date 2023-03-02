@@ -4188,12 +4188,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      currentSection: Number,
+      deleteAfterPaid: false,
+      currentSection: -1,
       currentItems: [],
       currentOrders: [],
       temperoryVal: null,
@@ -4209,11 +4221,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.menuItems;
     },
     totale: function totale() {
-      var totoal = 0;
+      var total = 0;
       this.currentOrders.forEach(function (o) {
-        totoal += o.price * o.quantity;
+        total += o.price * o.quantity;
       });
-      return totoal;
+      return total;
     },
     currentSalePointOrders: function currentSalePointOrders() {
       return _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.currentSalePointOrders;
@@ -4223,6 +4235,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var finall = {
           id: this.createId,
           orders: this.currentOrders,
+          totale: this.totale,
           customerName: this.currentCustomerName,
           created_at: this.created_at,
           updated_at: this.updated_at,
@@ -4241,19 +4254,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   watch: {
-    currentSection: function currentSection(newVal, oldVal) {
-      if (newVal == -1) {
-        var array = [];
-        this.allSections.forEach(function (s, i) {
-          array = array.concat(array, s.items);
-        });
-        array = array.sort(function (a, b) {
-          a.section - b.section;
-        });
-        this.currentItems = array;
-      } else {
-        this.currentItems = _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters.menuSectionItems(newVal);
-      }
+    currentSection: {
+      handler: function handler(newVal, oldVal) {
+        if (newVal == -1) {
+          var array = [];
+          this.allSections.forEach(function (s, i) {
+            array = array.concat(array, s.items);
+          });
+          array = array.sort(function (a, b) {
+            a.section - b.section;
+          });
+          this.currentItems = array;
+        } else {
+          this.currentItems = _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters.menuSectionItems(newVal);
+        }
+      },
+      immediate: false
     }
   },
   methods: {
@@ -4265,6 +4281,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         case 'notPaid':
           word = 'غير مدفوع';
+          break;
+
+        case 'AM':
+          word = ' صباحاً';
+          break;
+
+        case 'PM':
+          word = ' مساءً';
           break;
       }
 
@@ -4467,21 +4491,106 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     saveFinallOrder: function saveFinallOrder() {
-      this.createId = (0,uuid__WEBPACK_IMPORTED_MODULE_1__["default"])();
-      var finallO = JSON.stringify(this.finallOrder);
-      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('saveSalePointOrder', {
-        'order': finallO
-      });
+      if (this.deleteAfterPaid && this.currentOrderStatus == 'paid') {
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('deleteSalePointOrder', {
+          'id': this.createId
+        });
+      } else {
+        if (!this.createId) {
+          this.createId = (0,uuid__WEBPACK_IMPORTED_MODULE_1__["default"])();
+        }
+
+        var finallO = JSON.stringify(this.finallOrder);
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('saveSalePointOrder', {
+          'order': finallO
+        });
+      }
+
       this.createId = null;
       this.currentCustomerName = '';
       this.currentOrderStatus = 'notPaid';
       this.currentOrders = [];
       this.created_at = null;
       this.updated_at = null;
+    },
+    removeSalePointOrder: function removeSalePointOrder(id) {
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('deleteSalePointOrder', {
+        'id': id
+      });
+    },
+    editeSalePointOrder: function editeSalePointOrder(id) {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var order;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return _this6.findItem(id, _this6.currentSalePointOrders);
+
+              case 2:
+                order = _context6.sent;
+                _this6.createId = order.id;
+                _this6.currentOrders = order.orders;
+                _this6.currentCustomerName = order.customerName;
+                _this6.currentOrderStatus = order.status;
+                _this6.created_at = order.created_at;
+                _this6.updated_at = order.updated_at;
+
+              case 9:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    changeOrderStatus: function changeOrderStatus(id, status) {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var order;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return _this7.findItem(id, _this7.currentSalePointOrders);
+
+              case 2:
+                order = _context7.sent;
+                order.status = status;
+
+                if (_this7.deleteAfterPaid && status == 'paid') {
+                  _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('deleteSalePointOrder', {
+                    'id': order.id
+                  });
+                } else {
+                  order = JSON.stringify(order);
+                  _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('saveSalePointOrder', {
+                    'order': order
+                  });
+                }
+
+              case 5:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
     }
   },
   mounted: function mounted() {
-    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('bringAllMenuItems');
+    var _this8 = this;
+
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('bringAllMenuItems').then(function () {
+      setTimeout(function () {
+        _this8.currentSection = '-1';
+      }, 1000);
+    });
     _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('bringAllSalePointOrders');
   }
 });
@@ -4597,6 +4706,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -5245,6 +5357,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       console.log(res);
       commit('setSalePointOrder', res.data.order);
     });
+  }), _defineProperty(_actions, "deleteSalePointOrder", function deleteSalePointOrder(_ref18, req) {
+    var commit = _ref18.commit;
+    axios__WEBPACK_IMPORTED_MODULE_0___default().post('/delete-sale-point-order', req).then(function (res) {
+      commit('deleteSalePointOrder', res.data.id);
+    });
   }), _actions),
   mutations: {
     setHalls: function setHalls(state, halls) {
@@ -5337,7 +5454,23 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       var oldOrder = state.currentSalePointOrders.find(function (o) {
         return o.id == order.id;
       });
-      if (oldOrder) oldOrder = order;else state.currentSalePointOrders.push(order);
+      console.log('oldOrder', oldOrder);
+
+      if (oldOrder) {
+        oldOrder.orders = order.orders;
+        oldOrder.customerName = order.customerName;
+        oldOrder.status = order.status;
+        oldOrder.totale = order.totale;
+        oldOrder.created_at = order.created_at;
+        oldOrder.updated_at = order.updated_at;
+      } else state.currentSalePointOrders.push(order);
+
+      console.log('oldOrder', oldOrder);
+    },
+    deleteSalePointOrder: function deleteSalePointOrder(state, id) {
+      state.currentSalePointOrders = state.currentSalePointOrders.filter(function (o) {
+        return o.id !== id;
+      });
     }
   },
   modules: {}
@@ -5599,10 +5732,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, "\n@-webkit-keyframes button-float {\n0
 
 /***/ }),
 
-/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5616,7 +5749,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nul{\n    list-style: none;\n}\n.order-option{\n    display: flex;\n    flex-wrap: wrap;\n}\n.order-option button{\n    flex: 0 0 33.3333%;\n}\n.decrement-btn , .increment-btn  , .order-quantity , .option{\n    visibility: hidden;\n}\n.save-order-changes , .cancel-update-order{\n    display: none;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nul[data-v-55a1b764]{\n    list-style: none;\n}\n.order-option[data-v-55a1b764]{\n    display: flex;\n    flex-wrap: wrap;\n}\n.order-option button[data-v-55a1b764]{\n    flex: 0 0 33.3333%;\n}\n.decrement-btn[data-v-55a1b764], .increment-btn[data-v-55a1b764], .order-quantity[data-v-55a1b764], .option[data-v-55a1b764]{\n    visibility: hidden;\n}\n.save-order-changes[data-v-55a1b764], .cancel-update-order[data-v-55a1b764]{\n    display: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6213,10 +6346,10 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6226,7 +6359,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=style&index=0&lang=css& */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_id_55a1b764_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&");
 
             
 
@@ -6235,11 +6368,11 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_id_55a1b764_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_id_55a1b764_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -7151,9 +7284,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./salePoint.vue?vue&type=template&id=55a1b764& */ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&");
+/* harmony import */ var _salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./salePoint.vue?vue&type=template&id=55a1b764&scoped=true& */ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true&");
 /* harmony import */ var _salePoint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./salePoint.vue?vue&type=script&lang=js& */ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=script&lang=js&");
-/* harmony import */ var _salePoint_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./salePoint.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _salePoint_vue_vue_type_style_index_0_id_55a1b764_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& */ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -7165,11 +7298,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _salePoint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__.render,
-  _salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "55a1b764",
   null
   
 )
@@ -7683,15 +7816,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css& ***!
-  \****************************************************************************************************/
+/***/ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&":
+/*!****************************************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& ***!
+  \****************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_style_index_0_id_55a1b764_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=style&index=0&id=55a1b764&scoped=true&lang=css&");
 
 
 /***/ }),
@@ -7879,19 +8012,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764& ***!
-  \**************************************************************************************************/
+/***/ "./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true& ***!
+  \**************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=template&id=55a1b764& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_salePoint_vue_vue_type_template_id_55a1b764_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./salePoint.vue?vue&type=template&id=55a1b764&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true&");
 
 
 /***/ }),
@@ -9516,10 +9649,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&":
-/*!*****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764& ***!
-  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/appLayout/salePoint/salePoint.vue?vue&type=template&id=55a1b764&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9536,6 +9669,94 @@ var render = function () {
     "div",
     { staticClass: "wrapper", staticStyle: { "background-color": "blue" } },
     [
+      _c("div", { staticClass: "sale-point-options" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.deleteAfterPaid,
+              expression: "deleteAfterPaid",
+            },
+          ],
+          attrs: { type: "checkbox", name: "deleteAfterPaid" },
+          domProps: {
+            checked: Array.isArray(_vm.deleteAfterPaid)
+              ? _vm._i(_vm.deleteAfterPaid, null) > -1
+              : _vm.deleteAfterPaid,
+          },
+          on: {
+            change: function ($event) {
+              var $$a = _vm.deleteAfterPaid,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false
+              if (Array.isArray($$a)) {
+                var $$v = null,
+                  $$i = _vm._i($$a, $$v)
+                if ($$el.checked) {
+                  $$i < 0 && (_vm.deleteAfterPaid = $$a.concat([$$v]))
+                } else {
+                  $$i > -1 &&
+                    (_vm.deleteAfterPaid = $$a
+                      .slice(0, $$i)
+                      .concat($$a.slice($$i + 1)))
+                }
+              } else {
+                _vm.deleteAfterPaid = $$c
+              }
+            },
+          },
+        }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "deleteAfterPaid" } }, [
+          _vm._v("الحذف بعد الدفع"),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "option-group" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.currentOrderStatus,
+                expression: "currentOrderStatus",
+              },
+            ],
+            attrs: { type: "radio", name: "notPaid", value: "notPaid" },
+            domProps: { checked: _vm._q(_vm.currentOrderStatus, "notPaid") },
+            on: {
+              change: function ($event) {
+                _vm.currentOrderStatus = "notPaid"
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "notPaid" } }, [
+            _vm._v("غير مدفوع(إفتراضي)"),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.currentOrderStatus,
+                expression: "currentOrderStatus",
+              },
+            ],
+            attrs: { type: "radio", name: "paid", value: "paid" },
+            domProps: { checked: _vm._q(_vm.currentOrderStatus, "paid") },
+            on: {
+              change: function ($event) {
+                _vm.currentOrderStatus = "paid"
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "paid" } }, [_vm._v(" مدفوع(إفتراضي) ")]),
+        ]),
+      ]),
+      _vm._v(" "),
       _c(
         "div",
         {
@@ -9673,7 +9894,10 @@ var render = function () {
                             ),
                           ]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(order.totale))]),
+                          _c("td", [
+                            _vm._v(_vm._s(order.totale) + " "),
+                            _c("span", [_vm._v("ل.س")]),
+                          ]),
                           _vm._v(" "),
                           _c("td", [
                             _vm._v(
@@ -9686,18 +9910,86 @@ var render = function () {
                             ),
                           ]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(order.created_at))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(order.updated_at))]),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                order.created_at
+                                  ? order.created_at.replace(
+                                      /AM|PM/i,
+                                      _vm.translate
+                                    )
+                                  : "غير محدد"
+                              )
+                            ),
+                          ]),
                           _vm._v(" "),
                           _c("td", [
-                            _c("button", [_vm._v("تعديل")]),
+                            _vm._v(
+                              _vm._s(
+                                order.updated_at
+                                  ? order.updated_at.replace(
+                                      /AM|PM/i,
+                                      _vm.translate
+                                    )
+                                  : "غير محدد"
+                              )
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.editeSalePointOrder(order.id)
+                                  },
+                                },
+                              },
+                              [_vm._v("تعديل")]
+                            ),
                             _vm._v(" "),
-                            _c("button", [_vm._v("حذف")]),
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.removeSalePointOrder(order.id)
+                                  },
+                                },
+                              },
+                              [_vm._v("حذف")]
+                            ),
                             _vm._v(" "),
                             order.status == "notPaid"
-                              ? _c("button", [_vm._v("تعليم كمدفوع")])
-                              : _c("button", [_vm._v("تعليم كغير مدفوع")]),
+                              ? _c(
+                                  "button",
+                                  {
+                                    on: {
+                                      click: function ($event) {
+                                        return _vm.changeOrderStatus(
+                                          order.id,
+                                          "paid"
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("تعليم كمدفوع")]
+                                )
+                              : _c(
+                                  "button",
+                                  {
+                                    on: {
+                                      click: function ($event) {
+                                        return _vm.changeOrderStatus(
+                                          order.id,
+                                          "notPaid"
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("تعليم كغير مدفوع")]
+                                ),
                           ]),
                         ])
                       : _vm._e(),
@@ -9757,6 +10049,14 @@ var render = function () {
               },
               [_vm._v("حذف")]
             ),
+            _vm._v(" "),
+            _c("button", {
+              on: {
+                click: function ($event) {
+                  _vm.cancelUpdatOrder = []
+                },
+              },
+            }),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -10340,6 +10640,20 @@ var render = function () {
               ),
             ]),
           ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(28),
+            _vm._v("   "),
+            _c("span", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "" + _vm.url + "/show-edit-sale-point-form" },
+                },
+                [_vm._v(" تعديل نقطة البيع ")]
+              ),
+            ]),
+          ]),
         ]),
       ]),
     ]),
@@ -10611,6 +10925,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "item-text" }, [
       _c("span", [_vm._v("نقاط البيع والصالات")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
     ])
   },
   function () {

@@ -167,6 +167,11 @@ const store = new vuex.Store({
                 commit('setSalePointOrder', res.data.order)
             })
         },
+        deleteSalePointOrder({ commit }, req) {
+            axios.post('/delete-sale-point-order', req).then((res) => {
+                commit('deleteSalePointOrder', res.data.id)
+            })
+        },
         //test// saveSalePointOrder
         // switchArrayPistion({ commit }, data) {
         //     var temp = this.state.boards[data.index1];
@@ -284,8 +289,19 @@ const store = new vuex.Store({
         },
         setSalePointOrder: (state, order) => {
             var oldOrder = state.currentSalePointOrders.find(o => o.id == order.id);
-            if (oldOrder) oldOrder = order;
-            else state.currentSalePointOrders.push(order);
+            console.log('oldOrder', oldOrder);
+            if (oldOrder) {
+                oldOrder.orders = order.orders
+                oldOrder.customerName = order.customerName
+                oldOrder.status = order.status
+                oldOrder.totale = order.totale
+                oldOrder.created_at = order.created_at
+                oldOrder.updated_at = order.updated_at
+            } else state.currentSalePointOrders.push(order);
+            console.log('oldOrder', oldOrder);
+        },
+        deleteSalePointOrder: (state, id) => {
+            state.currentSalePointOrders = state.currentSalePointOrders.filter(o => o.id !== id);
         }
     },
     modules: {}

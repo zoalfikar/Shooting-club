@@ -1,6 +1,17 @@
 <template>
     <div class="wrapper" style="background-color: blue;">
-        <!-- <pre>{{currentSalePointOrders[0][30]}}</pre> -->
+        <div class="sale-point-options">
+            <input v-model="deleteAfterPaid" type="checkbox" name="deleteAfterPaid" />
+            <label for="deleteAfterPaid">الحذف بعد الدفع</label>  
+            <div class="option-group">
+                <input v-model="currentOrderStatus"  type="radio" name="notPaid" value="notPaid">
+                <label for="notPaid">غير مدفوع(إفتراضي)</label>  
+
+                <input v-model="currentOrderStatus" type="radio" name="paid" value="paid">
+                <label for="paid"> مدفوع(إفتراضي) </label>  
+
+            </div>
+        </div>
         <div class="sections" style="background-color: aqua;">
            <ul>
                 <li @click="setSectionValue($event.target.value)" value="-1">عرض الكل</li>
@@ -40,19 +51,18 @@
                     <template  v-for="order in currentSalePointOrders">
                         <tr v-if="order" :key="order.id">
                             <td>{{order.customerName ? order.customerName : 'غير محدد'}}</td>
-                            <td>{{order.totale}}</td>
+                            <td>{{order.totale}} <span>ل.س</span> </td>
                             <td>{{order.status.replace(/notPaid|paid/i,translate)}}</td>
-                            <td>{{order.created_at}}</td>
-                            <td>{{order.updated_at}}</td>
+                            <td>{{order.created_at ? order.created_at.replace(/AM|PM/i,translate) : 'غير محدد'}}</td>
+                            <td>{{order.updated_at ? order.updated_at.replace(/AM|PM/i,translate) : 'غير محدد'}}</td>
                             <td>
-                                <button>تعديل</button>
-                                <button>حذف</button>
-                                <button v-if="order.status =='notPaid'">تعليم كمدفوع</button> 
-                                <button v-else>تعليم كغير مدفوع</button>
+                                <button @click="editeSalePointOrder(order.id)">تعديل</button>
+                                <button @click="removeSalePointOrder(order.id)">حذف</button>
+                                <button @click="changeOrderStatus(order.id,'paid')" v-if="order.status =='notPaid'">تعليم كمدفوع</button> 
+                                <button @click="changeOrderStatus(order.id,'notPaid')" v-else>تعليم كغير مدفوع</button>
                             </td>
                         </tr>
                     </template>
-                  
                 </tbody>
             </table>
         </div>
@@ -62,6 +72,7 @@
                 <button @click="currentOrderStatus = 'paid'" v-if="currentOrderStatus=='notPaid'">تعليم كمدفوع</button> 
                 <button  @click="currentOrderStatus = 'notPaid'" v-else >تعليم كغير مدفوع</button>
                 <button @click="currentOrders = []" >حذف</button> 
+                <button @click="cancelUpdatOrder = []" ></button> 
                 <input type="text" name="customerName"  v-model="currentCustomerName" placeholder="إضافة اسم الزبون">
             </div>
             <ul>
@@ -91,7 +102,8 @@ import store from '../../../store'
 export default {
     data (){
         return{
-            currentSection : Number,
+            deleteAfterPaid:false,
+            currentSection : -1,
             currentItems : [],
             currentOrders : [],
             temperoryVal : null,
@@ -105,11 +117,11 @@ export default {
     computed:{
         allSections: ()=>store.state.menuItems,
         totale: function () {
-            var totoal = 0;
+            var total = 0;
             this.currentOrders.forEach((o)=>{
-                totoal += o.price * o.quantity
+                total += o.price * o.quantity
             })
-            return totoal;
+            return total;
         },
         currentSalePointOrders:()=> store.state.currentSalePointOrders,
         finallOrder:{
@@ -117,6 +129,7 @@ export default {
                 var finall = {
                     id:this.createId,
                     orders:this.currentOrders,
+                    totale:this.totale,
                     customerName:this.currentCustomerName,
                     created_at:this.created_at,
                     updated_at:this.updated_at,
@@ -135,22 +148,25 @@ export default {
         },
     },
     watch:{
-        currentSection(newVal,oldVal){
-            if (newVal == -1) 
-            {
-                var array = [];
-                this.allSections.forEach((s , i)=>{
-                    array = array.concat(array, s.items);
-                })
-                array = array.sort((a , b)=>{
-                    a.section - b.section
-                })
-                this.currentItems =  array;
-            }
-            else 
-            {
-                this.currentItems = store.getters.menuSectionItems(newVal);
-            }
+        currentSection : {
+            handler:function(newVal,oldVal){
+                if (newVal == -1) 
+                {
+                    var array = [];
+                    this.allSections.forEach((s , i)=>{
+                        array = array.concat(array, s.items);
+                    })
+                    array = array.sort((a , b)=>{
+                        a.section - b.section
+                    })
+                    this.currentItems =  array;
+                }
+                else 
+                {
+                    this.currentItems = store.getters.menuSectionItems(newVal);
+                }
+            },
+            immediate:false,
         },
     },
     methods:{
@@ -162,6 +178,12 @@ export default {
                 case 'notPaid':
                     word = 'غير مدفوع'
                     break;
+                case 'AM':
+                    word = ' صباحاً'
+                break;
+                case 'PM':
+                    word = ' مساءً'
+                break;
             }
             return word ;
         },
@@ -260,25 +282,60 @@ export default {
 
         },
         saveFinallOrder(){
-            this.createId =  uuidv4();
-            var finallO =  JSON.stringify(this.finallOrder);
-            store.dispatch('saveSalePointOrder' , {'order':finallO});
+            if (this.deleteAfterPaid && this.currentOrderStatus=='paid') {
+                    store.dispatch('deleteSalePointOrder' , {'id':this.createId});
+            }
+            else{
+                if (!this.createId) {
+                    this.createId =  uuidv4();
+                }
+                var finallO =  JSON.stringify(this.finallOrder);
+                store.dispatch('saveSalePointOrder' , {'order':finallO});
+            }
             this.createId=null;
             this.currentCustomerName = '';
             this.currentOrderStatus='notPaid';
             this.currentOrders=[];
             this.created_at=null;
             this.updated_at=null;
+        },
+        removeSalePointOrder(id){
+            store.dispatch('deleteSalePointOrder' ,{ 'id': id});
+        },
+        async editeSalePointOrder(id){
+            var order = await this.findItem(id,this.currentSalePointOrders);
+            this.createId = order.id;
+            this.currentOrders = order.orders;
+            this.currentCustomerName = order.customerName;
+            this.currentOrderStatus = order.status;
+            this.created_at = order.created_at;
+            this.updated_at = order.updated_at;
+        },
+        async changeOrderStatus(id , status){
+            var order = await this.findItem(id,this.currentSalePointOrders);
+            order.status = status;
+            if (this.deleteAfterPaid && status == 'paid' ) {
+                store.dispatch('deleteSalePointOrder' , {'id':order.id});
+            }
+            else{
+                order = JSON.stringify(order);
+                store.dispatch('saveSalePointOrder' , {'order':order});
+            }
         }
     },
    mounted:function () {
-        store.dispatch('bringAllMenuItems');
+        store.dispatch('bringAllMenuItems').then(()=>{
+            setTimeout(()=>{
+                this.currentSection = '-1' ;
+            } ,1000)
+        });
         store.dispatch('bringAllSalePointOrders');
+
     }
 }
 </script>
     
-<style>
+<style scoped>
     ul{
         list-style: none;
     }

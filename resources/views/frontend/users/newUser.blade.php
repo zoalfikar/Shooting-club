@@ -45,6 +45,7 @@
                 <option value="-1" disabled></option>
                 <option value="acountant">محاسب</option>
                 <option value="waiter">نادل</option>
+                <option value="salePoint">نقطة مبيع</option>
             </select>
               @if ($errors->has('email'))
                   <div class="bg-danger mt-2 p-3 text-white">

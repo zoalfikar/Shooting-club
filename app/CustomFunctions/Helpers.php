@@ -278,5 +278,7 @@ if (! function_exists('setSalePointOrder')) {
 }
 if (! function_exists('deleteSalePointOrder')) {
     function deleteSalePointOrder($salPointId, $order){
+        Redis::del('salePoint:' . $salPointId .':order:'. $order);
+        return $order ;
     }
 }
