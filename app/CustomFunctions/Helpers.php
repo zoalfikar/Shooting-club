@@ -282,3 +282,29 @@ if (! function_exists('deleteSalePointOrder')) {
         return $order ;
     }
 }
+if (! function_exists('setSalePointSeller')) {
+    function setSalePointSeller($id, $salPoint){
+        Redis::set('salePointSeller:' . $id .':salPoint:' , $salPoint);
+    }
+}
+if (! function_exists('getSellerSalePoint')) {
+    function getSellerSalePoint($id){
+      return  Redis::get('salePointSeller:' . $id .':salPoint:');
+    }
+}
+if (! function_exists('delSalePointSeller')) {
+    function delSalePointSeller($id){
+        if (Redis::exists('salePointSeller:' . $id .':salPoint:'))
+        {
+            Redis::del('salePointSeller:' . $id .':salPoint:');
+        }
+    }
+}
+if (! function_exists('getAllSalePointSellers')) {
+    function getAllSalePointSellers($id){
+        if (Redis::exists('salePointSeller:' . $id .':salPoint:'))
+        {
+            Redis::del('salePointSeller:' . $id .':salPoint:');
+        }
+    }
+}

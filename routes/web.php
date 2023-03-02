@@ -93,6 +93,11 @@ Route::middleware('authenticate')->group(function () {
         Route::get('/sale-point-orders', [SalePointController::class ,'getOrders']);
         Route::post('/set-sale-point-order', [SalePointController::class ,'setOrder']);
         Route::post('/delete-sale-point-order', [SalePointController::class ,'deleteOrder']);
+        Route::get('/get-seller-sale-point', [SalePointController::class ,'getSellerSalePoint']);
+        Route::get('get-all-sale-point-sellers/{id}', [SalePointController::class ,'getAllSalePointSellers']);
+
+
+
         Route::get('/show-new-table-form', [Resturant::class,'showFormNewTable']);
         Route::get('/show-update-tables-form', [Resturant::class,'showFormUpdateTables']);
         Route::post('/add-new-table', [Resturant::class,'addNewTable']);
@@ -121,6 +126,7 @@ Route::middleware('authenticate')->group(function () {
         Route::match(['get', 'post'], '/users/all', [UserController::class ,'editUsers']);
         Route::resource('users', UserController::class);
         Route::get('/show-waiter-area-form', [UserHallTableController::class,'index']);
+        Route::get('/show-seller-area-form', [UserHallTableController::class,'index2']);
         Route::get('/get-waiter-hall-tables', [UserHallTableController::class,'getWaiterHallTables']);
         Route::post('/set-user-hall-tables', [UserHallTableController::class,'setWaiterHallTables']);
         Route::get('/get-waiters-by-date', [UserHallTableController::class,'getWaitersByDate']);

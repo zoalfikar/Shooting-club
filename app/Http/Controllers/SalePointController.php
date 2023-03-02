@@ -95,4 +95,12 @@ class SalePointController extends Controller
         }
 
     }
+    public function getSellerSalePoint(Request $req)
+    {
+        return response()->json(['salePoint'=>getSellerSalePoint($req->userId)]);
+    }
+    public function getAllSalePointSellers($id)
+    {
+        # code...
+    }
 }
