@@ -28,6 +28,9 @@
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-waiter-area-form'">مجال عمل النادل</a></span>
                 </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-seller-area-form'">تحديد العاملين في نقاط البيع</a></span>
+                </div>
             </div>
         </div>
         <div class="menu-item-itemChild">

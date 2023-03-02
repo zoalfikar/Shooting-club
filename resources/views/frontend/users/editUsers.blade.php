@@ -79,7 +79,7 @@ select{
         </div>
         <div class="mb-3 grid-item">
             <label for="role" class="form-label">الصلاحيات</label>
-            <select name='role'>
+            <select name='role' id="role">
                 <option value="-1" disabled></option>
                 <option value="acountant">محاسب</option>
                 <option value="waiter">نادل</option>
@@ -147,7 +147,7 @@ select{
                                 $("input[name='email']").val(response.user.email)
                                 $("input[name='password']").val(response.user.password)
                                 $("input[name='passwordConfirme']").val(response.user.password)
-                                $("input[select='role']").val(response.user.role)
+                                $("#role").val(response.user.role)
                             }
                         });
                     });

@@ -59,7 +59,7 @@ class UserController extends Controller
     }
         $data = $req->only('name','email','password','role');
         $dataValidated = Validator::make($data,[
-            'role'=>'required|in:acountant,waiter',
+            'role'=>'required|in:acountant,waiter,salePoint',
             'name' =>'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
@@ -71,6 +71,9 @@ class UserController extends Controller
                 "user_id"=>$user->id,
                 "name"=>$user->name,
             ]);
+        }
+        if ($user->role == 'salePoint') {
+            setSalePointSeller($user->id,'');
         }
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال مستخدم جدديد بنجاح"]);
@@ -119,7 +122,7 @@ class UserController extends Controller
         }
         $data = $request->only('name','email','password');
         $dataValidated = Validator::make($data,[
-            'role'=>'in:acountant,waiter',
+            'role'=>'in:acountant,waiter,salePoint',
             'name' =>'required|string',
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -135,12 +138,21 @@ class UserController extends Controller
                 "user_id"=>$user->id,
                 "name"=>$user->name,
             ]);
+            delSalePointSeller($user->id);
+        }
+        if ($user->role == 'salePoint') {
+            $userToDelet = UserHallTable::find($user->id);
+            if($userToDelet){
+                $userToDelet->delete();
+            }
+            setSalePointSeller($user->id,'');
         }
         if ($user->role == 'acountant') {
              $userToDelet = UserHallTable::find($user->id);
             if($userToDelet){
                 $userToDelet->delete();
             }
+            delSalePointSeller($user->id);
         }
         return response()->json(["message"=>'تم التعديل بنجاح']);
     }
@@ -155,6 +167,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
+        delSalePointSeller($user->id);
         return response()->json(["message"=>' تم حذف المستخدم بنجاح ']);
     }
 }

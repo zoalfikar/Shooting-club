@@ -4826,6 +4826,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 var sidebarStatus = new CustomEvent('sidebarStatusChanged');
 
@@ -10454,6 +10457,18 @@ var render = function () {
               ),
             ]),
           ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "item-child" }, [
+            _vm._m(5),
+            _vm._v("   "),
+            _c("span", [
+              _c(
+                "a",
+                { attrs: { href: "" + _vm.url + "/show-seller-area-form" } },
+                [_vm._v("تحديد العاملين في نقاط البيع")]
+              ),
+            ]),
+          ]),
         ]),
       ]),
       _vm._v(" "),
@@ -10468,7 +10483,7 @@ var render = function () {
               },
             },
           },
-          [_vm._m(5), _vm._v(" "), _vm._m(6)]
+          [_vm._m(6), _vm._v(" "), _vm._m(7)]
         ),
         _vm._v(" "),
         _c(
@@ -10482,8 +10497,6 @@ var render = function () {
             },
           },
           [
-            _vm._m(7),
-            _vm._v(" "),
             _vm._m(8),
             _vm._v(" "),
             _vm._m(9),
@@ -10497,6 +10510,8 @@ var render = function () {
             _vm._m(13),
             _vm._v(" "),
             _vm._m(14),
+            _vm._v(" "),
+            _vm._m(15),
           ]
         ),
       ]),
@@ -10512,12 +10527,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(15), _vm._v(" "), _vm._m(16)]
+          [_vm._m(16), _vm._v(" "), _vm._m(17)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(17),
+            _vm._m(18),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10529,7 +10544,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(18),
+            _vm._m(19),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10541,7 +10556,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(19),
+            _vm._m(20),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10553,7 +10568,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(20),
+            _vm._m(21),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10577,12 +10592,12 @@ var render = function () {
               },
             },
           },
-          [_vm._m(21), _vm._v(" "), _vm._m(22)]
+          [_vm._m(22), _vm._v(" "), _vm._m(23)]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "item-children" }, [
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(23),
+            _vm._m(24),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10594,7 +10609,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(24),
+            _vm._m(25),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10606,7 +10621,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(25),
+            _vm._m(26),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10618,7 +10633,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(26),
+            _vm._m(27),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10630,7 +10645,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(27),
+            _vm._m(28),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10642,7 +10657,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "item-child" }, [
-            _vm._m(28),
+            _vm._m(29),
             _vm._v("   "),
             _c("span", [
               _c(
@@ -10674,6 +10689,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "item-text" }, [
       _c("span", [_vm._v("الرئيسية")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", {
+        staticClass: "fa fa-angle-double-left",
+        attrs: { "aria-hidden": "true" },
+      }),
     ])
   },
   function () {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hall;
+use App\Models\SalePoint;
 use App\Models\Table;
 use App\Models\User;
 use App\Models\UserHallTable;
@@ -43,30 +44,57 @@ class UserHallTableController extends Controller
         $date= strtolower($req->filterDate);
         switch ($date) {
             case 'hour':
-                $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subHour()->toDateString())->get();
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->where('created_at' ,'>=' ,  Carbon::now()->subHour()->toDateString())->get()
+                :
+                $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subHour()->toDateString())->get() ;
                 break;
             case 'day':
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->where('created_at' ,'>=' ,  Carbon::now()->subDay()->toDateString())->get()
+                :
                 $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subDay()->toDateString())->get();
                 break;
             case 'week':
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->where('created_at' ,'>=' ,  Carbon::now()->subWeek()->toDateString())->get()
+                :
                 $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subWeek()->toDateString())->get();
             break;
             case 'month':
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->where('created_at' ,'>=' ,  Carbon::now()->subMonth()->toDateString())->get()
+                :
                 $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subMonth()->toDateString())->get();
             break;
             case 'year':
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->where('created_at' ,'>=' ,  Carbon::now()->subYear()->toDateString())->get()
+                :
                 $waiters = User::where('role' , 'waiter')->where('created_at' ,'>=' ,  Carbon::now()->subYear()->toDateString())->get();
             break;
             default:
+                isset($req->forSeller) ?
+                $sellers = User::where('role' , 'salePoint')->get()
+                :
                 $waiters = User::where('role' , 'waiter')->get();
             break;
         }
-        return response()->json(['waiters'=>$waiters]);
+        if (isset($req->forSeller) )
+            return response()->json(['sellers'=>$sellers]);
+        else
+            return response()->json(['waiters'=>$waiters]);
     }
     public function getWaitersByName(Request $req)
     {
+        isset($req->forSeller) ? 
+        $sellers = User::where('role' , 'salePoint')->where('name'  ,  $req->filterName)->get()
+        :
         $waiters = User::where('role' , 'waiter')->where('name'  ,  $req->filterName)->get();
-        return response()->json(['waiters'=>$waiters]);
+        if (isset($req->forSeller)) 
+            return response()->json(['sellers'=>$sellers]);
+        else
+            return response()->json(['waiters'=>$waiters]);
     }
     public function getTablesByWaitersNumber(Request $req)
     {
@@ -87,70 +115,16 @@ class UserHallTableController extends Controller
         }
         return response()->json(['tables'=>$result]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index2(Request $req)
     {
-        //
+        $sellers = User::where('role','salePoint')->get();
+        $salePoints = SalePoint::all();
+        if ($req->ajax()) {
+            return response( getAjaxResponse('frontend.users.sellerWorkArea',['sellers'=>$sellers,'salePoints'=>$salePoints]));
+        }
+        return view('frontend.users.sellerWorkArea',compact(['sellers','salePoints']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\UserHallTable  $userHallTable
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserHallTable $userHallTable)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\UserHallTable  $userHallTable
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserHallTable $userHallTable)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserHallTable  $userHallTable
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserHallTable $userHallTable)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\UserHallTable  $userHallTable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UserHallTable $userHallTable)
-    {
-        //
-    }
 }
