@@ -4199,6 +4199,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5752,7 +5763,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nul[data-v-55a1b764]{\n    list-style: none;\n}\n.order-option[data-v-55a1b764]{\n    display: flex;\n    flex-wrap: wrap;\n}\n.order-option button[data-v-55a1b764]{\n    flex: 0 0 33.3333%;\n}\n.decrement-btn[data-v-55a1b764], .increment-btn[data-v-55a1b764], .order-quantity[data-v-55a1b764], .option[data-v-55a1b764]{\n    visibility: hidden;\n}\n.save-order-changes[data-v-55a1b764], .cancel-update-order[data-v-55a1b764]{\n    display: none;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-55a1b764]{\n    transform: translateY(0);\n}\n.container[data-v-55a1b764]{\n    width: 1000px;\n    min-height: 70vh ;\n    display: grid;\n    grid-template-columns: repeat(2, 1fr);\n    grid-auto-rows: minmax(100px, auto);\n}\n.sale-point-options[data-v-55a1b764]{\n    grid-column: 1/3;\n    grid-row: 1;\n}\n.sectionItems[data-v-55a1b764]{\n    grid-column: 1/1;\n    grid-row: 2;\n    display: flex;\n    flex-grow: 1;\n}\n.currentOrder[data-v-55a1b764]{\n    position: relative;\n    grid-column: 2/3;\n    grid-row: 2;\n}\n.orders[data-v-55a1b764]{\n    max-height: 585px;\n    overflow: auto;\n    grid-column: 1/3;\n    grid-row: 3;\n    padding-left: 70px;\n    padding-right: 70px;\n    background: rgba(0, 0, 0);\n}\n.sections[data-v-55a1b764]{\n    overflow-y: auto;\n    overflow-x: hidden;\n    width: 40%;\n}\n.sections ul[data-v-55a1b764]{\n    width: 100%;\n    padding-left: 0%;\n}\n.sections li[data-v-55a1b764]{\n    width: 100%;\n    padding: 6px 10px;\n}\n.sections li[data-v-55a1b764]:hover{\n    background-color: rgb(15, 15, 15) !important;\n    color: azure;\n}\n.sections li[data-v-55a1b764]:nth-child(2n){\n    background-color: darkgray;\n}\n.sections li[data-v-55a1b764]:nth-child(2n+1){\n    background-color: rgb(117, 116, 116);\n}\n.sections .selected[data-v-55a1b764]{\n    background-color: rgb(15, 15, 15) !important;\n    color: azure;\n}\n.items[data-v-55a1b764]{\n    width: 60%;\n    min-height: 100px;\n    height: 250px;\n    overflow: scroll;\n}\n.items .item[data-v-55a1b764]{\n    padding: 6px 10px;\n    display: flex;\n    justify-content: space-evenly;\n    flex-grow: 1;\n    align-items: center;\n}\n.items .item .title[data-v-55a1b764]{\n    width: 90px;\n}\n.items .item .order-quantity[data-v-55a1b764] {\n    display: flex;\n    flex-wrap: nowrap;\n}\n.items .item input[type=\"number\"][data-v-55a1b764]{\n    text-align: center;\n    width: 50px;\n}\n.items .item input[type=\"number\"][data-v-55a1b764]{\n    text-align: center;\n    width: 50px;\n}\n.items .item input[type=\"number\"][data-v-55a1b764]::-webkit-inner-spin-button\n{\n    -webkit-appearance: none;\n            appearance: none;\n}\n.items .item .option[data-v-55a1b764]{\n    display: flex;\n    justify-content: center;\n    gap:10px;\n    width: 90px;\n}\n.orderNotPaidYet[data-v-55a1b764]{\n    background: rgba(212, 108, 108 , 0.6);\n}\n.orderTableOption[data-v-55a1b764]{\n    display: flex;\n    justify-content: space-between;\n    height: 100%;\n    width: 250px;\n}\n.orderTableOption button[data-v-55a1b764]{\n    border-radius: 20px;\n    padding: 0px 6px;\n    color: aliceblue;\n    background: rgb(18, 116, 111);\n}\n.orderTableOption button[data-v-55a1b764]:hover{\n    background: rgb(29, 77, 58);\n}\n.orderTableOption button[data-v-55a1b764]:active{\n    background: rgb(17, 48, 35);\n}\ntable[data-v-55a1b764]{\n    border: 2px solid rgb(250, 245, 240);\n    border-top: 0px solid rgb(250, 245, 240);\n    background: rgb(250, 245, 240);\n    height: 100%;\n    margin-bottom: 0%;\n}\nthead[data-v-55a1b764]{\n    position: sticky;\n    top: 0px;\n}\nth[data-v-55a1b764], td[data-v-55a1b764] {\n    text-align: center;\n}\n.total[data-v-55a1b764]{\n    position: absolute;\n    bottom: 0;\n}\nul[data-v-55a1b764]{\n    list-style: none;\n}\n.order-option[data-v-55a1b764]{\n    display: flex;\n    flex-wrap: wrap;\n}\n.order-option button[data-v-55a1b764]{\n    flex: 0 0 33.3333%;\n}\n.decrement-btn[data-v-55a1b764], .increment-btn[data-v-55a1b764], .order-quantity[data-v-55a1b764], .option[data-v-55a1b764]{\n    visibility: hidden;\n}\n.save-order-changes[data-v-55a1b764], .cancel-update-order[data-v-55a1b764]{\n    display: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9457,155 +9468,172 @@ var render = function () {
           "div",
           { key: section.id, staticClass: "col", attrs: { id: section.id } },
           [
-            _c(
-              "div",
-              { staticClass: "menu-section" },
-              [
-                _c("center", [_c("h1", [_vm._v(_vm._s(section.name))])]),
-                _vm._v(" "),
-                !section.items.length
-                  ? _c("div", { staticStyle: { "text-align": "center" } }, [
-                      _vm._v("لاتوجد عناصر في هذه القائمة"),
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                !section.items.length
-                  ? _c(
-                      "div",
-                      {
-                        staticClass: "menu-section-list",
-                        staticStyle: { visibility: "hidden !important" },
-                      },
-                      [
-                        _c("div", { staticClass: "menu-section-list-item" }, [
-                          _c("input", {
-                            attrs: { type: "hidden", value: "-1" },
-                          }),
-                          _vm._v(" "),
-                          _c("input", {
-                            staticClass:
-                              "form-check-input resturant-m-item-checkBox",
-                            attrs: {
-                              disabled: "",
-                              type: "checkbox",
-                              name: "chosen",
-                            },
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { class: "resturant-m-item", attrs: { for: "" } },
-                            [_vm._v("اسم العنصر")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              class: "resturant-m-item-info",
-                              staticStyle: { visibility: "hidden" },
-                            },
-                            [
-                              _vm._v(
-                                "\r\n                           السعر ل.س    /     "
-                              ),
-                              _c("i", [_vm._v("الواحدة ")]),
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _vm._m(1, true),
-                        ]),
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm._l(section.items, function (item) {
-                  return _c(
-                    "div",
-                    { key: item.id, staticClass: "menu-section-list" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "menu-section-list-item",
-                          style: "opacity: " + (!item.active ? 0.7 : 1),
-                        },
-                        [
-                          _c("input", {
-                            attrs: { id: "id", type: "hidden" },
-                            domProps: { value: item.id },
-                          }),
-                          _vm._v(" "),
-                          _c("input", {
-                            staticClass:
-                              "form-check-input resturant-m-item-checkBox",
-                            attrs: {
-                              type: "checkbox",
-                              disabled: !item.active ? true : false,
-                              name: "chosen",
-                            },
-                            on: { click: _vm.checkBoxClicked },
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              class: "resturant-m-item",
-                              attrs: { for: "" },
-                              on: { click: _vm.itemClicked },
-                            },
-                            [_vm._v(_vm._s(item.title))]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { class: "resturant-m-item-info" }, [
-                            _vm._v(
-                              "\r\n                            " +
-                                _vm._s(item.price) +
-                                " ل.س    /     "
+            section.options == "resturant" || section.options == "both"
+              ? _c(
+                  "div",
+                  { staticClass: "menu-section" },
+                  [
+                    _c("center", [_c("h1", [_vm._v(_vm._s(section.name))])]),
+                    _vm._v(" "),
+                    !section.items.length
+                      ? _c("div", { staticStyle: { "text-align": "center" } }, [
+                          _vm._v("لاتوجد عناصر في هذه القائمة"),
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !section.items.length
+                      ? _c(
+                          "div",
+                          {
+                            staticClass: "menu-section-list",
+                            staticStyle: { visibility: "hidden !important" },
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "menu-section-list-item" },
+                              [
+                                _c("input", {
+                                  attrs: { type: "hidden", value: "-1" },
+                                }),
+                                _vm._v(" "),
+                                _c("input", {
+                                  staticClass:
+                                    "form-check-input resturant-m-item-checkBox",
+                                  attrs: {
+                                    disabled: "",
+                                    type: "checkbox",
+                                    name: "chosen",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    class: "resturant-m-item",
+                                    attrs: { for: "" },
+                                  },
+                                  [_vm._v("اسم العنصر")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    class: "resturant-m-item-info",
+                                    staticStyle: { visibility: "hidden" },
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\r\n                           السعر ل.س    /     "
+                                    ),
+                                    _c("i", [_vm._v("الواحدة ")]),
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _vm._m(1, true),
+                              ]
                             ),
-                            _c("i", [_vm._v(_vm._s(item.unit) + " ")]),
-                          ]),
-                          _vm._v(" "),
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._l(section.items, function (item) {
+                      return _c(
+                        "div",
+                        { key: item.id, staticClass: "menu-section-list" },
+                        [
                           _c(
                             "div",
-                            { staticClass: "resturant-m-item-quantity" },
+                            {
+                              staticClass: "menu-section-list-item",
+                              style: "opacity: " + (!item.active ? 0.7 : 1),
+                            },
                             [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "decrement-btn",
-                                  on: { click: _vm.decrementBtnClicked },
-                                },
-                                [_c("i", { staticClass: "fa-solid fa-minus" })]
-                              ),
+                              _c("input", {
+                                attrs: { id: "id", type: "hidden" },
+                                domProps: { value: item.id },
+                              }),
                               _vm._v(" "),
                               _c("input", {
-                                staticClass: "qty-input text-center",
+                                staticClass:
+                                  "form-check-input resturant-m-item-checkBox",
                                 attrs: {
-                                  type: "number",
-                                  name: "quantity",
-                                  min: "0",
-                                  step: item.pace,
+                                  type: "checkbox",
+                                  disabled: !item.active ? true : false,
+                                  name: "chosen",
                                 },
+                                on: { click: _vm.checkBoxClicked },
                               }),
                               _vm._v(" "),
                               _c(
-                                "button",
+                                "div",
                                 {
-                                  staticClass: "increment-btn",
-                                  on: { click: _vm.incrementBtnClicked },
+                                  class: "resturant-m-item",
+                                  attrs: { for: "" },
+                                  on: { click: _vm.itemClicked },
                                 },
-                                [_c("i", { staticClass: "fa-solid fa-plus" })]
+                                [_vm._v(_vm._s(item.title))]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { class: "resturant-m-item-info" }, [
+                                _vm._v(
+                                  "\r\n                            " +
+                                    _vm._s(item.price) +
+                                    " ل.س    /     "
+                                ),
+                                _c("i", [_vm._v(_vm._s(item.unit) + " ")]),
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "resturant-m-item-quantity" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "decrement-btn",
+                                      on: { click: _vm.decrementBtnClicked },
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fa-solid fa-minus",
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "qty-input text-center",
+                                    attrs: {
+                                      type: "number",
+                                      name: "quantity",
+                                      min: "0",
+                                      step: item.pace,
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "increment-btn",
+                                      on: { click: _vm.incrementBtnClicked },
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fa-solid fa-plus",
+                                      }),
+                                    ]
+                                  ),
+                                ]
                               ),
                             ]
                           ),
                         ]
-                      ),
-                    ]
-                  )
-                }),
-              ],
-              2
-            ),
+                      )
+                    }),
+                  ],
+                  2
+                )
+              : _vm._e(),
           ]
         )
       }),
@@ -9672,441 +9700,211 @@ var render = function () {
     "div",
     { staticClass: "wrapper", staticStyle: { "background-color": "blue" } },
     [
-      _c("div", { staticClass: "sale-point-options" }, [
-        _c("input", {
-          directives: [
+      _c(
+        "div",
+        { staticClass: "header", staticStyle: { "background-color": "brown" } },
+        [_vm._v("\n        header\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "container",
+          staticStyle: {
+            border: "2px solid black",
+            "background-color": "sandybrown",
+          },
+        },
+        [
+          _c(
+            "div",
             {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.deleteAfterPaid,
-              expression: "deleteAfterPaid",
-            },
-          ],
-          attrs: { type: "checkbox", name: "deleteAfterPaid" },
-          domProps: {
-            checked: Array.isArray(_vm.deleteAfterPaid)
-              ? _vm._i(_vm.deleteAfterPaid, null) > -1
-              : _vm.deleteAfterPaid,
-          },
-          on: {
-            change: function ($event) {
-              var $$a = _vm.deleteAfterPaid,
-                $$el = $event.target,
-                $$c = $$el.checked ? true : false
-              if (Array.isArray($$a)) {
-                var $$v = null,
-                  $$i = _vm._i($$a, $$v)
-                if ($$el.checked) {
-                  $$i < 0 && (_vm.deleteAfterPaid = $$a.concat([$$v]))
-                } else {
-                  $$i > -1 &&
-                    (_vm.deleteAfterPaid = $$a
-                      .slice(0, $$i)
-                      .concat($$a.slice($$i + 1)))
-                }
-              } else {
-                _vm.deleteAfterPaid = $$c
-              }
-            },
-          },
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "deleteAfterPaid" } }, [
-          _vm._v("الحذف بعد الدفع"),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "option-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.currentOrderStatus,
-                expression: "currentOrderStatus",
-              },
-            ],
-            attrs: { type: "radio", name: "notPaid", value: "notPaid" },
-            domProps: { checked: _vm._q(_vm.currentOrderStatus, "notPaid") },
-            on: {
-              change: function ($event) {
-                _vm.currentOrderStatus = "notPaid"
+              staticClass: "sale-point-options",
+              staticStyle: {
+                border: "2px solid black",
+                "background-color": "gold",
               },
             },
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "notPaid" } }, [
-            _vm._v("غير مدفوع(إفتراضي)"),
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.currentOrderStatus,
-                expression: "currentOrderStatus",
-              },
-            ],
-            attrs: { type: "radio", name: "paid", value: "paid" },
-            domProps: { checked: _vm._q(_vm.currentOrderStatus, "paid") },
-            on: {
-              change: function ($event) {
-                _vm.currentOrderStatus = "paid"
-              },
-            },
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "paid" } }, [_vm._v(" مدفوع(إفتراضي) ")]),
-        ]),
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "sections",
-          staticStyle: { "background-color": "aqua" },
-        },
-        [
-          _c(
-            "ul",
             [
-              _c(
-                "li",
-                {
-                  attrs: { value: "-1" },
-                  on: {
-                    click: function ($event) {
-                      return _vm.setSectionValue($event.target.value)
-                    },
-                  },
-                },
-                [_vm._v("عرض الكل")]
-              ),
-              _vm._v(" "),
-              _vm._l(_vm.allSections, function (section, index) {
-                return _c(
-                  "li",
-                  {
-                    key: section.id,
-                    attrs: { value: section.id },
-                    on: {
-                      click: function ($event) {
-                        return _vm.setSectionValue($event.target.value)
-                      },
-                    },
-                  },
-                  [_vm._v(_vm._s(section.name))]
-                )
-              }),
-            ],
-            2
-          ),
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "items",
-          staticStyle: { "background-color": "blanchedalmond" },
-        },
-        _vm._l(_vm.currentItems, function (item) {
-          return _c("div", { key: item.id, staticClass: "item" }, [
-            _c("input", {
-              staticClass: "itemId",
-              attrs: { type: "hidden" },
-              domProps: { value: item.id },
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "title", on: { click: _vm.activeItem } }, [
-              _vm._v(" " + _vm._s(item.title) + " "),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "order-quantity" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "decrement-order-btn",
-                  attrs: { disabled: "" },
-                  on: { click: _vm.decresQuantity },
-                },
-                [_c("i", { staticClass: "fa-solid fa-minus" })]
-              ),
-              _vm._v(" "),
               _c("input", {
-                staticClass: "qty-input text-center",
-                attrs: {
-                  disabled: "",
-                  type: "number",
-                  name: "quantity",
-                  min: "1",
-                  value: "1",
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.deleteAfterPaid,
+                    expression: "deleteAfterPaid",
+                  },
+                ],
+                attrs: { type: "checkbox", name: "deleteAfterPaid" },
+                domProps: {
+                  checked: Array.isArray(_vm.deleteAfterPaid)
+                    ? _vm._i(_vm.deleteAfterPaid, null) > -1
+                    : _vm.deleteAfterPaid,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.deleteAfterPaid,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.deleteAfterPaid = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.deleteAfterPaid = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.deleteAfterPaid = $$c
+                    }
+                  },
                 },
               }),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "increment-order-btn",
-                  attrs: { disabled: "" },
-                  on: { click: _vm.incresQuantity },
-                },
-                [_c("i", { staticClass: "fa-solid fa-plus" })]
-              ),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "option" }, [
-              _c(
-                "button",
-                { attrs: { disabled: "" }, on: { click: _vm.add } },
-                [_vm._v("أضف")]
-              ),
+              _c("label", { attrs: { for: "deleteAfterPaid" } }, [
+                _vm._v("الحذف بعد الدفع"),
+              ]),
               _vm._v(" "),
-              _c(
-                "button",
-                { attrs: { disabled: "" }, on: { click: _vm.cancel } },
-                [_vm._v("الغاء")]
-              ),
-            ]),
-          ])
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "orders", staticStyle: { "background-color": "cyan" } },
-        [
-          _c("table", [
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              [
-                _vm._l(_vm.currentSalePointOrders, function (order) {
-                  return [
-                    order
-                      ? _c("tr", { key: order.id }, [
-                          _c("td", [
-                            _vm._v(
-                              _vm._s(
-                                order.customerName
-                                  ? order.customerName
-                                  : "غير محدد"
-                              )
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(_vm._s(order.totale) + " "),
-                            _c("span", [_vm._v("ل.س")]),
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(
-                              _vm._s(
-                                order.status.replace(
-                                  /notPaid|paid/i,
-                                  _vm.translate
-                                )
-                              )
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(
-                              _vm._s(
-                                order.created_at
-                                  ? order.created_at.replace(
-                                      /AM|PM/i,
-                                      _vm.translate
-                                    )
-                                  : "غير محدد"
-                              )
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(
-                              _vm._s(
-                                order.updated_at
-                                  ? order.updated_at.replace(
-                                      /AM|PM/i,
-                                      _vm.translate
-                                    )
-                                  : "غير محدد"
-                              )
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c(
-                              "button",
-                              {
-                                on: {
-                                  click: function ($event) {
-                                    return _vm.editeSalePointOrder(order.id)
-                                  },
-                                },
-                              },
-                              [_vm._v("تعديل")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                on: {
-                                  click: function ($event) {
-                                    return _vm.removeSalePointOrder(order.id)
-                                  },
-                                },
-                              },
-                              [_vm._v("حذف")]
-                            ),
-                            _vm._v(" "),
-                            order.status == "notPaid"
-                              ? _c(
-                                  "button",
-                                  {
-                                    on: {
-                                      click: function ($event) {
-                                        return _vm.changeOrderStatus(
-                                          order.id,
-                                          "paid"
-                                        )
-                                      },
-                                    },
-                                  },
-                                  [_vm._v("تعليم كمدفوع")]
-                                )
-                              : _c(
-                                  "button",
-                                  {
-                                    on: {
-                                      click: function ($event) {
-                                        return _vm.changeOrderStatus(
-                                          order.id,
-                                          "notPaid"
-                                        )
-                                      },
-                                    },
-                                  },
-                                  [_vm._v("تعليم كغير مدفوع")]
-                                ),
-                          ]),
-                        ])
-                      : _vm._e(),
-                  ]
+              _c("div", { staticClass: "option-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentOrderStatus,
+                      expression: "currentOrderStatus",
+                    },
+                  ],
+                  attrs: { type: "radio", name: "notPaid", value: "notPaid" },
+                  domProps: {
+                    checked: _vm._q(_vm.currentOrderStatus, "notPaid"),
+                  },
+                  on: {
+                    change: function ($event) {
+                      _vm.currentOrderStatus = "notPaid"
+                    },
+                  },
                 }),
-              ],
-              2
-            ),
-          ]),
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "currentOrder",
-          staticStyle: { "background-color": "coral" },
-        },
-        [
-          _c("div", { staticClass: "order-option" }, [
-            _c("button", { on: { click: _vm.saveFinallOrder } }, [
-              _vm._v("حفظ"),
-            ]),
-            _vm._v(" "),
-            _vm.currentOrderStatus == "notPaid"
-              ? _c(
-                  "button",
-                  {
-                    on: {
-                      click: function ($event) {
-                        _vm.currentOrderStatus = "paid"
-                      },
+                _vm._v(" "),
+                _c("label", { attrs: { for: "notPaid" } }, [
+                  _vm._v("غير مدفوع(إفتراضي)"),
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentOrderStatus,
+                      expression: "currentOrderStatus",
+                    },
+                  ],
+                  attrs: { type: "radio", name: "paid", value: "paid" },
+                  domProps: { checked: _vm._q(_vm.currentOrderStatus, "paid") },
+                  on: {
+                    change: function ($event) {
+                      _vm.currentOrderStatus = "paid"
                     },
                   },
-                  [_vm._v("تعليم كمدفوع")]
-                )
-              : _c(
-                  "button",
-                  {
-                    on: {
-                      click: function ($event) {
-                        _vm.currentOrderStatus = "notPaid"
+                }),
+                _vm._v(" "),
+                _c("label", { attrs: { for: "paid" } }, [
+                  _vm._v(" مدفوع(إفتراضي) "),
+                ]),
+              ]),
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "sectionItems" }, [
+            _c(
+              "div",
+              {
+                staticClass: "sections",
+                staticStyle: { border: "2px solid black" },
+              },
+              [
+                _c(
+                  "ul",
+                  [
+                    _c(
+                      "li",
+                      {
+                        class: _vm.currentSection == -1 ? "selected" : "",
+                        attrs: { value: "-1" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.setSectionValue($event.target.value)
+                          },
+                        },
                       },
-                    },
-                  },
-                  [_vm._v("تعليم كغير مدفوع")]
+                      [_vm._v("عرض الكل")]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.allSections, function (section, index) {
+                      return [
+                        section.options == "free-point" ||
+                        section.options == "both"
+                          ? _c(
+                              "li",
+                              {
+                                key: section.id,
+                                class:
+                                  _vm.currentSection == section.id
+                                    ? "selected"
+                                    : "",
+                                attrs: { value: section.id },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.setSectionValue(
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              },
+                              [_vm._v(_vm._s(section.name))]
+                            )
+                          : _vm._e(),
+                      ]
+                    }),
+                  ],
+                  2
                 ),
+              ]
+            ),
             _vm._v(" "),
             _c(
-              "button",
+              "div",
               {
-                on: {
-                  click: function ($event) {
-                    _vm.currentOrders = []
-                  },
+                staticClass: "items",
+                staticStyle: {
+                  border: "2px solid black",
+                  "background-color": "blanchedalmond",
                 },
               },
-              [_vm._v("حذف")]
-            ),
-            _vm._v(" "),
-            _c("button", {
-              on: {
-                click: function ($event) {
-                  _vm.cancelUpdatOrder = []
-                },
-              },
-            }),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.currentCustomerName,
-                  expression: "currentCustomerName",
-                },
-              ],
-              attrs: {
-                type: "text",
-                name: "customerName",
-                placeholder: "إضافة اسم الزبون",
-              },
-              domProps: { value: _vm.currentCustomerName },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.currentCustomerName = $event.target.value
-                },
-              },
-            }),
-          ]),
-          _vm._v(" "),
-          _c(
-            "ul",
-            _vm._l(_vm.currentOrders, function (order) {
-              return _c(
-                "li",
-                { key: order.id, attrs: { id: "c-o" + order.id } },
-                [
-                  _c("span", [_vm._v(_vm._s(order.title))]),
+              _vm._l(_vm.currentItems, function (item) {
+                return _c("div", { key: item.id, staticClass: "item" }, [
+                  _c("input", {
+                    staticClass: "itemId",
+                    attrs: { type: "hidden" },
+                    domProps: { value: item.id },
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "quantity" }, [
+                  _c(
+                    "div",
+                    { staticClass: "title", on: { click: _vm.activeItem } },
+                    [_vm._v(" " + _vm._s(item.title) + " ")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "order-quantity" }, [
                     _c(
                       "button",
                       {
-                        staticClass: "decrement-btn",
+                        staticClass: "decrement-order-btn",
                         attrs: { disabled: "" },
-                        on: {
-                          click: function ($event) {
-                            return _vm.decresOrderQuant(order.id)
-                          },
-                        },
+                        on: { click: _vm.decresQuantity },
                       },
                       [_c("i", { staticClass: "fa-solid fa-minus" })]
                     ),
@@ -10118,91 +9916,386 @@ var render = function () {
                         type: "number",
                         name: "quantity",
                         min: "1",
+                        value: "1",
                       },
-                      domProps: { value: order.quantity },
                     }),
                     _vm._v(" "),
                     _c(
                       "button",
                       {
-                        staticClass: "increment-btn",
+                        staticClass: "increment-order-btn",
                         attrs: { disabled: "" },
-                        on: {
-                          click: function ($event) {
-                            return _vm.incresOrderQuant(order.id)
-                          },
-                        },
+                        on: { click: _vm.incresQuantity },
                       },
                       [_c("i", { staticClass: "fa-solid fa-plus" })]
                     ),
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "delete-current-order",
-                      on: {
-                        click: function ($event) {
-                          return _vm.deleteCurrentOrder(order.id)
+                  _c("div", { staticClass: "option" }, [
+                    _c(
+                      "button",
+                      { attrs: { disabled: "" }, on: { click: _vm.add } },
+                      [_vm._v("أضف")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { attrs: { disabled: "" }, on: { click: _vm.cancel } },
+                      [_vm._v("الغاء")]
+                    ),
+                  ]),
+                ])
+              }),
+              0
+            ),
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "currentOrder",
+              staticStyle: {
+                border: "2px solid black",
+                "background-color": "coral",
+              },
+            },
+            [
+              _c("div", { staticClass: "order-option" }, [
+                _c("button", { on: { click: _vm.saveFinallOrder } }, [
+                  _vm._v("حفظ"),
+                ]),
+                _vm._v(" "),
+                _vm.currentOrderStatus == "notPaid"
+                  ? _c(
+                      "button",
+                      {
+                        on: {
+                          click: function ($event) {
+                            _vm.currentOrderStatus = "paid"
+                          },
                         },
                       },
-                    },
-                    [_vm._v("حذف")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "update-current-order",
-                      on: {
-                        click: function ($event) {
-                          return _vm.updateCurrentOrder(order.id)
+                      [_vm._v("تعليم كمدفوع")]
+                    )
+                  : _c(
+                      "button",
+                      {
+                        on: {
+                          click: function ($event) {
+                            _vm.currentOrderStatus = "notPaid"
+                          },
                         },
                       },
-                    },
-                    [_vm._v("تعديل")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "save-order-changes",
-                      on: {
-                        click: function ($event) {
-                          return _vm.saveOrderChanges(order.id)
-                        },
+                      [_vm._v("تعليم كغير مدفوع")]
+                    ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function ($event) {
+                        _vm.currentOrders = []
                       },
                     },
-                    [_vm._v("حفظ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
+                  },
+                  [_vm._v("حذف")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
                     {
-                      staticClass: "cancel-update-order",
-                      on: {
-                        click: function ($event) {
-                          return _vm.cancelUpdatOrder(order.id)
-                        },
-                      },
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentCustomerName,
+                      expression: "currentCustomerName",
                     },
-                    [_vm._v("الغاء")]
+                  ],
+                  attrs: {
+                    type: "text",
+                    name: "customerName",
+                    placeholder: "إضافة اسم الزبون",
+                  },
+                  domProps: { value: _vm.currentCustomerName },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.currentCustomerName = $event.target.value
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.currentOrders, function (order) {
+                  return _c(
+                    "li",
+                    { key: order.id, attrs: { id: "c-o" + order.id } },
+                    [
+                      _c("span", [_vm._v(_vm._s(order.title))]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "quantity" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "decrement-btn",
+                            attrs: { disabled: "" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.decresOrderQuant(order.id)
+                              },
+                            },
+                          },
+                          [_c("i", { staticClass: "fa-solid fa-minus" })]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "qty-input text-center",
+                          attrs: {
+                            disabled: "",
+                            type: "number",
+                            name: "quantity",
+                            min: "1",
+                          },
+                          domProps: { value: order.quantity },
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "increment-btn",
+                            attrs: { disabled: "" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.incresOrderQuant(order.id)
+                              },
+                            },
+                          },
+                          [_c("i", { staticClass: "fa-solid fa-plus" })]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "delete-current-order",
+                          on: {
+                            click: function ($event) {
+                              return _vm.deleteCurrentOrder(order.id)
+                            },
+                          },
+                        },
+                        [_vm._v("حذف")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "update-current-order",
+                          on: {
+                            click: function ($event) {
+                              return _vm.updateCurrentOrder(order.id)
+                            },
+                          },
+                        },
+                        [_vm._v("تعديل")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "save-order-changes",
+                          on: {
+                            click: function ($event) {
+                              return _vm.saveOrderChanges(order.id)
+                            },
+                          },
+                        },
+                        [_vm._v("حفظ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "cancel-update-order",
+                          on: {
+                            click: function ($event) {
+                              return _vm.cancelUpdatOrder(order.id)
+                            },
+                          },
+                        },
+                        [_vm._v("الغاء")]
+                      ),
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "total",
+                  staticStyle: {
+                    border: "2px solid black",
+                    "background-color": "lightgrey",
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n                " + _vm._s(_vm.totale) + "\n            "
                   ),
                 ]
-              )
-            }),
-            0
+              ),
+            ]
           ),
+          _vm._v(" "),
+          _c("div", { staticClass: "orders" }, [
+            _c("table", { staticClass: "table table-striped" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                [
+                  _vm._l(_vm.currentSalePointOrders, function (order) {
+                    return [
+                      order
+                        ? _c(
+                            "tr",
+                            {
+                              key: order.id,
+                              class:
+                                order.status == "notPaid"
+                                  ? "orderNotPaidYet"
+                                  : "",
+                            },
+                            [
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    order.customerName
+                                      ? order.customerName
+                                      : "غير محدد"
+                                  )
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(order.totale) + " "),
+                                _c("span", [_vm._v("ل.س")]),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    order.status.replace(
+                                      /notPaid|paid/i,
+                                      _vm.translate
+                                    )
+                                  )
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    order.created_at
+                                      ? order.created_at.replace(
+                                          /AM|PM/i,
+                                          _vm.translate
+                                        )
+                                      : "غير محدد"
+                                  )
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    order.updated_at
+                                      ? order.updated_at.replace(
+                                          /AM|PM/i,
+                                          _vm.translate
+                                        )
+                                      : "غير محدد"
+                                  )
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("div", { staticClass: "orderTableOption" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.editeSalePointOrder(
+                                            order.id
+                                          )
+                                        },
+                                      },
+                                    },
+                                    [_vm._v("تعديل")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.removeSalePointOrder(
+                                            order.id
+                                          )
+                                        },
+                                      },
+                                    },
+                                    [_vm._v("حذف")]
+                                  ),
+                                  _vm._v(" "),
+                                  order.status == "notPaid"
+                                    ? _c(
+                                        "button",
+                                        {
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.changeOrderStatus(
+                                                order.id,
+                                                "paid"
+                                              )
+                                            },
+                                          },
+                                        },
+                                        [_vm._v("تعليم كمدفوع")]
+                                      )
+                                    : _c(
+                                        "button",
+                                        {
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.changeOrderStatus(
+                                                order.id,
+                                                "notPaid"
+                                              )
+                                            },
+                                          },
+                                        },
+                                        [_vm._v("تعليم كغير مدفوع")]
+                                      ),
+                                ]),
+                              ]),
+                            ]
+                          )
+                        : _vm._e(),
+                    ]
+                  }),
+                ],
+                2
+              ),
+            ]),
+          ]),
         ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "total",
-          staticStyle: { "background-color": "lightgrey" },
-        },
-        [_vm._v("\n        " + _vm._s(_vm.totale) + "\n    ")]
       ),
     ]
   )
@@ -10212,7 +10305,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
+    return _c("thead", { staticClass: "table-dark" }, [
       _c("tr", [
         _c("th", [_vm._v("اسم الزبون")]),
         _vm._v(" "),

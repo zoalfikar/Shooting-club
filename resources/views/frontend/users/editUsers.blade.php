@@ -23,12 +23,26 @@ select{
     width: 100%;
     background:rgb(238, 228, 213);
 }
+.filter{
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#filterName{
+    width: 60%;
+    display: inline;
+    margin-right: 20px;
+    background-color: darkgrey;
+}
 </style>
 
 @endsection
 @section('content')
 <div class="arabic-form" style="margin-top: -40px">
-    <h1 class="text-center"> مستخدم جديد  </h1>
+    <h1 class="text-center">  تعديل حالة المستخدم  </h1>
+    <div class="filter">
+        <label for="filterName"> بحث عن المستخدم</label>
+        <input class="form-control" type="text" name="filterName" id="filterName">
+    </div>
     <form action="{{url('/users')}}" method="post">
         @csrf
         <div class="mb-3 grid-item">
@@ -225,6 +239,34 @@ select{
                                     }
                                 };
                             },
+                        });
+                    });
+                    $('#filterName').change(function (e) { 
+                        e.preventDefault();
+                        $.ajax({
+                            type: "get",
+                            url: "/get-waiters-by-name",
+                            data: {
+                                filterName:$(this).val(),
+                                forAllUsers:true,
+                            },
+                            success: function (response) {
+                                if (response.users.length >0) {
+                                    $('#user').html('');
+                                    $("#user").append('<option value=' + (-1) + '> المستخدم </option>');
+                                    for (var i in response.users) {
+                                        $("#user").append('<option value=' + response.users[i].id + '> ' + response.users[i].name + '</option>');
+                                    };
+                                }
+                                else{
+                                    $('#filterName').val('غير موجود');
+                                    $(document).on('click',   function () {
+                                        $('#filterName').val('');
+                                        $(document).off('click');
+                                        $('#filterName').trigger('change');
+                                    });
+                                }
+                            }
                         });
                     });
                 }

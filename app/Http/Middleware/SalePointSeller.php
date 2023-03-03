@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class Waiter
+class SalePointSeller
 {
     /**
      * Handle an incoming request.
@@ -17,17 +16,6 @@ class Waiter
      */
     public function handle(Request $request, Closure $next)
     {
-        
-        if (Auth::user()->role == 'waiter') {
-            return $next($request);
-        }
-        else{
-            if (request()->expectsJson()) {
-                return response()->json(['errorMessage'=>'غير مسموح الوصول لهذا المستخدم']);
-            }
-            else{
-                return redirect()->back();
-            }
-        }
+        return $next($request);
     }
 }

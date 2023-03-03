@@ -56573,17 +56573,17 @@ readers do not read off random characters that represent icons */
 
     margin: auto
 }
-.mx-auto {
-
-    margin-left: auto;
-
-    margin-right: auto
-}
 .-mx-3 {
 
     margin-left: -0.75rem;
 
     margin-right: -0.75rem
+}
+.mx-auto {
+
+    margin-left: auto;
+
+    margin-right: auto
 }
 .mb-3 {
 
@@ -56597,10 +56597,6 @@ readers do not read off random characters that represent icons */
 
     margin-top: 0.25rem
 }
-.ml-4 {
-
-    margin-left: 1rem
-}
 .mb-6 {
 
     margin-bottom: 1.5rem
@@ -56612,6 +56608,10 @@ readers do not read off random characters that represent icons */
 .mt-12 {
 
     margin-top: 3rem
+}
+.ml-4 {
+
+    margin-left: 1rem
 }
 .mb-12 {
 
@@ -56759,14 +56759,6 @@ readers do not read off random characters that represent icons */
 
     justify-content: center
 }
-.space-y-5 > :not([hidden]) ~ :not([hidden]) {
-
-    --tw-space-y-reverse: 0;
-
-    margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
-
-    margin-bottom: calc(1.25rem * var(--tw-space-y-reverse))
-}
 .space-y-7 > :not([hidden]) ~ :not([hidden]) {
 
     --tw-space-y-reverse: 0;
@@ -56791,6 +56783,14 @@ readers do not read off random characters that represent icons */
 
     margin-bottom: calc(2.5rem * var(--tw-space-y-reverse))
 }
+.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+
+    --tw-space-y-reverse: 0;
+
+    margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+
+    margin-bottom: calc(1.25rem * var(--tw-space-y-reverse))
+}
 .rounded {
 
     border-radius: 0.25rem
@@ -56807,17 +56807,17 @@ readers do not read off random characters that represent icons */
 
     border-style: solid
 }
-.border-red-500 {
-
-    --tw-border-opacity: 1;
-
-    border-color: rgb(239 68 68 / var(--tw-border-opacity))
-}
 .border-gray-200 {
 
     --tw-border-opacity: 1;
 
     border-color: rgb(229 231 235 / var(--tw-border-opacity))
+}
+.border-red-500 {
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(239 68 68 / var(--tw-border-opacity))
 }
 .border-blue-700 {
 
@@ -56837,12 +56837,6 @@ readers do not read off random characters that represent icons */
 
     background-color: rgb(229 231 235 / var(--tw-bg-opacity))
 }
-.bg-gray-500 {
-
-    --tw-bg-opacity: 1;
-
-    background-color: rgb(107 114 128 / var(--tw-bg-opacity))
-}
 .bg-blue-500 {
 
     --tw-bg-opacity: 1;
@@ -56854,6 +56848,12 @@ readers do not read off random characters that represent icons */
     --tw-bg-opacity: 1;
 
     background-color: rgb(239 68 68 / var(--tw-bg-opacity))
+}
+.bg-gray-500 {
+
+    --tw-bg-opacity: 1;
+
+    background-color: rgb(107 114 128 / var(--tw-bg-opacity))
 }
 .bg-teal-600 {
 
@@ -56899,18 +56899,6 @@ readers do not read off random characters that represent icons */
 
     padding: 0.75rem
 }
-.py-4 {
-
-    padding-top: 1rem;
-
-    padding-bottom: 1rem
-}
-.px-5 {
-
-    padding-left: 1.25rem;
-
-    padding-right: 1.25rem
-}
 .px-3 {
 
     padding-left: 0.75rem;
@@ -56935,6 +56923,18 @@ readers do not read off random characters that represent icons */
 
     padding-bottom: 0.5rem
 }
+.py-4 {
+
+    padding-top: 1rem;
+
+    padding-bottom: 1rem
+}
+.px-5 {
+
+    padding-left: 1.25rem;
+
+    padding-right: 1.25rem
+}
 .px-2 {
 
     padding-left: 0.5rem;
@@ -56953,6 +56953,10 @@ readers do not read off random characters that represent icons */
 
     padding-bottom: 0.25rem
 }
+.pr-8 {
+
+    padding-right: 2rem
+}
 .pt-0 {
 
     padding-top: 0px
@@ -56960,10 +56964,6 @@ readers do not read off random characters that represent icons */
 .pl-2 {
 
     padding-left: 0.5rem
-}
-.pr-8 {
-
-    padding-right: 2rem
 }
 .text-center {
 

@@ -15,7 +15,7 @@
          v-bind:key="section.id"
          :id="section.id"
          class="col">
-            <div class="menu-section">
+            <div class="menu-section" v-if="section.options == 'resturant' || section.options == 'both'">
                 <center><h1>{{section.name}}</h1></center>
                 <div v-if="!section.items.length" style="text-align: center;">لاتوجد عناصر في هذه القائمة</div>
                 <div v-if="!section.items.length" class="menu-section-list" style="visibility: hidden !important;"> 

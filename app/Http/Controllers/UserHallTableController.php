@@ -87,14 +87,27 @@ class UserHallTableController extends Controller
     }
     public function getWaitersByName(Request $req)
     {
-        isset($req->forSeller) ? 
-        $sellers = User::where('role' , 'salePoint')->where('name'  ,  $req->filterName)->get()
-        :
-        $waiters = User::where('role' , 'waiter')->where('name'  ,  $req->filterName)->get();
-        if (isset($req->forSeller)) 
-            return response()->json(['sellers'=>$sellers]);
+        if (isset($req->forAllUsers))
+        {
+            if (!$req->filterName) {
+                return response()->json(['users'=>User::all()]);
+            }
+            else{
+
+                return response()->json(['users'=>User::where('name'  ,  $req->filterName)->get()]);
+            }
+        }
         else
-            return response()->json(['waiters'=>$waiters]);
+        { 
+            isset($req->forSeller) ? 
+            $sellers = User::where('role' , 'salePoint')->where('name'  ,  $req->filterName)->get()
+            :
+            $waiters = User::where('role' , 'waiter')->where('name'  ,  $req->filterName)->get();
+            if (isset($req->forSeller)) 
+                return response()->json(['sellers'=>$sellers]);
+            else
+                return response()->json(['waiters'=>$waiters]);
+        }
     }
     public function getTablesByWaitersNumber(Request $req)
     {

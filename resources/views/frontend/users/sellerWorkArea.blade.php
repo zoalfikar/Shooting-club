@@ -85,6 +85,13 @@
         flex-wrap: wrap;
         justify-content: space-between;
     }
+    #tablesSection{
+        margin: auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        width: 90%;
+    }
     .waiter select{
         display: block;
         /* width: 100%; */
@@ -278,6 +285,16 @@
         color: chartreuse;
         background: rgba(0, 0, 0, 0.7)
     }
+    .sellerInfo{
+        background-color: rgb(19, 33, 156);
+        border-radius: 10px;
+        padding:10px; 
+        width: 160px !important;
+        height: 40px !important;
+        overflow: hidden  !important;
+        white-space: nowrap;
+        text-align: center;
+    }
     </style>
 
 @endsection
@@ -315,30 +332,17 @@
         </div>
         <div class="hall">
             <div class="subtitle">نقاط البيع</div>
-
             <div class="cntr">
                 @foreach ($salePoints as $salePoint)
-                    <label for="{{$salePoint->name}}" class="radio">
-                        <input disabled type="radio" name="salePoint" value="{{$salePoint->id}}"  id="{{$salePoint->name}}" class="hidden halls"/>
+                    <label for="{{$salePoint->id}}" class="radio">
+                        <input disabled type="radio" name="salePoint" value="{{$salePoint->id}}"  id="{{$salePoint->id}}" class="hidden halls"/>
                         <span class="label"></span>{{$salePoint->name}}
                     </label>
                 @endforeach
             </div>
         </div>
         <div class="tables">
-            <div class="subtitle">الطاولات</div>
-            <div class="option">
-                <button id="selectAllTables">تحديد الكل</button>
-                <button id="resetAllTables"> إزالة التحدد عن الكل</button>
-                <div class="fromTo">
-                    <label for="from" style="margin-left: 4px">من</label><input id="from" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="to" style="margin-left: 4px">الى</label><input id="to" type="number">
-                </div>
-                <div class="neitherNor">
-                    <label for="neither" style="margin-left: 4px">ماعدا</label><input id="neither" type="number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="nor" style="margin-left: 4px">الى</label><input id="nor" type="number">
-                </div>
-            </div>
+            <div class="subtitle">جميع العاملين في هذه النقطة</div>
             <div id="tablesSection" class="tables">
                   
             </div>
@@ -355,12 +359,7 @@
            
             var salePoints = {{ Js::from($salePoints) }};
             function init() {
-                var currentInforamtion = null;
-                var currentHall = null;
-                var currentHallTables = [];
-                var currentTables = [];
                 let tablesSection = document.getElementById("tablesSection");
-
                 $.ajaxSetup({
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -411,31 +410,19 @@
                     });
                     $('.halls').click(function (e) { 
                         // e.preventDefault();
-                        currentHall = $(this).val();
                         initHallRequest();
                         $.ajax({
                             type: "get",
                             url: `get-all-sale-point-sellers/${$(this).val()}`,
                             success: function (response) {
-                                if (response.tables) {
-                                    currentHallTables = response.tables;
-                                    $.each(response.tables, function (i, e) { 
+                                if (response.sellers) {
+                                    console.log(response.sellers);
+                                    $.each(response.sellers, function (i, e) { 
                                          var newEl = document.createElement("div");
                                          newEl.classList.add("checkbox");
                                          newEl.innerHTML = 
                                          `
-                                        <input class="tables-checkbox checkbox-flip"  type="checkbox" value = "${e.tableNumber}"
-                                         id="t${e.tableNumber}"
-                                         ${
-                                        currentInforamtion ?
-                                        currentInforamtion.tables ?
-                                        currentInforamtion.hall == currentHall ?
-                                        currentInforamtion.tables.includes(String(e.tableNumber))? 'checked' : 'none' 
-                                        :'none'
-                                        :'none'
-                                        :'none'
-                                        }/>
-                                        <label for="t${e.tableNumber}"><span></span>${e.tableNumber}</label>
+                                        <label class='sellerInfo' for="t${e.id}">${e.name}</label>
                                         `
                                         $(tablesSection).append(newEl);
                                     });
@@ -446,21 +433,14 @@
                     });
                     $("#submit").click(function (e) { 
                         e.preventDefault();
-                        var tablesToSet = [];
-                        $('.tables-checkbox').filter(function (i,e) { 
-                             if ($(e).prop("checked")) {
-                                tablesToSet.push($(e).val())
-                            }
-                        })
-                        var hallToSet = $("input:radio[name=hall]:checked").val();
+                        var salePoint = $("input:radio[name='salePoint']:checked").val();
                         var user_id = $("#waiter").val();
                         $.ajax({
                             type: "post",
-                            url: "/set-user-hall-tables",
+                            url: "/set-sale-point-seller",
                             data: {
                                 "user_id":user_id,
-                                "hallToSet":hallToSet,
-                                "tablesToSet":tablesToSet,
+                                "salePoint":salePoint,
                             },
                             success: function (response) {
                                 swal({
@@ -475,32 +455,32 @@
                                     },
                                 });
                             },
-                            error:function (response) {
-                                if (response.responseJSON.passwordError) {
-                                    if (response.responseJSON.passwordError) {
-                                        $("#passwordConfirmeError").html(response.responseJSON.passwordError);
-                                        $("#passwordConfirmeError").css("display", "block");
-                                    }
-                                }
-                                if(response.responseJSON.errors){
-                                    if (response.responseJSON.errors.name) {
-                                        $("#nameError").html(String(response.responseJSON.errors.name[0]).replace('name',' الاسم'));
-                                        $("#nameError").css("display", "block");
-                                    }
-                                    if (response.responseJSON.errors.email) {
-                                        $("#emailError").html(String(response.responseJSON.errors.email[0]).replace('email','الايميل'));
-                                        $("#emailError").css("display", "block");
-                                    }
-                                    if (response.responseJSON.errors.role) {
-                                        $("#roleError").html(String(response.responseJSON.errors.role[0]).replace('role',' الصلاحيات'));
-                                        $("#roleError").css("display", "block");
-                                    }
-                                    if (response.responseJSON.errors.password) {
-                                        $("#passwordError").html(String(response.responseJSON.errors.password).replace('password',' كلمة المرور'));
-                                        $("#passwordError").css("display", "block");
-                                    }
-                                };
-                            },
+                            // error:function (response) {
+                            //     if (response.responseJSON.passwordError) {
+                            //         if (response.responseJSON.passwordError) {
+                            //             $("#passwordConfirmeError").html(response.responseJSON.passwordError);
+                            //             $("#passwordConfirmeError").css("display", "block");
+                            //         }
+                            //     }
+                            //     if(response.responseJSON.errors){
+                            //         if (response.responseJSON.errors.name) {
+                            //             $("#nameError").html(String(response.responseJSON.errors.name[0]).replace('name',' الاسم'));
+                            //             $("#nameError").css("display", "block");
+                            //         }
+                            //         if (response.responseJSON.errors.email) {
+                            //             $("#emailError").html(String(response.responseJSON.errors.email[0]).replace('email','الايميل'));
+                            //             $("#emailError").css("display", "block");
+                            //         }
+                            //         if (response.responseJSON.errors.role) {
+                            //             $("#roleError").html(String(response.responseJSON.errors.role[0]).replace('role',' الصلاحيات'));
+                            //             $("#roleError").css("display", "block");
+                            //         }
+                            //         if (response.responseJSON.errors.password) {
+                            //             $("#passwordError").html(String(response.responseJSON.errors.password).replace('password',' كلمة المرور'));
+                            //             $("#passwordError").css("display", "block");
+                            //         }
+                            //     };
+                            // },
                         });
                     });
                     $('#filterDate').change(function (e) {
@@ -536,8 +516,7 @@
                             },
                             success: function (response) {
                                 if (response.sellers) {
-                                    $("#waiter").append('<option value=' + (-1) + '> حددد نادل</option>');
-                                    for (var i in response.waiters) {
+                                    for (var i in response.sellers) {
                                         $("#waiter").append('<option value=' + response.sellers[i].id + '> ' + response.sellers[i].name + '</option>');
                                     }
                                 }

@@ -3,44 +3,61 @@
 
 <head>
     <style>
-        .div1 {
-            background-color: red;
-            width: 500px;
-            position: relative;
-            height: 400px;
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            grid-auto-rows: minmax(100px, auto);
         }
         
-        .div2 {
-            width: 500px;
-            height: 400px;
-            background-color: blue;
-            position: absolute;
-            inset: auto auto auto auto;
+        .one {
+            grid-row: 1;
+            grid-column: 1;
+        }
+        
+        .two {
+            grid-column: 2/3;
+            grid-row: 2/7;
+        }
+        
+        .three {
+            grid-column: 1;
+        }
+        
+        .four {
+            grid-column: 1;
+        }
+        
+        .five {
+            grid-column: 1;
+        }
+        
+        .six {
+            grid-column: 1;
+        }
+        
+        div:nth-child(2n) {
+            background-color: bisque;
+        }
+        
+        div:nth-child(2n+1) {
+            background-color: rgb(255, 119, 119);
         }
     </style>
 </head>
 
 <body>
-    <h1>test git ignore</h1>
-
-    <div class="div1">
-        <p>dsd</p>
-        <!-- <h6>test git ignore</h6> -->
-
-        <div id="div2">
-            zzzzzzzzz pppppp
-
-        </div>
+    <div class="wrapper">
+        <div class="one">One</div>
+        <div class="two">Two</div>
+        <div class="three">Three</div>
+        <div class="four">Four</div>
+        <div class="five">Five</div>
+        <div class="six">Six</div>
     </div>
 
 
 
-    <script>
-        var df = document.getElementById('div2');
-        var t = df.innerHTML;
-        console.log(df.innerHTML);
-        df.innerHTML = t.replace('zz', '<strong>pp</strong>')
-    </script>
 </body>
 
 </html>

@@ -18,12 +18,15 @@ class Acountant
     {
         if (Auth::user()->role == 'acountant') {
             return $next($request);
-        }
-        if (request()->expectsJson()) {
-            return response()->json(['errorMessage'=>'غير مسموح الوصول لهذا المستخدم']);
-        }
-        else{
-            return redirect()->back();
+        }else{
+            if (Auth::user()->role == 'waiter') {
+                return redirect('/resturant'); 
+            }
+            else{
+                if (Auth::user()->role == 'salePoint') {
+                    return redirect('/sale-points');
+                }
+            }
         }
     }
 }

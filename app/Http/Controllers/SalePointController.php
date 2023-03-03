@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalePoint;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -101,6 +102,13 @@ class SalePointController extends Controller
     }
     public function getAllSalePointSellers($id)
     {
-        getAllSalePointSellers($id);
+        $ids = array_values(getAllSalePointSellers($id)) ;
+        $sellers = User::where('role','salePoint')->whereIn('id',$ids)->get();
+        return response()->json(['sellers'=>$sellers]);
+    }
+    public function setSalePointSeller(Request $req)
+    {
+        setSalePointSeller($req->user_id, $req->salePoint);
+        return response()->json(['message'=>'تم']);
     }
 }

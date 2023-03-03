@@ -31,7 +31,16 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/test', function () {
-   dd(Carbon::now()->format('y-m-d g:i A') );
+    setSalePointSeller(3,3);
+    setSalePointSeller(4,3);
+    setSalePointSeller(5,3);
+    setSalePointSeller(13,3);
+    setSalePointSeller(1111,3);
+    setSalePointSeller(3,3);
+    setSalePointSeller(3,3);
+    setSalePointSeller(3,3);
+    setSalePointSeller(4,3);
+    dd(getAllSalePointSellers(3));
 });
 
 
@@ -46,6 +55,13 @@ Route::middleware('authenticate')->group(function () {
             return response( getAjaxResponse('boards',[]));
         }
         return view('boards');
+    });
+    Route::get('/sale-points', function (Request $req) {
+        if ($req->ajax()) {
+            return getAjaxResponse('frontend.salePoint.index' , []);
+        }
+        return view('frontend.salePoint.index');
+        
     });
     
     
@@ -76,25 +92,20 @@ Route::middleware('authenticate')->group(function () {
             return view('frontend.setting');
             
         });
-        //sale-point  /get-salePoint-data
+        //sale-point  /get-salePoint-data 
         Route::get('/show-new-sale-point-form', [SalePointController::class ,'newSalePoint']);
         Route::post('/add-new-sale-point-form', [SalePointController::class ,'addSalePoint']);
         Route::get('/show-edit-sale-point-form', [SalePointController::class ,'editSalePoint']);
         Route::get('/get-salePoint-data/{id}', [SalePointController::class ,'getSalePointData']);
         Route::post('/update-sale-point', [SalePointController::class ,'updateSalePoint']);
         Route::post('/delete-sale-point', [SalePointController::class ,'deleteSalePoint']);
-        Route::get('/sale-points', function (Request $req) {
-            if ($req->ajax()) {
-                return getAjaxResponse('frontend.salePoint.index' , []);
-            }
-            return view('frontend.salePoint.index');
-            
-        });
+
         Route::get('/sale-point-orders', [SalePointController::class ,'getOrders']);
         Route::post('/set-sale-point-order', [SalePointController::class ,'setOrder']);
         Route::post('/delete-sale-point-order', [SalePointController::class ,'deleteOrder']);
         Route::get('/get-seller-sale-point', [SalePointController::class ,'getSellerSalePoint']);
         Route::get('get-all-sale-point-sellers/{id}', [SalePointController::class ,'getAllSalePointSellers']);
+        Route::post('set-sale-point-seller', [SalePointController::class ,'setSalePointSeller']);
 
 
 
