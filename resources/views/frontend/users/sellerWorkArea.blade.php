@@ -399,10 +399,10 @@
                                 "userId": $(this).val()
                             },
                             success: function (response) {
+                                $('.halls').attr("disabled" ,false) 
                                 if (response.salePoint) {
                                     currentInforamtion = response.salePoint;
                                     $('.halls').filter(function (index) {
-                                        $(this).attr("disabled" ,false) 
                                         return  $(this).attr("id") == response.salePoint;
                                     }).click();
                                 }

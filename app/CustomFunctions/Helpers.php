@@ -302,9 +302,12 @@ if (! function_exists('delSalePointSeller')) {
 }
 if (! function_exists('getAllSalePointSellers')) {
     function getAllSalePointSellers($id){
-        if (Redis::exists('salePointSeller:' . $id .':salPoint:'))
-        {
-            Redis::del('salePointSeller:' . $id .':salPoint:');
+        $keys = Redis::KEYS('salePointSeller:*');
+        $sellers = [];
+        foreach ($keys as $key) {
+            if (Redis::get(substr($key, 0, strlen('laravel_database_'))) == $id) {
+                array_push($sellers,intval(substr($key, strpos($key ,'salePointSeller:')+strlen("salePointSeller:"),strpos($key ,':salPoint'))));
+            }
         }
     }
 }

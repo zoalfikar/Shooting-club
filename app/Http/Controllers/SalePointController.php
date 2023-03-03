@@ -101,6 +101,6 @@ class SalePointController extends Controller
     }
     public function getAllSalePointSellers($id)
     {
-        # code...
+        getAllSalePointSellers($id);
     }
 }
