@@ -262,6 +262,12 @@ const store = new vuex.Store({
         setBoardState: (state, data) => {
             state.boards[data.index].status = data.status;
         },
+        setBoardStateRealTimeTest: (state, data) => {
+            // console.log(data);
+            state.boards.find(b => {
+                return b.tableNumber == data.tableNumber
+            }).status = data.status;
+        },
         setoOrders: (state, data) => {
             state.boards[data.index].orders = data.orders;
             console.log(state.boards[data.index].orders);

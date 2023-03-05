@@ -1,16 +1,25 @@
-// require('./bootstrap');
+require('./bootstrap');
 // import jQuery from 'jquery';
+// import VueEcho from "vue-echo-laravel";
 import router from './routes';
 import vuetify from './vuetify';
 import store from './store';
 import { v4 as uuidv4 } from 'uuid';
+import echo from './echoServer';
+
+
 // window.$ = jQuery;
+
+
+
 window.Vue = require('vue').default;
 const vueAppOptions = {
     vuetify,
     store,
     router,
+    // echo
 }
+
 const npmDependencies = {
     uuidv4
 }
@@ -29,10 +38,15 @@ Vue.component('resturant-menu', require('./components/appLayout/resturant/menu.v
 Vue.component('sale-point', require('./components/appLayout/salePoint/salePoint.vue').default);
 Vue.component('setting', require('./components/appLayout/setting/index.vue').default);
 
+
+
+
+
 const app = new Vue({
     vuetify,
     store,
     router,
+    // echo
 
 }).$mount('#app');
 // var app = new Vue({

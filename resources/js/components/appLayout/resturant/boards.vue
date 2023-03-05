@@ -393,6 +393,12 @@ import store from '../../../store';
         },
 
         mounted: function () {
+                Echo.channel('board-status')
+                .listen('BoardChangeStatus', (e) => {
+                    if (e.hall == this.currentHall) {
+                        store.commit('setBoardStateRealTimeTest',{'tableNumber':e.board , "status": e.status})
+                    }
+                })
         window.addEventListener('resize',(e)=>{ this.initBoardsPositions()}  );
         $(document).ready(function () {
 

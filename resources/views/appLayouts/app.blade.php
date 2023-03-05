@@ -109,6 +109,12 @@
 
 
     </script>
+        <script>
+            Echo.channel('trades')
+                .listen('NewTrade', (e) => {
+                    console.log(e.trade+'appLayout');
+                })
+        </script>
 </body>
 
 

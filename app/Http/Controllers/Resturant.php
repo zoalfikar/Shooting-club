@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BoardChangeStatus;
 use App\Http\Requests\HallRequest;
 use App\Http\Requests\TableRequest;
 use App\Models\Hall;
@@ -296,6 +297,7 @@ class Resturant extends Controller
     public function setStatus($hall,$table, Request $req)
     {
         changeTableStatus($hall, $table , $req->status);
+        event(new BoardChangeStatus($req->status ,$table ,$hall));
         return response()->json(["message"=>"تم الحفظ"]);
     }
     // ؟؟؟؟؟؟؟؟؟؟؟؟
