@@ -1,13 +1,15 @@
 <template>
-    <div class="wrapper" style="background-color: blue;">
+    <div class="wrapper" >
         <div class="header" style="background-color: brown;">
-            header
+            <h1>جميع نقاط البيع</h1>
         </div>
-        <div class="container" style="border:2px solid black; background-color: sandybrown">   
-            <div class="sale-point-options" style="border:2px solid black; background-color: gold">
-                <input v-model="deleteAfterPaid" type="checkbox" name="deleteAfterPaid" />
-                <label for="deleteAfterPaid">الحذف بعد الدفع</label>  
-                <div class="option-group">
+        <div class="container" >   
+            <div class="sale-point-options" >
+                <div class="option-group1">
+                    <input v-model="deleteAfterPaid" type="checkbox" name="deleteAfterPaid" />
+                    <label for="deleteAfterPaid">الحذف بعد الدفع</label>  
+                </div>
+                <div class="option-group2">
                     <input v-model="currentOrderStatus"  type="radio" name="notPaid" value="notPaid">
                     <label for="notPaid">غير مدفوع(إفتراضي)</label>  
 
@@ -17,7 +19,7 @@
                 </div>
             </div>
             <div class="sectionItems">
-                <div class="sections" style="border:2px solid black; ">
+                <div class="sections" >
                     <ul>
                             <li :class="currentSection== -1 ? 'selected' : ''" @click="setSectionValue($event.target.value)" value="-1">عرض الكل</li>
                             <template v-for="(section , index) in  allSections" >
@@ -27,7 +29,7 @@
                             </template>
                     </ul>
                 </div>
-                <div style="border:2px solid black; background-color: blanchedalmond;" class="items">
+                <div  class="items">
                     <div class="item" v-for="item in currentItems" :key="item.id">
                         <input class="itemId" type="hidden" :value="item.id">
                         <div class="title" @click="activeItem"> {{item.title}} </div> 
@@ -43,31 +45,30 @@
                     </div>
                 </div>
             </div>
-            <div style="border:2px solid black; background-color: coral;" class="currentOrder">
+            <div  class="currentOrder">
                 <div class="order-option">
                     <button @click="saveFinallOrder" >حفظ</button> 
                     <button @click="currentOrderStatus = 'paid'" v-if="currentOrderStatus=='notPaid'">تعليم كمدفوع</button> 
                     <button  @click="currentOrderStatus = 'notPaid'" v-else >تعليم كغير مدفوع</button>
                     <button @click="currentOrders = []" >حذف</button> 
-                    <!-- <button @click="cancelUpdatOrder = []" ></button>  -->
                     <input type="text" name="customerName"  v-model="currentCustomerName" placeholder="إضافة اسم الزبون">
                 </div>
                 <ul>
                     <li v-for=" order in currentOrders" :key="order.id" :id="'c-o'+order.id">
-                            <span>{{order.title}}</span>
+                            <div class="title">{{order.title}}</div>
                             <div class="quantity"> 
                                 <button  disabled  class="decrement-btn" @click="decresOrderQuant(order.id)"><i class='fa-solid fa-minus'></i></button>
                                 <input disabled  type="number" name="quantity"  class=" qty-input text-center" min="1" :value="order.quantity">
                                 <button  disabled class="increment-btn  " @click="incresOrderQuant(order.id)"><i class='fa-solid fa-plus'></i></button>
                             </div>
-                            <button class="delete-current-order" @click="deleteCurrentOrder(order.id)">حذف</button> 
-                            <button class="update-current-order" @click="updateCurrentOrder(order.id)">تعديل</button>
-                            <button class="save-order-changes" @click="saveOrderChanges(order.id)">حفظ</button>
-                            <button class="cancel-update-order" @click="cancelUpdatOrder(order.id)">الغاء</button>
+                            <button class="delete-current-order bOption" @click="deleteCurrentOrder(order.id)">حذف</button> 
+                            <button class="update-current-order bOption" @click="updateCurrentOrder(order.id)">تعديل</button>
+                            <button class="save-order-changes bOption" @click="saveOrderChanges(order.id)">حفظ</button>
+                            <button class="cancel-update-order bOption" @click="cancelUpdatOrder(order.id)">الغاء</button>
                     </li>
                 </ul>            
-                <div class="total" style="border:2px solid black; background-color: lightgrey;">
-                    {{ totale }}
+                <div class="total" >
+                    {{ totale }} &nbsp;<span>ل.س</span>
                 </div>
             </div>
             <div  class="orders">
@@ -341,36 +342,91 @@ export default {
             } ,1000)
         });
         store.dispatch('bringAllSalePointOrders');
-
+        ///
+        const currentOrderUl = document.querySelector('.currentOrder ul');
+        const orders = document.querySelector('.orders');
+        const ordersTable = document.querySelector('.orders tbody');
+        const config = { childList: true };
+        const callback = function (mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === "childList") {
+            currentOrderUl.scrollTo(0, currentOrderUl.scrollHeight);
+            }
+        }
+        };
+        const callback2 = function (mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === "childList") {
+                orders.scrollTo(0, orders.scrollHeight);
+            }
+        }
+        };
+        const observer = new MutationObserver(callback);
+        const observer2 = new MutationObserver(callback2);
+        observer.observe(currentOrderUl, config);
+        observer2.observe(ordersTable, config);
+        ///
     }
 }
 </script>
     
 <style scoped>
     .wrapper{
-        transform: translateY(0);
+        margin-top: 20px;
+        background-color: hsl(0, 52%, 6%);
     }
+    .header{
+        display: flex;
+        height: 100px;
+        justify-content: center;
+        align-items: center;
+        color: azure;
+    }
+
     .container{
-        width: 1000px;
+        width: 1160px;
         min-height: 70vh ;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: minmax(100px, auto);
+        grid-auto-rows:auto;
+        padding-top: 0px !important;
+        border: 2px solid black;
+
+        
     }
     .sale-point-options{
         grid-column: 1/3;
         grid-row: 1;
+        display: flex;
+        height: max-content;
+        padding: 20px 14px;
+        gap: 40px;
+        color: white;
+    }
+    .sale-point-options .option-group2{
+
+        display: flex;
+        gap: 10px;
     }
     .sectionItems{
         grid-column: 1/1;
         grid-row: 2;
         display: flex;
         flex-grow: 1;
+        min-width: 580px;
+        box-sizing: border-box;
+
+        border: 2px solid black;
     }
     .currentOrder{
+        background-color: hsla(0, 100%, 82%, 0.788);
         position: relative;
         grid-column: 2/3;
         grid-row: 2;
+        min-height:320px;
+        max-height:320px;
+        overflow: overlay;
+        border: 2px solid black;
 
     }
     .orders{
@@ -383,9 +439,13 @@ export default {
         background: rgba(0, 0, 0);
     }
     .sections{
+        background-color: hsla(0, 19%, 21%, 0.788);
+        height: 320px;
         overflow-y: auto;
         overflow-x: hidden;
         width: 40%;
+        border: 2px solid black;
+
     }
     .sections ul{
         width: 100%;
@@ -411,34 +471,63 @@ export default {
         color: azure;
     }
     .items{
+        box-sizing: border-box;
         width: 60%;
-        min-height: 100px;
-        height: 250px;
+        height: 320px;
         overflow: scroll;
+        border: 2px solid black;
+        background-color: hsla(221, 70%, 8%, 0.788);
+        color: aqua;
+
     }
     .items .item{
-        padding: 6px 10px;
+        padding: 10px 10px;
         display: flex;
         justify-content: space-evenly;
         flex-grow: 1;
         align-items: center;
+        font-size: large;
+        gap:5px;
+        border-bottom:0.5px inset rgb(126, 79, 79) ;
     }
+    .items .item:hover{
+        color: rgb(61, 32, 32);
+       background-color: rgba(230, 230, 230, 0.4);
+       cursor:pointer;
+    } 
+
     .items .item .title{
         width: 90px;
     } 
+
     .items .item .order-quantity {
         display: flex;
         flex-wrap: nowrap;
+        align-items: center;
+        gap:3px
     }
-    .items .item input[type="number"]{
+    .items .item .order-quantity button{
+        width: 20px;
+        height:20px;
+        background-color: rgb(126, 53, 53);
+        border-radius: 100%;
+        color: white;
+    }
+    .items .item .order-quantity button:hover{
+        background-color: rgb(90, 31, 31);
+    }
+    .items .item .order-quantity button:active{
+        background-color: rgb(71, 22, 22);
+    }
+
+    .items .item .order-quantity input[type="number"]{
         text-align: center;
         width: 50px;
+        background-color: rgba(126, 53, 53, 0.7);
+        color: white;
+
     }
-    .items .item input[type="number"]{
-        text-align: center;
-        width: 50px;
-    }
-    .items .item input[type="number"]::-webkit-inner-spin-button
+    .items .item .order-quantity input[type="number"]::-webkit-inner-spin-button
     {
         appearance: none;
     }
@@ -448,6 +537,102 @@ export default {
         gap:10px;
         width: 90px;
     }
+    .items .item .option button{
+        color: white;
+        width: 40px;
+        background-color: rgb(95, 25, 25);
+    }
+    .items .item .option button:hover{
+        background-color: rgb(75, 15, 15);
+    }
+    .items .item .option button:active{
+        background-color: rgb(0, 0, 0);
+    }
+    .currentOrder .order-option{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .currentOrder .order-option button{
+        color: aqua;
+        flex: 0 0 33.3333%;
+        background-color: rgba(126, 53, 53, 0.7);
+    }
+    .currentOrder .order-option button:hover{
+        background-color: rgba(161, 87, 87, 0.7);
+    }
+    .currentOrder .order-option button:active{
+        background-color: rgba(189, 141, 141, 0.7);
+    }
+    .currentOrder .order-option input{
+        padding: 4px 8px;
+        flex: 0 0 100%;
+        background-color: rgb(221, 202, 206);
+        color: rgb(37, 41, 41);
+    }
+    .currentOrder .order-option input:hover{
+        background-color: rgb(202, 173, 179);
+        color: rgb(37, 41, 41);
+    }
+    .currentOrder ul{
+        height: 210px;
+        overflow: overlay;
+        padding-left:0 !important ;
+        list-style: none;
+    }
+    .currentOrder li{
+        width: 100%;
+        padding: 5px 10px;
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    .currentOrder li .title{
+        width: 120px;
+    }
+    .currentOrder li .quantity{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap:6px
+    }
+    .currentOrder li .quantity button{
+        width: 20px;
+        height:20px;
+        background-color: rgb(126, 53, 53);
+        border-radius: 100%;
+        color: white;
+    }
+    .currentOrder li .quantity input{
+        text-align: center;
+        width: 50px;
+        background-color: rgba(126, 53, 53, 0.7);
+        color: white;
+    }
+    .currentOrder li .quantity input::-webkit-inner-spin-button{
+        appearance: none;
+    }
+    .currentOrder li .bOption{
+        padding: 2px 5px;
+    }
+    .currentOrder li .bOption:hover{
+        background-color: rgba(212, 212, 212,0.7);
+    }
+    .currentOrder li .bOption:active{
+        background-color: rgb(247, 247, 247,0.7);
+    }
+    .total{
+        height: 47px;
+        width: 107px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        background-color: rgb(22, 21, 21);
+        color: aliceblue;
+    }
+
     .orderNotPaidYet{
         background: rgba(212, 108, 108 , 0.6);
     }
@@ -485,20 +670,13 @@ export default {
     th , td {
         text-align: center;
     }
-    .total{
-        position: absolute;
-        bottom: 0;
-    }
     ul{
+        padding-left:0 !important ;
         list-style: none;
     }
-    .order-option{
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .order-option button{
-        flex: 0 0 33.3333%;
-    }
+
+
+
     .decrement-btn , .increment-btn  , .order-quantity , .option{
         visibility: hidden;
     }
