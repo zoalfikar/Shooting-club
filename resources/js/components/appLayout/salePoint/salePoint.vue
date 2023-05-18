@@ -373,6 +373,7 @@ export default {
 <style scoped>
     .wrapper{
         margin-top: 20px;
+        margin-bottom: 50px;
         background-color: hsl(0, 52%, 6%);
     }
     .header{
