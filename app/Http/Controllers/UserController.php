@@ -59,7 +59,7 @@ class UserController extends Controller
     }
         $data = $req->only('name','email','password','role');
         $dataValidated = Validator::make($data,[
-            'role'=>'required|in:acountant,waiter,salePoint',
+            'role'=>'required|in:acountant,waiter,salePoint,hallAcountant',
             'name' =>'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
@@ -74,6 +74,9 @@ class UserController extends Controller
         }
         if ($user->role == 'salePoint') {
             setSalePointSeller($user->id,'');
+        }
+        if ($user->role == 'hallAcountant') {
+            setHallAcounatnt($user->id,'');
         }
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال مستخدم جدديد بنجاح"]);
@@ -122,7 +125,7 @@ class UserController extends Controller
         }
         $data = $request->only('name','email','password');
         $dataValidated = Validator::make($data,[
-            'role'=>'in:acountant,waiter,salePoint',
+            'role'=>'in:acountant,waiter,salePoint,hallAcountant',
             'name' =>'required|string',
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -139,12 +142,14 @@ class UserController extends Controller
                 "name"=>$user->name,
             ]);
             delSalePointSeller($user->id);
+            delHallAcounatnt($user->id);
         }
         if ($user->role == 'salePoint') {
             $userToDelet = UserHallTable::find($user->id);
             if($userToDelet){
                 $userToDelet->delete();
             }
+            delHallAcounatnt($user->id);
             setSalePointSeller($user->id,'');
         }
         if ($user->role == 'acountant') {
@@ -152,8 +157,17 @@ class UserController extends Controller
             if($userToDelet){
                 $userToDelet->delete();
             }
+            delHallAcounatnt($user->id);
             delSalePointSeller($user->id);
         }
+        if ($user->role == 'hallAcounatnt') {
+            $userToDelet = UserHallTable::find($user->id);
+           if($userToDelet){
+               $userToDelet->delete();
+           }
+           delSalePointSeller($user->id);
+           setHallAcounatnt($user->id,'');
+       }
         return response()->json(["message"=>'تم التعديل بنجاح']);
     }
 

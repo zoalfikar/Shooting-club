@@ -1,7 +1,6 @@
 @extends('appLayouts.app')
 @section('styles')
     <style>
-
         .unit{
             visibility:hidden;
         }
@@ -125,7 +124,7 @@
                   </div>
                   <div class="w-full md:w-1/5 px-3 mt-2">
                       <div class="form-check">
-                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked value="1"> 
+                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked value="1">
                           <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="active">
                               مفعل
                           </label>
@@ -234,7 +233,7 @@
                 </th>
             </thead>
             <tbody>
-               
+
             </tbody>
         </table>
     </div>
@@ -247,7 +246,7 @@
     <script type='module'>
 
            function init() {
-            
+
                 const addNewItemButton = document.getElementById('add');
                 var ease =Power1.easeInOut;
                 var items = [];
@@ -441,9 +440,9 @@
                                 }
 
                             }
-                        }); 
+                        });
                         }
-                      
+
                     });
                     addNewItemButton.addEventListener('click',(e)=>{
                         let newItem= {};
@@ -470,10 +469,10 @@
                         items.push(newItem)
                         document.querySelectorAll('.editItem').forEach(element => {
                             element.addEventListener('click', editItem)
-                        }); 
+                        });
                         document.querySelectorAll('.deleteItem').forEach(element => {
                             element.addEventListener('click', deleteItem)
-                        }); 
+                        });
                     })
                     function editItem(e) {
                        let tr=e.target.parentNode.parentNode;

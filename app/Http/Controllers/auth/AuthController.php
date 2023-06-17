@@ -52,6 +52,9 @@ class AuthController extends Controller
         if (Auth::user()->role == 'waiter') {
             return redirect('/resturant');
         }
+        if (Auth::user()->role == 'salePoint') {
+            return redirect('/sale-points');
+        }
         return redirect('/');
     }
 

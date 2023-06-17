@@ -1,13 +1,14 @@
 <template>
     <v-app-bar app color="#2F4F4F" dark>
         <div class="links-bar">
-            <span class="nav-bar-button" onClick="navigatTo(event,this)" :href="`${url}`+'/resturant'">مطعم</span> 
-            <div class="links-divider"><v-divider vertical></v-divider></div>
+            <span :style="`display:${userRole =='salePoint' ?'none':''}`" class="nav-bar-button" @click="setActiveLink(this)" onClick="navigatTo(event,this)" :href="`${url}`+'/resturant'">مطعم</span>
+            <div :style="`display:${userRole =='salePoint' ?'none':''}`" class="links-divider"><v-divider vertical></v-divider></div>
             <span class="nav-bar-button" onClick="navigatTo(event,this)" :href="`${url}`+'/sale-points'">نقطة مبيع</span>
             <div class="links-divider"><v-divider vertical></v-divider></div>
-            <div>حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></div>
+            <span class="nav-bar-button">حول البرنامج  &nbsp; <i class="fa fa-circle-question"></i></span>
         </div>
         <h1> {{navbarTitle}}</h1>
+        <div class="userInfo"><span>{{ userName }}</span>&nbsp;&nbsp;&nbsp;<span>( {{ role }} )</span></div>
         <v-btn icon id="setting-menu-toggle" data-bs-toggle="collapse" data-bs-target="#setting-menu">
             <v-icon>
                 mdi-menu
@@ -17,7 +18,7 @@
             <li>
                 <a :href="`${url}`+'/logout'" onClick="navigatTo(event,this)" class="setting-link logout" @click="logout">  تسجيل خروج  </a><i class="fa fa-sign-out" aria-hidden="true"></i>
             </li>
-            <li>
+            <li :style="`display:${userRole !=='acountant' ?'none':''}`">
                <a :href="`${url}`+'/setting'" onClick="navigatTo(event,this)" class="setting-link"> الأعدادات </a><i class="fa fa-cog" aria-hidden="true"></i>
             </li>
         </div>
@@ -25,10 +26,38 @@
 </template>
 <script>
     export default {
-        props:['url','navbarTitle'],
+        props:['url','navbarTitle' , 'userName' , 'userRole'],
+        data:function(){
+            return{
+                activeLink:null
+            }
+        },
+        computed:{
+            role:function () {
+                switch (this.userRole) {
+                    case 'acountant':
+                        return 'محاسب عام'
+                        break;
+                    case 'waiter':
+                        return 'نادل'
+                        break;
+                    case 'hallAcountant':
+                        return 'محاسب صالة'
+                        break;
+                    case 'salePoint':
+                        return 'محاسب مبيع حر'
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },
         methods:{
             logout:function () {
                 window.location.reload();
+            },
+            setActiveLink:function (Link) {
+               this.activeLink=Link;
             }
         },
         mounted : function () {
@@ -39,6 +68,12 @@
                     settingMenu.classList.remove("show");
                 }
             });
+            document.querySelectorAll('.nav-bar-button').forEach((e)=>{
+                e.addEventListener('click', function(event) {
+                    $('.nav-bar-button').removeClass('link-active');
+                    event.target.classList.add('link-active');
+                });
+            })
         }
 
     }
@@ -49,14 +84,25 @@
         margin-right: 1.5rem;
         align-items: center;
         height: 80%;
-        gap: 1.5rem;
+        gap: 1.2rem;
     }
     .setting-link{
         text-decoration:none;
         color:rgb(255, 255, 255)
     }
+    .links-bar .nav-bar-button{
+        box-sizing: border-box;
+        padding: 10px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
     .links-bar .nav-bar-button:hover{
-        background-color :blue;
+        background-color :rgb(145, 65, 65);
+        /* border:2px solid rgb(224, 212, 212); */
+    }
+    .link-active{
+        background-color :rgb(65, 59, 59);
+        border:2px solid rgb(224, 212, 212);
     }
     .links-divider{
         height: 40%;
@@ -93,6 +139,11 @@
         float: left;
     }
     h1{
+        height: 100%;
+        padding-left:40px ;
+        padding-right:40px ;
+        border-radius: 20px;
+        background-color:rgb(12, 77, 71) ;
         margin: auto;
         transform: translateX(2.5rem);
     }

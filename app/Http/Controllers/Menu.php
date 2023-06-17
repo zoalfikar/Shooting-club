@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\menuSectionAdded;
+use App\Events\menuSectionDeleted;
+use App\Events\menuSectionItemsUpdated;
+use App\Events\menuSectionManyItems;
+use App\Events\menuSectionUpdated;
 use App\Models\MenuSection;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
@@ -20,6 +25,7 @@ class Menu extends Controller
     public function addNewMenuSection(Request $req)
     {
         $newSection = MenuSection::create($req->only(["name","description","active","options"]));
+        event(new menuSectionAdded($newSection));
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال نوع جديد بنجاح"]);
         }
@@ -48,11 +54,13 @@ class Menu extends Controller
         $section->active = $req->active;
         $section->description = $req->description;
         $section->update();
+        event(new menuSectionUpdated($section));
         return response()->json(['message'=>"تم التعديل بنجاح"]);
     }
     public function deleteMenuSection(Request $req)
     {
         $section = MenuSection::find($req->id);
+        event(new menuSectionDeleted($section));
         $section->delete();
         return response()->json(['message'=>"تم الحذف بنجاح"]);
 
@@ -75,6 +83,11 @@ class Menu extends Controller
             $vars = $req->only(["title","description","unit","active","section","price","fragmentable"]);
         }
         $newMenuItem = MenuItem::create($vars);
+
+        //real time
+        $section = MenuSection::find( $newMenuItem->section);
+        event(new menuSectionItemsUpdated($section,$section->items));
+
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال مادة جديدة الى القائمة بنجاح"]);
         }
@@ -94,7 +107,7 @@ class Menu extends Controller
                 'title' => ['required'],
                 'section' => ['required','exists:menu_sections,id'],
                 'unit' => ['required'],
-                'price' => 'required|numeric',
+                'price' => 'required|numeric|between:0.00,9999999.99',
                 'fragmentable' => 'required',
                 'active'=>'required'
         ];
@@ -105,11 +118,14 @@ class Menu extends Controller
                 return response()->json(["errors" =>$itemValidated->messages(),"erroreInitem"=>$allItems[$i]["uniqeNumber"]], 422);
             }
         }
-        for ($i=0; $i < count($allItems) ; $i++) { 
+        for ($i=0; $i < count($allItems) ; $i++) {
             unset($allItems[$i]["uniqeNumber"]);
             unset($allItems[$i]["sectionName"]);
         }
         $newTable =MenuItem::insert($allItems);
+
+        event(new menuSectionManyItems());
+
         if ($req->ajax()) {
             return response()->json(["message"=>"تم إدخال".count($allItems)." مادة جديدة الى القائمة بنجاح"]);
         }
@@ -125,7 +141,6 @@ class Menu extends Controller
     public function getMenuItems()
     {
         $sections = MenuSection::with('items')->get();
-        // dd($sections[0]->items());
         return response()->json(['sections'=>$sections]);
     }
     public function updateMenuItem(Request $req)
@@ -139,13 +154,18 @@ class Menu extends Controller
         $item->active = $req->active;
         $item->description = $req->description;
         $item->update();
+        $section = MenuSection::find( $item->section);
+        event(new menuSectionItemsUpdated($section,$section->items));
         return response()->json(["message"=>"تم التعديل بنجاح"]);
 
     }
     public function deleteMenuItem(Request $req)
     {
         $item = MenuItem::find($req->id);
+        $sectionId =  $item->section;
         $item->delete();
+        $section = MenuSection::find($sectionId);
+        event(new menuSectionItemsUpdated($section,$section->items));
         return response()->json(["message"=>"تم الحذف بنجاح"]);
     }
 }

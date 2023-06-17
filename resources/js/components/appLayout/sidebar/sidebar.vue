@@ -31,6 +31,9 @@
                 <div class="item-child">
                     <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-seller-area-form'">تحديد العاملين في نقاط البيع</a></span>
                 </div>
+                <div class="item-child">
+                    <span><i  class="fa fa-angle-double-left" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;<span><a :href="`${url}`+'/show-hall-acountant-area-form'">  تحديد قاعات المحاسبين  </a></span>
+                </div>
             </div>
         </div>
         <div class="menu-item-itemChild">
@@ -124,11 +127,19 @@
 <script>
 import { ref } from 'vue';
 const sidebarStatus = new CustomEvent('sidebarStatusChanged');
+var oldMenuItem = null;
+const waitToClosePreviousElement= ()=>{
+        return new Promise((resolve)=>{
+            setTimeout(()=>{
+                resolve('closed');
+            },370)
+        })
+    }
 if (!sessionStorage.expanded) {
     sessionStorage.setItem('expanded',false)
 }
 const is_expanded = ref((sessionStorage.expanded ==='true'));
-const showItemChildren = (e)=>{
+const showItemChildren = async (e)=>{
     var div = false;
     while (!div) {
         if(e.tagName != "DIV"){
@@ -139,6 +150,15 @@ const showItemChildren = (e)=>{
             div=true
         }
     }
+    if (oldMenuItem) {
+        if (oldMenuItem.parentElement !== e.parentElement) {
+            if (oldMenuItem.classList.contains("show-children")) {
+                    oldMenuItem.classList.remove("show-children");
+                    await waitToClosePreviousElement();
+            }
+        }
+    }
+    oldMenuItem = e.parentElement.lastChild;
     if (e.parentElement.lastChild.classList.contains("show-children")) {
        if(is_expanded.value){
             e.parentElement.lastChild.classList.remove("show-children");
@@ -391,7 +411,7 @@ export default {
    .item-children{
         max-height: 0;
         overflow: hidden;
-        transition: 0.19s ease-in-out;
+        transition: 0.38s ease-in-out;
    }
    .is_expanded .show-children{
         max-height: 320px;

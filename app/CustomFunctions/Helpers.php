@@ -1,5 +1,9 @@
 <?php
 
+use App\Events\orderAdded;
+use App\Events\orderDeleted;
+use App\Events\ordersChanged;
+use App\Events\salePointSettings;
 use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Table;
@@ -109,7 +113,7 @@ if (! function_exists('getHallTables')) {
             $tableStatus= Redis::hgetall('hall:' . $hallNumber .':table:'. $table['tableNumber']);
             $tableStatus['orders'] = unserialize($tableStatus['orders']);
             $tableStatus['customerInfo'] = unserialize($tableStatus['customerInfo']);
-            $table=(object)(array_merge($table,(array)$tableStatus)); 
+            $table=(object)(array_merge($table,(array)$tableStatus));
             array_push( $reslt,$table);
         }
         return $reslt;
@@ -229,56 +233,107 @@ if (! function_exists('setTableOrderNoStatusRelative')) {
         changeTableOrder($hallNumber , $table , $order);
     }
 }
+if (! function_exists('addSetSalePoint')) {
+    function addSalePoint($salPointId){
+        setSalePointSetting($salPointId,(object)["deleteAfterPaid"=>true,"paid"=>false]);
+        // Redis::pipeline(function ($pipe) use ($salPointId)
+        // {
+        //         $pipe->hmset('salePoint:' . $salPointId,[
+        //             'orders' =>  '',
+        //         ]);
+        // });
+    }
+}
+if (! function_exists('deleteSalePoint')) {
+    function deleteSalePoint($salPointId){
+        Redis::del('salePoint:' . $salPointId);
+        $ks = Redis::keys('salePointSeller:*:salPoint:');
+        for ($i=0; $i <  count($ks) ; $i++) {
+            if (Redis::get(str_replace('laravel_database_' ,'' , $ks[$i])) == $salPointId) {
+                Redis::del(str_replace('laravel_database_' ,'' , $ks[$i]));
+            }
+        }
+        $kso = Redis::keys('salePoint:' . $salPointId .':order:*');
+        for ($i=0; $i <  count($kso) ; $i++) {
+            Redis::del(str_replace('laravel_database_' ,'' , $kso[$i]));
+        }
+    }
+}
 if (! function_exists('getSalePointOrders')) {
     function getSalePointOrders($salPointId){
-        // dd(Redis::get('salePoint:' . $salPointId .':order:803a3848-60c0-438d-8b01-5bfeecf27e39'));
-        // dd(Redis::mGet(['salePoint:' . $salPointId .':order:803a3848-60c0-438d-8b01-5bfeecf27e39']));
         $keys = Redis::KEYS('salePoint:' . $salPointId .':order:*');
-        for ($i=0; $i < count($keys) ; $i++) { 
+        for ($i=0; $i < count($keys) ; $i++) {
             $keys[$i] = str_replace('laravel_database_','',$keys[$i]);
         }
+        if(!$keys) return [] ;
         $orders = Redis::mGet($keys);
-        for ($i=0; $i < count($orders) ; $i++) { 
+        for ($i=0; $i < count($orders) ; $i++) {
             $orders[$i] = unserialize($orders[$i]);
         }
         usort($orders,function ($a , $b)
         {
             if (!$a) {
-                return -1 ; 
+                return -1 ;
             }
             if (!$b) {
-                return 1 ; 
+                return 1 ;
             }
             $ad = new DateTime($a->created_at);
             $bd = new DateTime($b->created_at);
-          
+
             if ($ad == $bd) {
               return 0;
             }
-          
-            return $ad < $bd ? -1 : 1; 
+
+            return $ad < $bd ? -1 : 1;
         });
         return $orders;
+    }
+}
+if (! function_exists('deleteSPPaidOrders')) {
+    function deleteSPPaidOrders($salPointId){
+        $orders = getSalePointOrders($salPointId);
+        $orders = array_filter($orders,function($o) use ($salPointId){
+            if ($o->status == 'paid') {
+                deleteSalePointOrder($salPointId,$o->id);
+            }
+            return $o->status != 'paid' ;
+        });
+        usort($orders,function ($a , $b)
+        {
+            if (!$a) {
+                return -1 ;
+            }
+            if (!$b) {
+                return 1 ;
+            }
+            $ad = new DateTime($a->created_at);
+            $bd = new DateTime($b->created_at);
 
+            if ($ad == $bd) {
+              return 0;
+            }
+
+            return $ad < $bd ? -1 : 1;
+        });
+        event(new ordersChanged($salPointId,$orders));
+        return $orders;
     }
 }
 if (! function_exists('setSalePointOrder')) {
     function setSalePointOrder($salPointId, $order ){
+        // if (Redis::exists('salePoint:' . $salPointId .':order:'. $order->id))
+        // else
+            // event(new orderAdded($salPointId ,$order));
         Redis::set('salePoint:' . $salPointId .':order:'. $order->id, serialize($order));
+        event(new orderAdded($salPointId ,$order));
         return unserialize(Redis::get('salePoint:' . $salPointId .':order:'. $order->id));
     }
-    // [
-    //     'id'=>$order['id'],
-    //     'status' =>  $order['status'],
-    //     'orders' => serialize($order['orders']) ,
-    //     'customerName' =>  $order['customerName'],
-    //     'created_at' => $oldOrder ? $order['created_at'] : Carbon::now()->format('y-m-d g:i A'),
-    //     'updated_at' =>  $oldOrder ? Carbon::now()->format('y-m-d g:i A') : null,
-    // ]
 }
 if (! function_exists('deleteSalePointOrder')) {
     function deleteSalePointOrder($salPointId, $order){
         Redis::del('salePoint:' . $salPointId .':order:'. $order);
+        event(new orderDeleted($salPointId ,$order));
         return $order ;
     }
 }
@@ -307,6 +362,48 @@ if (! function_exists('getAllSalePointSellers')) {
         foreach ($keys as $key) {
             if (Redis::get(str_replace('laravel_database_' ,'' ,$key )) == $id) {
                 array_push($sellers,intval(substr($key, strpos($key ,'salePointSeller:')+strlen("salePointSeller:"),strpos($key ,':salPoint'))));
+            }
+        }
+        return $sellers;
+    }
+}
+if (! function_exists('setSalePointSetting')) {
+    function setSalePointSetting($salPointId, $setting ){
+        Redis::set('salePoint:' . $salPointId .':setting:', serialize($setting));
+        event(new salePointSettings($salPointId , $setting));
+        return unserialize(Redis::get('salePoint:' . $salPointId .':setting:'));
+    }
+}
+if (! function_exists('getSalePointSetting')) {
+    function getSalePointSetting($salPointId){
+      return  unserialize(Redis::get('salePoint:' . $salPointId .':setting:'));
+    }
+}
+if (! function_exists('setHallAcounatnt')) {
+    function setHallAcounatnt($id, $hall){
+        Redis::set('hallAcountant:' . $id .':hall:' , $hall);
+    }
+}
+if (! function_exists('getHallAcounatnt')) {
+    function getHallAcounatnt($id){
+      return  Redis::get('hallAcountant:' . $id .':hall:');
+    }
+}
+if (! function_exists('delHallAcounatnt')) {
+    function delHallAcounatnt($id){
+        if (Redis::exists('hallAcountant:' . $id .':hall:'))
+        {
+            Redis::del('hallAcountant:' . $id .':hall:');
+        }
+    }
+}
+if (! function_exists('getAllHallAcounatnts')) {
+    function getAllHallAcounatnts($id){
+        $keys = Redis::KEYS('hallAcountant:*');
+        $sellers = [];
+        foreach ($keys as $key) {
+            if (Redis::get(str_replace('laravel_database_' ,'' ,$key )) == $id) {
+                array_push($sellers,intval(substr($key, strpos($key ,'hallAcountant:')+strlen("hallAcountant:"),strpos($key ,':hall'))));
             }
         }
         return $sellers;

@@ -21,10 +21,12 @@
             box-shadow: none;
         }
         .dropdown-menu{
+            position: absolute;
+            inset:54px 0 0 0;
             padding-top: 0% !important;
             padding-bottom: 0% !important;
-            transform: translate( calc(-100% + 34px ) ,56px) !important;
-            width: 224px !important; 
+            width: 224px !important;
+            min-height: 200px;
             max-height: 272px;
             overflow: auto;
         }
@@ -57,15 +59,15 @@
                 </label>
                     <div class="relative2">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="toggleSectionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="toggleSectionsMenu" data-bs-toggle="collapse" data-bs-target="#items" >
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="toggleSectionsMenu">
+                            <div class="dropdown-menu collapse"  id="items">
                                 @foreach ($sections as $section)
                                     <li class="bg-gray-300 text-gray-700 font-bold "  data-item-id="{{$section->id}}">
                                         {{$section->name}}
                                     </li>
-                                @endforeach 
-                            </ul>    
+                                @endforeach
+                            </div>
                         </div>
                         <input class="appearance-none  w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="name" name="name" type="text" placeholder="اسم الصنف الجديد" >
                     </div>
@@ -146,6 +148,13 @@
 @section('scripts')
     <script>
            function init() {
+                document.addEventListener('click', function(event) {
+                    var settingMenu = document.getElementById('items');
+                    var ClickedOnSettimgMenu = settingMenu.contains(event.target);
+                    if (!ClickedOnSettimgMenu) {
+                        settingMenu.classList.remove("show");
+                    }
+                });
                 $.ajaxSetup({
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -205,11 +214,11 @@
                         });
 
                     });
-                    $("#delete").click(function (e) { 
+                    $("#delete").click(function (e) {
                         e.preventDefault();
                         $.ajax({
                             type: "post",
-                            url: "delete-menu-section",
+                            url: "/delete-menu-section",
                             data: {
                                 "id" : currentListItem.dataset.itemId ,
                             },

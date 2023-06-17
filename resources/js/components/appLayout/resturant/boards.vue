@@ -43,13 +43,13 @@
             <div   v-for="(board,index) in boards"
             v-bind:key="`${'h:'+currentHall+'t:'+board.tableNumber}`"
             :id="`${'h:'+currentHall+'t:'+board.tableNumber}`"
-            :style=" 
+            :style="
             `order:${currentHallActive? board.active ? board.order : orderHelper *10+ board.tableNumber : board.order};
             display:${ board.extra.filterShow ? 'block' : 'none' }`
             "
             :class="`${'col-lg-3 col-md-4 h'+currentHall} boardContainter`">
                 <board
-                    :currentHallActive="currentHallActive" 
+                    :currentHallActive="currentHallActive"
                     :table-number="board.tableNumber"
                     :style="`animation-delay: ${(index) * 0.1}s`"
                     class="animate-fade-in-down"
@@ -58,7 +58,7 @@
             </div>
         </div>
         <board-modal></board-modal>
-        <info-modal  @statusChanged="(data)=>moveitem(data)"></info-modal> 
+        <info-modal  @statusChanged="(data)=>moveitem(data)"></info-modal>
     </div>
   </template>
 
@@ -141,18 +141,8 @@ import store from '../../../store';
             },
         },
         methods:{
-        //test
-            // switchArrayPistion:function(index1,index2){
-            //     store.dispatch('switchArrayPistion' , {"index1":index1,"index2":index2});
-            // },
-            // addElement:function(index1){
-            //     store.dispatch('addElement' , {"x":index1});
-
-            // },
-        //
-        
             toggleHeader:function(){
-                var  animationProps = 
+                var  animationProps =
                 [
                     { clipPath: "inset(0px 0px 0px 0px)" , minHeight: '70px' , height : '70px'},
                     { clipPath: "inset(0px 0px 100% 0px)" , minHeight: '0' , height : '0'}
@@ -160,7 +150,7 @@ import store from '../../../store';
                 $('.toggle-boards-header').toggleClass('rotate-toggle-boards-header');
                 if (this.headerFolded) {
                     this.headerFolded = false;
-                    document.querySelector('.boards-header').animate( animationProps, 
+                    document.querySelector('.boards-header').animate( animationProps,
                         {
                             duration: 500,
                             iterations: 1,
@@ -170,7 +160,7 @@ import store from '../../../store';
                     )
                 } else {
                     this.headerFolded = true;
-                    document.querySelector('.boards-header').animate( animationProps, 
+                    document.querySelector('.boards-header').animate( animationProps,
                         {
                             duration: 500,
                             iterations: 1,
@@ -179,7 +169,7 @@ import store from '../../../store';
                         }
                     )
                 }
-             
+
             },
             getNewBoards:function(boards){
                 return new Promise((resolve, reject) => {
@@ -380,12 +370,12 @@ import store from '../../../store';
             },
             filter:function(){
                 return this.boards.map((board) =>{
-                    var condition =   
+                    var condition =
                     ( this.currentTableNameFilter == board.tableNumber ||
                     ( !this.currentTableNameFilter  &&
-                    (( String( board.customerInfo.customerName).indexOf(this.currentCustomerNameFilter) == 0 && this.currentCustomerNameFilter !== '')  || 
-                    ( this.currentCustomerNameFilter == '' && 
-                    ( this.currentFilterVal == 'all' || 
+                    (( String( board.customerInfo.customerName).indexOf(this.currentCustomerNameFilter) == 0 && this.currentCustomerNameFilter !== '')  ||
+                    ( this.currentCustomerNameFilter == '' &&
+                    ( this.currentFilterVal == 'all' ||
                     this.currentFilterVal == board.status )))))
                     board.extra.filterShow = condition
                 })
@@ -408,7 +398,7 @@ import store from '../../../store';
                 setTimeout(() => {
                     $('.naviga-link').filter(function(){return this.value == parseInt(sessionStorage.getItem('currentResturantHall'))}).click();
                 }, 1000);
-                    
+
             }
             const scrollLef = ()=>{
             document.querySelector('.navigations-links').scrollBy({
@@ -483,7 +473,7 @@ import store from '../../../store';
       .rotate-toggle-boards-header.toggle-boards-header:hover{
           color: rgb(77, 255, 115);
           transform:  rotate(180deg) translate(0px, -4px);
-        }        
+        }
 
       .hall-navigation{
             overflow: hidden;
@@ -677,7 +667,7 @@ import store from '../../../store';
             position: relative;
             margin-top: 10px;
             min-height: 70px;
-  
+
             display:  flex;
             align-items: center;
             background-color: hsla(120, 100%, 13%, 0.4);

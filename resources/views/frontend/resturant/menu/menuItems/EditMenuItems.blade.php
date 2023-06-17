@@ -1,7 +1,6 @@
 @extends('appLayouts.app')
 @section('styles')
     <style>
-
         .unit{
             visibility:hidden;
         }
@@ -59,10 +58,12 @@
             box-shadow: none;
         }
         .dropdown-menu{
+            position: absolute;
+            inset:54px 0 0 0;
             padding-top: 0% !important;
             padding-bottom: 0% !important;
-            transform: translate( calc(-100% + 34px ) ,56px) !important;
-            width: 224px !important; 
+            width: 224px !important;
+            min-height: 200px;
             max-height: 272px;
             overflow: auto;
         }
@@ -120,13 +121,13 @@
                     </label>
                     <div class="relative2">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="toggleItemsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="toggleItemsMenu" data-bs-toggle="collapse" data-bs-target="#allitems" >
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="toggleItemsMenu">
-                            </ul>    
+                            <div class="dropdown-menu collapse" id="allitems">
+                            </div>
                         </div>
                         <input class="appearance-none  w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="title" name="title" type="text" placeholder="اسم المادة" >
-                    </div>                    
+                    </div>
                     @error('title')
                         <p class="text-red-500 text-xl italic">
                             {{str_replace("title","اسم المادة",$message)}}
@@ -163,7 +164,7 @@
                   </div>
                   <div class="w-full md:w-1/5 px-3 mt-2">
                       <div class="form-check">
-                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked value="1"> 
+                          <input class="form-check-input" type="checkbox"  id="active" name="active" checked value="1">
                           <label class="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2" for="active">
                               مفعل
                           </label>
@@ -275,7 +276,7 @@
                 </th>
             </thead>
             <tbody>
-               
+
             </tbody>
         </table>
     </div> --}}
@@ -288,6 +289,13 @@
     <script type='module'>
 
            function init() {
+                document.addEventListener('click', function(event) {
+                    var settingMenu = document.getElementById('allitems');
+                    var ClickedOnSettimgMenu = settingMenu.contains(event.target);
+                    if (!ClickedOnSettimgMenu) {
+                        settingMenu.classList.remove("show");
+                    }
+                });
                 // const addNewItemButton = document.getElementById('add');
                 // var ease =Power1.easeInOut;
                 // var items = [];
@@ -301,7 +309,7 @@
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                     });
-                    $("#section").change(function (e) { 
+                    $("#section").change(function (e) {
                         e.preventDefault();
                         $.ajax({
                             type: "get",
@@ -323,7 +331,7 @@
                             }
                         });
                     });
-                    function addEventToOptions() { 
+                    function addEventToOptions() {
                         currentItemId = this.dataset.itemId;
                         currentListItemElement = this;
                         currentItem = allSectionItems.find((element)=>element.id==currentItemId);
@@ -345,7 +353,7 @@
                             $("#fragmentable").attr("checked",false)
                         }
                     }
-                    $('#delete').click(function (e) { 
+                    $('#delete').click(function (e) {
                         e.preventDefault();
                         $.ajax({
                             type: "post",
@@ -392,64 +400,74 @@
                     });
                     $("#done").click(function (e) {
                         e.preventDefault();
-                            resetErrore();
+                        resetErrore();
 
+                        if (!currentItem)
+                            swal({
+                                text:" لم يتم تحديد اي مادة",
+                                button: {
+                                    text: "حسنا",
+                                    value: true,
+                                    visible: true,
+                                },
+                            })
+                        else
                             $.ajax({
-                            type: "post",
-                            url: "update-menu-item",
-                            data: {
-                                "id" : currentItem.id,
-                                "title" : $("#title").val(),
-                                "price" : $("#price").val(),
-                                "unit" : $("#unit").val(),
-                                "pace" : $("#pace").val(),
-                                "fragmentable" : $("#fragmentable").prop("checked") == true ? 1 : 0,
-                                "active" : $("#active").prop("checked") == true ? 1 : 0,
-                                "description" : $("#description").val()
-                            },
-                            success: function (response) {
-                                swal({
-                                    text: response.message,
-                                    icon:"success",
-                                    button: {
-                                        text: "حسنا",
-                                        value: true,
-                                        visible: true,
-                                        className: "",
-                                        closeModal: true,
-                                    },
-                                });
-                                $(currentListItemElement).html($("#title").val());
-                                resetItem() ;
-                                // resetInputs();
-                            },
-                            // error:function (response) {
-                            //     if (response.responseJSON.errors) {
-                            //         if (response.responseJSON.errors.title) {
-                            //             $('#titleErrore').text(String(response.responseJSON.errors.title[0]).replace('title','المادة'));
-                            //         }
-                            //         if (response.responseJSON.errors.section) {
-                            //             $('#sectionErrore').text(String("هذا الصنف غير موجود بالقائمة"));
-                            //         }
-                            //         if (response.responseJSON.errors.price) {
-                            //             $('#priceErrore').text(String(response.responseJSON.errors.price[0]).replace('price',' السعر'));
-                            //         }
-                            //         if (response.responseJSON.errors.unit) {
-                            //             $('#unitErrore').text(String(response.responseJSON.errors.unit[0]).replace('unit',' الواحدة'));
-                            //         }
-                            //         if (response.responseJSON.errors.pace) {
-                            //             $('#paceErrore').text(String(response.responseJSON.errors.pace[0]).replace('pace','الخطوة'));
-                            //         }
-                            //         if (response.responseJSON.errors.fragmentable) {
-                            //             $('#fragmentableErrore').text(String(response.responseJSON.errors.fragmentable[0]).replace('fragmentable',' قابل للتجزئة'));
-                            //         }
-                            //         if (response.responseJSON.errors.active) {
-                            //             $('#activeErrore').text(String(response.responseJSON.errors.active[0]).replace('active','الجاهزية'));
-                            //         }
-                            //     }
+                                type: "post",
+                                url: "update-menu-item",
+                                data: {
+                                    "id" : currentItem.id,
+                                    "title" : $("#title").val(),
+                                    "price" : $("#price").val(),
+                                    "unit" : $("#unit").val(),
+                                    "pace" : $("#pace").val(),
+                                    "fragmentable" : $("#fragmentable").prop("checked") == true ? 1 : 0,
+                                    "active" : $("#active").prop("checked") == true ? 1 : 0,
+                                    "description" : $("#description").val()
+                                },
+                                success: function (response) {
+                                    swal({
+                                        text: response.message,
+                                        icon:"success",
+                                        button: {
+                                            text: "حسنا",
+                                            value: true,
+                                            visible: true,
+                                            className: "",
+                                            closeModal: true,
+                                        },
+                                    });
+                                    $(currentListItemElement).html($("#title").val());
+                                    resetItem() ;
+                                    // resetInputs();
+                                },
+                                // error:function (response) {
+                                //     if (response.responseJSON.errors) {
+                                //         if (response.responseJSON.errors.title) {
+                                //             $('#titleErrore').text(String(response.responseJSON.errors.title[0]).replace('title','المادة'));
+                                //         }
+                                //         if (response.responseJSON.errors.section) {
+                                //             $('#sectionErrore').text(String("هذا الصنف غير موجود بالقائمة"));
+                                //         }
+                                //         if (response.responseJSON.errors.price) {
+                                //             $('#priceErrore').text(String(response.responseJSON.errors.price[0]).replace('price',' السعر'));
+                                //         }
+                                //         if (response.responseJSON.errors.unit) {
+                                //             $('#unitErrore').text(String(response.responseJSON.errors.unit[0]).replace('unit',' الواحدة'));
+                                //         }
+                                //         if (response.responseJSON.errors.pace) {
+                                //             $('#paceErrore').text(String(response.responseJSON.errors.pace[0]).replace('pace','الخطوة'));
+                                //         }
+                                //         if (response.responseJSON.errors.fragmentable) {
+                                //             $('#fragmentableErrore').text(String(response.responseJSON.errors.fragmentable[0]).replace('fragmentable',' قابل للتجزئة'));
+                                //         }
+                                //         if (response.responseJSON.errors.active) {
+                                //             $('#activeErrore').text(String(response.responseJSON.errors.active[0]).replace('active','الجاهزية'));
+                                //         }
+                                //     }
 
-                            // }
-                        });
+                                // }
+                            });
                     });
                     function editItem(e) {
                        let tr=e.target.parentNode.parentNode;

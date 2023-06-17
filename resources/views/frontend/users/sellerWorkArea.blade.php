@@ -29,16 +29,16 @@
         width: 100%;
     }
     .filter .waiterFilter {
-        padding-right:40px; 
-        padding-left:40px; 
+        padding-right:40px;
+        padding-left:40px;
     }
     #filterName , #filterDate{
         width: 40%;
-        margin:auto; 
+        margin:auto;
     }
 
      .nameFilter, .dateFilter , .waiterNumber{
-        margin-top:15px; 
+        margin-top:15px;
         display: flex;
         align-items: center;
     }
@@ -73,7 +73,7 @@
 
     .hall{
         border-right: 2px solid rgba(153, 108, 108 , 0.5) ;
-        
+
         grid-area: halls ;
         /* background-color: rgb(0, 76, 78); */
     }
@@ -113,7 +113,7 @@
     .radio:nth-child(2n+1) {
         background-color: rgba(34, 25, 25, 0.7);
         color:white;
-        
+
     }
     .radio .label {
         position: relative;
@@ -167,10 +167,10 @@
     .hidden {
         display: none;
     }
-    
+
     .radio{
         border-radius: 10px;
-        padding:10px; 
+        padding:10px;
         width: 160px !important;
         height: 40px !important;
         overflow: hidden  !important;
@@ -181,20 +181,20 @@
         margin: 15px;
         width: 70px;
     }
-    
+
     ul {
         list-style-type: none;
     }
-    
+
     label {
         font-family: Helvetica;
         letter-spacing: 1px;
     }
-    
+
     .checkbox-flip{
         display: none;
     }
-    
+
     .checkbox-flip + label span {
         display: inline-block;
         width: 25px;
@@ -217,7 +217,7 @@
         z-index: 0;
         border: none;
     }
-    
+
     .checkbox-flip:checked + label span:before {
         -webkit-transform: rotateY(180deg);
         -moz-transform: rotateY(180deg);
@@ -256,7 +256,7 @@
         margin: auto;
         margin-top: 20px;
         color: aqua;
-        border-radius:10px; 
+        border-radius:10px;
     }
     input[type='number']{
         text-align: center;
@@ -288,7 +288,7 @@
     .sellerInfo{
         background-color: rgb(19, 33, 156);
         border-radius: 10px;
-        padding:10px; 
+        padding:10px;
         width: 160px !important;
         height: 40px !important;
         overflow: hidden  !important;
@@ -344,10 +344,10 @@
         <div class="tables">
             <div class="subtitle">جميع العاملين في هذه النقطة</div>
             <div id="tablesSection" class="tables">
-                  
+
             </div>
         </div>
-       
+
         <button id="submit" class="btn btn-primary">تم</button>
     {{-- </form> --}}
 </div>
@@ -356,7 +356,7 @@
 
 @section('scripts')
     <script>
-           
+
             var salePoints = {{ Js::from($salePoints) }};
             function init() {
                 let tablesSection = document.getElementById("tablesSection");
@@ -388,7 +388,7 @@
                         tablesSection.innerHTML = '';
                         currentTables=[];
                     }
-                    $('#waiter').change(function (e) { 
+                    $('#waiter').change(function (e) {
                         e.preventDefault();
                         initWaiterRequest()
                         $.ajax({
@@ -398,7 +398,7 @@
                                 "userId": $(this).val()
                             },
                             success: function (response) {
-                                $('.halls').attr("disabled" ,false) 
+                                $('.halls').attr("disabled" ,false)
                                 if (response.salePoint) {
                                     currentInforamtion = response.salePoint;
                                     $('.halls').filter(function (index) {
@@ -408,7 +408,7 @@
                             }
                         });
                     });
-                    $('.halls').click(function (e) { 
+                    $('.halls').click(function (e) {
                         // e.preventDefault();
                         initHallRequest();
                         $.ajax({
@@ -417,10 +417,10 @@
                             success: function (response) {
                                 if (response.sellers) {
                                     console.log(response.sellers);
-                                    $.each(response.sellers, function (i, e) { 
+                                    $.each(response.sellers, function (i, e) {
                                          var newEl = document.createElement("div");
                                          newEl.classList.add("checkbox");
-                                         newEl.innerHTML = 
+                                         newEl.innerHTML =
                                          `
                                         <label class='sellerInfo' for="t${e.id}">${e.name}</label>
                                         `
@@ -431,7 +431,7 @@
                             }
                         });
                     });
-                    $("#submit").click(function (e) { 
+                    $("#submit").click(function (e) {
                         e.preventDefault();
                         var salePoint = $("input:radio[name='salePoint']:checked").val();
                         var user_id = $("#waiter").val();
@@ -503,7 +503,7 @@
                             }
                         });
                     })
-                    $('#filterName').change(function (e) { 
+                    $('#filterName').change(function (e) {
                         e.preventDefault();
                         $('#waiter').html('');
                         if ($(this).val() == '') $('#filterDate').trigger('change');

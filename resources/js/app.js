@@ -36,6 +36,7 @@ Vue.component('board-modal', require('./components/appLayout/resturant/boardModa
 Vue.component('info-modal', require('./components/appLayout/resturant/infoModel.vue').default);
 Vue.component('resturant-menu', require('./components/appLayout/resturant/menu.vue').default);
 Vue.component('sale-point', require('./components/appLayout/salePoint/salePoint.vue').default);
+Vue.component('sale-point-content', require('./components/appLayout/salePoint/salePointContent.vue').default);
 Vue.component('setting', require('./components/appLayout/setting/index.vue').default);
 
 
@@ -46,8 +47,9 @@ const app = new Vue({
     vuetify,
     store,
     router,
-    // echo
-
+    beforeMount: function() {
+        // store.dispatch("getRole")
+    }
 }).$mount('#app');
 // var app = new Vue({
 //     vuetify,

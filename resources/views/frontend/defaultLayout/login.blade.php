@@ -44,7 +44,6 @@
             @endif
             <div class="mt-2">
                 <button type="submit" class="btn btn-primary w-25">سجل الدخول</button>
-                <span id="go-login"> إذا كنت لا تملك حساب انشىء&nbsp; <a href="{{url('show-registeration')}}" > حساب</a> </span>
             </div>
           </form>
     </div>

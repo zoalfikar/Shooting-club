@@ -98,12 +98,12 @@ class UserHallTableController extends Controller
             }
         }
         else
-        { 
-            isset($req->forSeller) ? 
+        {
+            isset($req->forSeller) ?
             $sellers = User::where('role' , 'salePoint')->where('name'  ,  $req->filterName)->get()
             :
             $waiters = User::where('role' , 'waiter')->where('name'  ,  $req->filterName)->get();
-            if (isset($req->forSeller)) 
+            if (isset($req->forSeller))
                 return response()->json(['sellers'=>$sellers]);
             else
                 return response()->json(['waiters'=>$waiters]);
@@ -116,7 +116,7 @@ class UserHallTableController extends Controller
         $tables = Table::where('hallNumber' , $req->hallNumber)->get();
         foreach ($tables as  $table) {
             $numberOfwaiter = 0;
-            for ($i=0; $i < count($userHallTables); $i++) { 
+            for ($i=0; $i < count($userHallTables); $i++) {
                 if (in_array((string) $table->tableNumber,$userHallTables[$i])) {
                     $numberOfwaiter++;
                 }
@@ -136,6 +136,15 @@ class UserHallTableController extends Controller
             return response( getAjaxResponse('frontend.users.sellerWorkArea',['sellers'=>$sellers,'salePoints'=>$salePoints]));
         }
         return view('frontend.users.sellerWorkArea',compact(['sellers','salePoints']));
+    }
+    public function index3(Request $req)
+    {
+        $sellers = User::where('role','hallAcountant')->get();
+        $salePoints = Hall::all();
+        if ($req->ajax()) {
+            return response( getAjaxResponse('frontend.users.hallAcountantWorkArea',['sellers'=>$sellers,'salePoints'=>$salePoints]));
+        }
+        return view('frontend.users.hallAcountantWorkArea',compact(['sellers','salePoints']));
     }
 
 

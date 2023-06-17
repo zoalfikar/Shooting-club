@@ -46,6 +46,7 @@
                 <option value="acountant">محاسب</option>
                 <option value="waiter">نادل</option>
                 <option value="salePoint">نقطة مبيع</option>
+                <option value="hallAcountant">محاسب صالة </option>
             </select>
               @if ($errors->has('email'))
                   <div class="bg-danger mt-2 p-3 text-white">
@@ -81,7 +82,7 @@
             @endif
             <div id="passwordConfirmeError" class="bg-danger mt-2 p-3 text-white errore">
             </div>
-            
+
         </div>
         <div>
             <button id="submit" type="submit" class="btn btn-primary w-25">إرسال</button>
@@ -98,7 +99,7 @@
                         headers:
                         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                     });
-                    $("#submit").click(function (e) { 
+                    $("#submit").click(function (e) {
                         e.preventDefault();
                         $('.errore').css('display', 'none');
                         $.ajax({

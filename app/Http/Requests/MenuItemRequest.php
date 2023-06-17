@@ -40,7 +40,7 @@ class MenuItemRequest extends FormRequest
             'title' => ['required'],
             'section' => ['required','exists:menu_sections,id'],
             'unit' => ['required'],
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|between:0.00,9999999.99',
             'fragmentable' => 'required',
             'active'=>'required'
         ];

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalePointSeller
 {
@@ -16,6 +17,10 @@ class SalePointSeller
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if (Auth::user()->role == "salePoint") {
+            return $next($request);
+        }else {
+            return redirect()->back();
+        }
     }
 }
