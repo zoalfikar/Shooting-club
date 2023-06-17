@@ -6,16 +6,16 @@
     </div>
     <div v-else class="container">
         <div class="sale-point-options" >
-           <!-- <div class="option-group1">
+            <div class="option-group1">
                 <input @click="displayDeleteOptions" v-model="deleteAfterPaid" type="checkbox" name="deleteAfterPaid"/>
                 <label for="deleteAfterPaid">الحذف بعد الدفع</label>
-            </div>-->
+            </div>
             <div class="option-group2">
                 <input v-model="currentOrderStatus"  type="radio" name="notPaid" value="notPaid">
-                <label for="notPaid">غير مدفوع ( إفتراضي )</label>
+                <label for="notPaid">غير مدفوع(إفتراضي)</label>
 
                 <input v-model="currentOrderStatus" type="radio" name="paid" value="paid">
-                <label for="paid"> مدفوع ( إفتراضي ) </label>
+                <label for="paid"> مدفوع(إفتراضي) </label>
 
             </div>
         </div>
@@ -107,8 +107,8 @@
                                 <div  class="orderTableOption">
                                     <button @click="editeSalePointOrder(order.id)">عرض</button>
                                     <button @click="removeSalePointOrder(order.id)">حذف</button>
-                                    <button @click="changeOrderStatus(order.id,'paid')" v-if="order.status =='notPaid'">دفع الحساب</button>
-                                   <!-- <button @click=" changeOrderStatus(order.id,'notPaid')" v-else>تعليم كغير مدفوع</button>-->
+                                    <button @click="changeOrderStatus(order.id,'paid')" v-if="order.status =='notPaid'">تعليم كمدفوع</button>
+                                    <button @click="changeOrderStatus(order.id,'notPaid')" v-else>تعليم كغير مدفوع</button>
                                 </div>
                             </td>
                         </tr>
@@ -399,9 +399,6 @@ export default {
                 order = JSON.stringify(order);
                 store.dispatch('saveSalePointOrder' , {'order':order});
             }
-        },
-        addToInventory(salePoint , order){
-
         }
     },
    mounted:function () {
